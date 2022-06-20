@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'wallpaper_src.g.dart';
 
 @JsonSerializable()
-class WallpaperSrc {
+class WallPaperSrc {
   final String original;
   final String tiny;
   final String large;
@@ -13,7 +13,7 @@ class WallpaperSrc {
   final String portrait;
   final String landscape;
 
-  WallpaperSrc(
+  WallPaperSrc(
     this.original,
     this.tiny,
     this.landscape,
@@ -24,8 +24,8 @@ class WallpaperSrc {
     this.small,
   );
 
-  factory WallpaperSrc.fromJson(Map<String, dynamic> json) =>
-      _$WallpaperSrcFromJson(json);
+  factory WallPaperSrc.fromJson(Map<String, dynamic> json) =>
+      _$WallPaperSrcFromJson(json);
 
-  Map<String, dynamic> toJson() => _$WallpaperSrcToJson(this);
+  Map<String, dynamic> toJson() => _$WallPaperSrcToJson(this);
 }

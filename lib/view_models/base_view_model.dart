@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/models/pexels/wallpaper.dart' as px;
 import 'package:mobile/repositories/wallpaper_repository.dart';
 
-abstract class BaseViewModel with ChangeNotifier {
+abstract class BaseViewModel<T extends Object> with ChangeNotifier {
   bool _isLoading = false;
   bool _isDisposed = false;
   bool _isInitializeDone = false;
   bool _hasError = false;
+  bool _canRefresh = false;
 
   Timer? _debounceTimer;
 
@@ -18,7 +20,6 @@ abstract class BaseViewModel with ChangeNotifier {
 
   FutureOr<void> _initState;
 
-  final WallpaperRepository wallpaperRepository = WallpaperRepository();
 
   int get size => 0;
 
@@ -29,6 +30,8 @@ abstract class BaseViewModel with ChangeNotifier {
   }
 
   FutureOr<void> init();
+
+  void paginate();
 
   void _init() async {
     isLoading = true;
@@ -64,9 +67,16 @@ abstract class BaseViewModel with ChangeNotifier {
 
   bool get hasError => _hasError;
 
+  bool get canRefresh => _canRefresh;
+
   set error(bool error) {
     _hasError = error;
     notifyListeners();
+  }
+
+  set canRefresh(bool val) {
+    _canRefresh = val;
+    reloadState();
   }
 
   //Setters

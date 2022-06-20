@@ -6,7 +6,7 @@ part of 'wallpaper_src.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-WallpaperSrc _$WallpaperSrcFromJson(Map<String, dynamic> json) => WallpaperSrc(
+WallPaperSrc _$WallPaperSrcFromJson(Map<String, dynamic> json) => WallPaperSrc(
       json['original'] as String,
       json['tiny'] as String,
       json['landscape'] as String,
@@ -17,7 +17,7 @@ WallpaperSrc _$WallpaperSrcFromJson(Map<String, dynamic> json) => WallpaperSrc(
       json['small'] as String,
     );
 
-Map<String, dynamic> _$WallpaperSrcToJson(WallpaperSrc instance) =>
+Map<String, dynamic> _$WallPaperSrcToJson(WallPaperSrc instance) =>
     <String, dynamic>{
       'original': instance.original,
       'tiny': instance.tiny,

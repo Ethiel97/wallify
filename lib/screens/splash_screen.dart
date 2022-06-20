@@ -196,7 +196,7 @@ class _SplashScreenState extends State<SplashScreen>
                             ),
                           ),
                           child: Text(
-                             Constants.appName,
+                             Constants.appName.toLowerCase(),
                             style: TextStyles.textStyle.apply(
                               color: Colors.white,
                               fontWeightDelta: 5,

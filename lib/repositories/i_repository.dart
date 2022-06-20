@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:mobile/utils/constants.dart';
 
-abstract class IRrepository<T extends Object> {
-  final String baseApiUrl = Constants.pexelsApiHost!;
+abstract class IRepository<T> {
+  // final String baseApiUrl = Constants.pexelsApiHost!;
+  final String baseApiUrl = Constants.wallhavenApiHost!;
 
-  FutureOr<List<T>> getItems({Map<String, dynamic> query = const {}});
+ static const Map defaultParams = {'per_page': Constants.perPageResults};
+
+  FutureOr<List<T>> getItems({Map<String, dynamic> query =  const {}});
 
   FutureOr<List<T>> searchItems({Map<String, dynamic> query = const {}});
 

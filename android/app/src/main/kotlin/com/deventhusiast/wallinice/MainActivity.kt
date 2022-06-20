@@ -1,4 +1,4 @@
-package com.deventhusiast.nice_wall.mobile
+package com.deventhusiast.wallinice
 
 import io.flutter.embedding.android.FlutterActivity
 

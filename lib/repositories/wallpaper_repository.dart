@@ -1,18 +1,35 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:mobile/models/wallpaper.dart';
+import 'package:mobile/main.dart';
 import 'package:mobile/repositories/i_repository.dart';
 import 'package:mobile/utils/constants.dart';
+import 'package:mobile/utils/log.dart';
 
-class WallpaperRepository extends IRrepository<Wallpaper> {
+class WallPaperRepository<T> extends IRepository {
   var dio = Dio();
 
-  WallpaperRepository() {
-    dio.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
+  final CreatorCallback creatorCallback;
+
+  final WallPaperProvider wallPaperProvider;
+
+  final String baseApiUrl;
+
+  WallPaperRepository({
+    this.wallPaperProvider = WallPaperProvider.pexels,
+    required this.creatorCallback,
+    required this.baseApiUrl,
+  }) {
+    dio.interceptors.add(interceptorsWrapper());
+  }
+
+  InterceptorsWrapper interceptorsWrapper() {
+    return InterceptorsWrapper(onRequest: (options, handler) {
       options.headers = {'Authorization': Constants.pexelsApiKey};
+      options.headers = {'X-Api-Key': Constants.wallhavenApiKey};
+
+      // LogUtils.log("TYPE: ${options.data.runtimeType}");
+
       // Do something before request is sent
       return handler.next(options); //continue
       // If you want to resolve the request with some custom data，
@@ -20,21 +37,26 @@ class WallpaperRepository extends IRrepository<Wallpaper> {
       // If you want to reject the request with a error message,
       // you can reject a `DioError` object eg: `handler.reject(dioError)`
     }, onResponse: (response, handler) {
+      Response responseModified = response
+        ..data = wallPaperProvider == WallPaperProvider.pexels
+            ? response.data['photos']
+            : response.data;
+
       // Do something with response data
-      return handler.next(response); // continue
+      return handler.next(responseModified); // continue
       // If you want to reject the request with a error message,
       // you can reject a `DioError` object eg: `handler.reject(dioError)`
     }, onError: (DioError e, handler) {
-      debugPrint(e.response?.data);
+      LogUtils.log("dio error ${e.response?.data}");
       // Do something with response error
       return handler.resolve(e.response!); //continue
       // If you want to resolve the request with some custom data，
       // you can resolve a `Response` object eg: `handler.resolve(response)`.
-    }));
+    });
   }
 
   @override
-  FutureOr<Wallpaper> getItem(String id,
+  FutureOr<T> getItem(String id,
       {Map<String, dynamic> query = const {}}) async {
     String url = "${baseApiUrl}photos/$id?";
 
@@ -49,13 +71,12 @@ class WallpaperRepository extends IRrepository<Wallpaper> {
 
     Response response = await dio.get(url);
 
-    return Wallpaper.fromJson(response.data);
+    return creatorCallback(response.data);
   }
 
   @override
-  FutureOr<List<Wallpaper>> getItems(
-      {Map<String, dynamic> query = const {}}) async {
-    String url = "${baseApiUrl}curated?";
+  FutureOr<List<T>> getItems({Map<String, dynamic> query = const {}}) async {
+    String url = "${baseApiUrl}search?";
 
     String lastKey = "";
     query.forEach((key, value) {
@@ -66,7 +87,9 @@ class WallpaperRepository extends IRrepository<Wallpaper> {
       url += "$key=$value${lastKey == key ? '' : '&'}";
     });
 
-    print("URL: $url");
+    /*query = {
+      ...IRrepository.defaultParams,
+    };*/
 
     /*print(url);
 
@@ -81,15 +104,20 @@ class WallpaperRepository extends IRrepository<Wallpaper> {
       url,
     );
 
-    return List<Wallpaper>.from(
-      response.data['photos'].map((x) => Wallpaper.fromJson(x)),
+    // LogUtils.log(response);
+
+    return List<T>.from(
+      response.data.map((x) => creatorCallback(x)),
     );
   }
 
   @override
-  FutureOr<List<Wallpaper>> searchItems(
-      {Map<String, dynamic> query = const {}}) async {
+  FutureOr<List<T>> searchItems({Map<String, dynamic> query = const {}}) async {
     String url = "${baseApiUrl}search?";
+
+    query = {
+      ...IRepository.defaultParams,
+    };
 
     String lastKey = "";
     query.forEach((key, value) {
@@ -102,8 +130,8 @@ class WallpaperRepository extends IRrepository<Wallpaper> {
 
     Response response = await dio.get(url);
 
-    return List<Wallpaper>.from(
-      response.data['photos'].map((x) => Wallpaper.fromJson(x)),
+    return List<T>.from(
+      response.data.map((x) => creatorCallback(x)),
     );
   }
 }

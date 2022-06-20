@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -9,6 +8,7 @@ import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
+import 'package:mobile/models/pexels/wallpaper.dart' as px;
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
@@ -23,21 +23,32 @@ class WallpaperDetailScreen extends StatefulWidget {
 
 class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
   late DraggableScrollableController scrollableController;
-  double dragRatio = 0.0;
+  double dragRatio = 0.21;
 
+  // calculate drag ratio with notificationscrolllistener
+  /*dragRatio = (notification.extent - notification.minExtent) /
+  (notification.maxExtent - notification.minExtent);*/
   @override
   void initState() {
     scrollableController = DraggableScrollableController();
+
+    scrollableController.addListener(() {
+      dragRatio = scrollableController.size / 0.33;
+
+      print("dragratio :${dragRatio}");
+      print("dragratio inverse :${1 / dragRatio}");
+    });
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return BaseView(
+  Widget build(BuildContext context) =>
+      BaseView<WallpaperViewModel<px.WallPaper>>(
         key: UniqueKey(),
-        vmBuilder: (context) => Provider.of<WallpaperViewModel>(context),
-        builder: buildScreen);
-  }
+        vmBuilder: (context) =>
+            Provider.of<WallpaperViewModel<px.WallPaper>>(context),
+        builder: buildScreen,
+      );
 
   Widget buildScreen(
           BuildContext context, WallpaperViewModel wallpaperViewModel) =>
@@ -46,7 +57,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
         child: Stack(
           children: [
             Hero(
-              tag: wallpaperViewModel.selectedWallaper.src.large2x,
+              tag: wallpaperViewModel.selectedWallpaper.src.large2x,
               child: Container(
                 key: UniqueKey(),
                 width: double.infinity,
@@ -54,12 +65,12 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
-                      AppColors.darkColor.withOpacity(.49),
+                      AppColors.darkColor.withOpacity(.59),
                       BlendMode.overlay,
                     ),
                     fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
-                      wallpaperViewModel.selectedWallaper.src.large2x,
+                      wallpaperViewModel.selectedWallpaper.src.large2x,
                     ),
                   ),
                 ),
@@ -67,19 +78,31 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
             ),
 
             Padding(
-              padding: const EdgeInsets.only(
-                top: 36.0,
-                left: 12,
-              ),
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: IconButton(
-                  icon: const Icon(
-                    Iconsax.arrow_left_1,
-                    size: 30,
+              padding: const EdgeInsets.only(top: 36.0, left: 12, right: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: IconButton(
+                      icon: const Icon(
+                        Iconsax.arrow_left_1,
+                        size: 30,
+                      ),
+                      onPressed: () => Get.back(),
+                    ),
                   ),
-                  onPressed: () => Get.back(),
-                ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      icon: const Icon(
+                        Iconsax.paintbucket,
+                        size: 30,
+                      ),
+                      onPressed: () => Get.back(),
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -90,108 +113,96 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
               left: 0,
               right: 0,
               child: AnimatedPadding(
-                duration: Duration(seconds: Constants.kDuration),
+                duration: const Duration(seconds: Constants.kDuration),
                 padding: const EdgeInsets.only(
                   top: 36.0,
                   left: 12,
                   right: 12,
                   bottom: 0,
                 ),
-                child: NotificationListener<DraggableScrollableNotification>(
-                  onNotification: (notification) {
-                    print("${notification.extent}");
-
-                    dragRatio = (notification.extent - notification.minExtent) /
-                        (notification.maxExtent - notification.minExtent);
-
-                    return false;
-                  },
-                  child: DraggableScrollableSheet(
-                    controller: scrollableController,
-                    expand: true,
-                    initialChildSize: .07,
-                    maxChildSize: .33,
-                    minChildSize: .07,
-                    builder: (context, controller) => SingleChildScrollView(
-                      controller: controller,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(Constants.kBorderRadius * 2),
-                          topRight:
-                              Radius.circular(Constants.kBorderRadius * 2),
-                          bottomLeft: Radius.circular(
-                              dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
-                          bottomRight: Radius.circular(
-                              dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
-                        ),
-                        child: AnimatedContainer(
-                          duration: Duration(seconds: Constants.kDuration),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: dragRatio == 1
-                                ? Theme.of(context)
-                                    .backgroundColor
-                                    .withOpacity(0)
-                                : Theme.of(context)
-                                    .backgroundColor
-                                    .withOpacity(1),
-                            borderRadius: BorderRadius.only(
-                              topLeft:
-                                  Radius.circular(Constants.kBorderRadius * 2),
-                              topRight:
-                                  Radius.circular(Constants.kBorderRadius * 2),
-                              bottomLeft: Radius.circular(
-                                dragRatio == 1
-                                    ? Constants.kBorderRadius * 2
-                                    : 0,
-                              ),
-                              bottomRight: Radius.circular(dragRatio == 1
-                                  ? Constants.kBorderRadius * 2
-                                  : 0),
+                child: DraggableScrollableSheet(
+                  controller: scrollableController,
+                  expand: true,
+                  initialChildSize: .07,
+                  maxChildSize: .33,
+                  minChildSize: .07,
+                  builder: (context, controller) => SingleChildScrollView(
+                    controller: controller,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft:
+                            const Radius.circular(Constants.kBorderRadius * 2),
+                        topRight:
+                            const Radius.circular(Constants.kBorderRadius * 2),
+                        bottomLeft: Radius.circular(
+                            dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
+                        bottomRight: Radius.circular(
+                            dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
+                      ),
+                      child: AnimatedContainer(
+                        duration: const Duration(seconds: Constants.kDuration),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .backgroundColor
+                              .withOpacity(dragRatio),
+                          borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(
+                                Constants.kBorderRadius * 2),
+                            topRight: const Radius.circular(
+                                Constants.kBorderRadius * 2),
+                            bottomLeft: Radius.circular(
+                              dragRatio == 1 ? Constants.kBorderRadius * 2 : 0,
                             ),
+                            bottomRight: Radius.circular(dragRatio == 1
+                                ? Constants.kBorderRadius * 2
+                                : 0),
                           ),
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(
-                              sigmaY: dragRatio * 15,
-                              sigmaX: dragRatio * 15,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                buildDraggableControlButton(),
-                                const SizedBox(
-                                  height: 12,
+                        ),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(
+                            sigmaY: dragRatio * 25,
+                            sigmaX: dragRatio * 25,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              buildDraggableControlButton(),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Text(
+                                overflow: TextOverflow.ellipsis,
+                                "Photographe: ${wallpaperViewModel.selectedWallpaper.photographer}",
+                                maxLines: 1,
+                                softWrap: true,
+                                style: TextStyles.textStyle.apply(
+                                  fontWeightDelta: 4,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color!,
                                 ),
-                                Text(
-                                  "Photographe: ${wallpaperViewModel.selectedWallaper.photographer}",
-                                  style: TextStyles.textStyle.apply(
-                                    fontWeightDelta: 4,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .color!,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 24,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    buildActionButton(Iconsax.document_download,
-                                        () {}, 'Telecharger'),
-                                    buildActionButton(Iconsax.paintbucket,
-                                        () {}, 'Telecharger'),
-                                    buildActionButton(
-                                        Iconsax.like, () {}, 'Telecharger'),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 24,
-                                ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(
+                                height: 24,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  buildActionButton(Iconsax.document_download,
+                                      () {}, 'Telecharger'),
+                                  buildActionButton(
+                                      Iconsax.paintbucket, () {}, 'Appliquer'),
+                                  buildActionButton(
+                                      Iconsax.like, () {}, 'Enregistrer'),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 24,
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -252,14 +263,14 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
       );
 
   Widget buildDraggableControlButton() => AnimatedSwitcher(
-        duration: Duration(
+        duration: const Duration(
           seconds: Constants.kDuration,
         ),
         child: IconButton(
           onPressed: () {
             scrollableController.animateTo(
               dragRatio == 1 ? .07 : .33,
-              duration: Duration(
+              duration: const Duration(
                 milliseconds: Constants.kDuration,
               ),
               curve: Curves.easeIn,

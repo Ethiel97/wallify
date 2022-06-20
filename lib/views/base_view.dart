@@ -22,22 +22,19 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
 }
 
 class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
-
   @override
   void didChangeDependencies() {
     Startup().setTransparentStatusBar();
     super.didChangeDependencies();
   }
-  @override
-  Widget build(BuildContext context) {
 
-    return ChangeNotifierProvider<T>.value(
+  @override
+  Widget build(BuildContext context) => ChangeNotifierProvider<T>.value(
         value: widget.vmBuilder(context),
         child: Consumer<T>(
           builder: _buildScreenContent,
         ),
       );
-  }
 
   Widget _buildScreenContent(
     BuildContext context,
@@ -48,6 +45,8 @@ class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
         color: Theme.of(context).colorScheme.secondary,
         backgroundColor: Theme.of(context).backgroundColor,
         strokeWidth: 4,
+        notificationPredicate:
+            viewModel.canRefresh ? (_) => true : (_) => false,
         onRefresh: () async {
           debugPrint("REFRESHING...");
           viewModel.init();

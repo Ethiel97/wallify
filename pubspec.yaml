@@ -39,6 +39,7 @@ dependencies:
   cached_network_image:
   http:
   secure_shared_preferences:
+  logger:
   gallery_saver: ^2.3.2
   flutter_dotenv: ^5.0.2
   dio:

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "91871510880",
+    "project_id": "wallinice",
+    "storage_bucket": "wallinice.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91871510880:android:7d78c89dd3d299d9b11e05",
+        "android_client_info": {
+          "package_name": "com.deventhusiast.wallinice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "91871510880-ctdij3u5g76us7p18c3g5goc7rjiu0sb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deventhusiast.wallinice",
+            "certificate_hash": "56e035901e25cb84497c44bdfb86210eeb9521e8"
+          }
+        },
+        {
+          "client_id": "91871510880-ek2j934n163538m3jrqa1gdn5fgg48hd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuC8142I15ztxyss3FNUb9R49fu3H3Iqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91871510880-ek2j934n163538m3jrqa1gdn5fgg48hd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

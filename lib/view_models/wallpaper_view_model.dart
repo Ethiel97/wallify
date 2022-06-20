@@ -1,15 +1,18 @@
 import 'dart:async';
 
+import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:mobile/models/wallpaper.dart';
+import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/app_router.dart';
+import 'package:mobile/utils/constants.dart';
+import 'package:mobile/utils/log.dart';
 import 'package:mobile/view_models/base_view_model.dart';
 
-class WallpaperViewModel extends BaseViewModel {
-  List<Wallpaper> wallpapers = [];
+class WallpaperViewModel<T> extends BaseViewModel {
+  List<T> wallpapers = [];
 
-  late Wallpaper _selectedWallpaper;
+  late T _selectedWallpaper;
 
   int page = 1;
   PageController pageController = PageController(
@@ -17,16 +20,20 @@ class WallpaperViewModel extends BaseViewModel {
     viewportFraction: .85,
   );
 
-  List<Wallpaper> filteredWallpapers = [];
+  List<T> filteredWallpapers = [];
 
-  set defSelectedWallpaper(Wallpaper wallpaper) {
+  set defSelectedWallpaper(T wallpaper) {
     _selectedWallpaper = wallpaper;
     reloadState();
-    Get.toNamed(wallpaperDetail,arguments: {'wallpaper': selectedWallaper});
+    Get.toNamed(wallpaperDetail, arguments: {'wallpaper': selectedWallpaper});
     reloadState();
   }
 
-  Wallpaper get selectedWallaper => _selectedWallpaper;
+  final WallPaperRepository<T> wallpaperRepository;
+
+  T get selectedWallpaper => _selectedWallpaper;
+
+  WallpaperViewModel({required this.wallpaperRepository});
 
   @override
   FutureOr<void> init() async {
@@ -35,21 +42,28 @@ class WallpaperViewModel extends BaseViewModel {
       notifyListeners();
 
       if (pageController.hasClients) {
-        if (pageController.page?.floor() == wallpapers.length - 1) {
+        //if the user reaches the last item, we search for the
+        // next page results using pagination method
+        if (pageController.page?.floor() ==
+            (Constants.perPageResults * page) - 1) {
           // print("END OF SCROLLING");
-          await paginate();
+          paginate();
         }
       }
     });
-    await fetchCuratedWallpapers();
+    await fetchTopWallPapers();
   }
 
-  fetchCuratedWallpapers({Map<String, dynamic> query = const {}}) async {
+  fetchTopWallPapers(
+      {Map<String, dynamic> query = const {'query': 'Cars'}}) async {
     try {
       // isLoading = true;
-      var results = await wallpaperRepository.getItems(query: query);
 
-      wallpapers = [...wallpapers, ...results];
+      List<T> results = await wallpaperRepository.getItems(query: query);
+
+      wallpapers = [...wallpapers..shuffle(), ...results..shuffle()];
+
+      _selectedWallpaper = wallpapers.first;
       reloadState();
       // wallpapers.shuffle();
       // reloadState();
@@ -57,17 +71,18 @@ class WallpaperViewModel extends BaseViewModel {
       // selectedTags = [tags[0]];
       // filterQuotesByTag();
     } catch (e) {
-      print(e);
+      LogUtils.error(e);
     } finally {
       reloadState();
       finishLoading();
     }
   }
 
+  @override
   paginate() async {
     //handle pagination
     page += 1;
-    await fetchCuratedWallpapers(query: {'page': page});
+    await fetchTopWallPapers(query: {'page': page});
     reloadState();
   }
 
@@ -77,15 +92,23 @@ class WallpaperViewModel extends BaseViewModel {
         debouncing(fn: () async {
           // filteredQuotes.clear();
           isLoading = true;
-          var results =
+          List<T> results =
               await wallpaperRepository.searchItems(query: {'query': query});
           filteredWallpapers = [...results, ...filteredWallpapers];
         });
       }
     } catch (e) {
-      print(e);
+      LogUtils.error(e);
     } finally {
       finishLoading();
     }
+  }
+
+  downloadWallpaper(T value){
+    // AsyncWallpaper.
+  }
+
+  applyWallpaper(T value){
+
   }
 }

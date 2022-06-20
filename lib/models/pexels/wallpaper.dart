@@ -1,10 +1,10 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mobile/models/wallpaper_src.dart';
+import 'package:mobile/models/pexels/wallpaper_src.dart';
 
 part 'wallpaper.g.dart';
 
 @JsonSerializable()
-class Wallpaper {
+class WallPaper {
   final int id;
 
   final int width;
@@ -24,9 +24,9 @@ class Wallpaper {
   @JsonKey(name: 'avg_color')
   final String avgColor;
 
-  final WallpaperSrc src;
+  final WallPaperSrc src;
 
-  Wallpaper({
+  WallPaper({
     required this.id,
     required this.width,
     required this.height,
@@ -38,18 +38,18 @@ class Wallpaper {
     required this.avgColor,
   });
 
-  Wallpaper copyWith({
+  WallPaper copyWith({
     int? id,
     int? width,
     int? height,
     String? url,
     String? photographer,
     String? photographerUrl,
-    WallpaperSrc? wallpaperSrc,
+    WallPaperSrc? wallpaperSrc,
     int? photographerId,
     String? avgColor,
   }) =>
-      Wallpaper(
+      WallPaper(
         id: id ?? this.id,
         width: width ?? this.width,
         height: height ?? this.height,
@@ -61,8 +61,8 @@ class Wallpaper {
         avgColor: avgColor ?? this.avgColor,
       );
 
-  factory Wallpaper.fromJson(Map<String, dynamic> json) =>
-      _$WallpaperFromJson(json);
+  factory WallPaper.fromJson(Map<String, dynamic> json) =>
+      _$WallPaperFromJson(json);
 
-  Map<String, dynamic> toJson() => _$WallpaperToJson(this);
+  Map<String, dynamic> toJson() => _$WallPaperToJson(this);
 }
