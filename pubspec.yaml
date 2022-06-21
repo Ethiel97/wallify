@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons:
   async_wallpaper:
   cached_network_image:
+  flutter_cache_manager:
+  permission_handler:
   http:
   secure_shared_preferences:
   logger:

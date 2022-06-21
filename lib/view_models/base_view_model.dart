@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/models/pexels/wallpaper.dart' as px;
-import 'package:mobile/repositories/wallpaper_repository.dart';
 
 abstract class BaseViewModel<T extends Object> with ChangeNotifier {
   bool _isLoading = false;

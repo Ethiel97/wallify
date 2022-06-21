@@ -10,6 +10,12 @@
   "home": "Home",
   "search": "Search",
   "saved": "Saved",
+  "notification": "Notification",
   "check_out_this_quote": "Check out this quote",
+  "successfully_downloaded": "Wallpaper successfully downloaded",
+  "yes_apply": "Yes, apply!",
+  "yes_download": "Yes, download!",
+  "wallpaper_application_confirmation": "Are you sure you want to apply this wallpaper?",
+  "wallpaper_download_confirmation": "Are you sure you want to download this wallpaper?",
   "on_dailyQ": "On dailyQ"
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/screens/home_screen.dart';
 import 'package:mobile/screens/main_screen.dart';
 import 'package:mobile/screens/onboarding_screen.dart';
+import 'package:mobile/screens/pexels/home_screen.dart';
+import 'package:mobile/screens/pexels/wallpaper_detail_screen.dart' as px;
 import 'package:mobile/screens/splash_screen.dart';
-import 'package:mobile/screens/wallpaper_detail_screen.dart';
+import 'package:mobile/screens/wallhaven/wallpaper_detail_screen.dart' as wh;
 
 const String splash = '/splash';
 const String onBoarding = '/onboarding';
@@ -12,7 +13,8 @@ const String login = '/login';
 const String register = '/register';
 const String landing = '/main';
 const String auth = '/auth';
-const String wallpaperDetail = '/wallpaperDetail';
+const String wallpaperDetailPx = '/wallpaperDetailPexels';
+const String wallpaperDetailWh = '/wallpaperDetailWallhaven';
 
 Map<String, WidgetBuilder> appRoutes = {
   splash: (context) => const SplashScreen(
@@ -27,7 +29,10 @@ Map<String, WidgetBuilder> appRoutes = {
   landing: (context) => const MainScreen(
         key: ValueKey("d"),
       ),
-  wallpaperDetail: (context) => const WallpaperDetailScreen(
+  wallpaperDetailPx: (context) => const px.WallpaperDetailScreen(
         key: ValueKey("e"),
+      ),
+  wallpaperDetailWh: (context) => const wh.WallpaperDetailScreen(
+        key: ValueKey("f"),
       ),
 };

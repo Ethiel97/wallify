@@ -10,5 +10,11 @@
   "skip": "Passer",
   "home": "Accueil",
   "search": "Recherche",
+  "notification": "Notification",
+  "successfully_downloaded": "Fond d'écran téléchargé avec succès",
+  "yes_apply": "Oui, définir comme d'écran!",
+  "yes_download": "Oui, télécharger!",
+  "wallpaper_application_confirmation": "Voulez-vous vraiment l'utiliser comme fond d'écran?",
+  "wallpaper_download_confirmation": "Voulez-vous vraiment télécharger ce fond d'écran?",
   "saved": "Favoris"
 }

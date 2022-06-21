@@ -17,9 +17,12 @@ WallPaper _$WallPaperFromJson(Map<String, dynamic> json) => WallPaper(
       dimensionY: json['dimension_y'] as String?,
       resolution: json['resolution'] as String?,
       fileSize: json['file_size'] as String?,
-      colors: json['colors'] as List<dynamic>?,
+      colors:
+          (json['colors'] as List<dynamic>?)?.map((e) => e as String).toList(),
       path: json['path'] as String?,
-      thumbs: json['thumbs'] as Map<String, dynamic>?,
+      thumbs: json['thumbs'] == null
+          ? null
+          : WallPaperThumbs.fromJson(json['thumbs'] as Map<String, dynamic>),
       tags: (json['tags'] as List<dynamic>?)
           ?.map((e) => Tag.fromJson(e as Map<String, dynamic>))
           .toList(),

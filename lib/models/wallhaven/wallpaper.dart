@@ -1,6 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mobile/models/wallhaven/tag.dart';
 
+import 'wallpaper_thumbs.dart';
+
 part 'wallpaper.g.dart';
 
 @JsonSerializable()
@@ -29,11 +31,11 @@ class WallPaper {
   @JsonKey(name: 'file_size')
   final String? fileSize;
 
-  final List? colors;
+  final List<String>? colors;
 
   final String? path;
 
-  final Map? thumbs;
+  final WallPaperThumbs? thumbs;
 
   final List<Tag>? tags;
 

@@ -117,6 +117,9 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 child: Column(
                   children: [
+                    const SizedBox(
+                      height: 12,
+                    ),
                     Text(
                       Constants.appName.toLowerCase(),
                       style: TextStyles.textStyle.apply(
@@ -152,8 +155,8 @@ class _HomeScreenState extends State<HomeScreen>
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(12),
-                    margin: EdgeInsets.only(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.only(
                       right: 12,
                     ),
                     decoration: BoxDecoration(
@@ -179,50 +182,53 @@ class _HomeScreenState extends State<HomeScreen>
               const SizedBox(
                 height: 24,
               ),
-              SizedBox(
-                height: Get.height * .7,
-                child: PageView.builder(
-                  controller: wallpaperViewModel.pageController,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: wallpaperViewModel.wallpapers.length,
-                  itemBuilder: (context, index) {
-                    final wallpaper = wallpaperViewModel.wallpapers[index];
+              Flexible(
+                child: SizedBox(
+                  height: Get.height * .71,
+                  child: PageView.builder(
+                    controller: wallpaperViewModel.pageController,
+                    physics: const ClampingScrollPhysics(),
+                    itemCount: wallpaperViewModel.wallpapers.length,
+                    itemBuilder: (context, index) {
+                      final wallpaper = wallpaperViewModel.wallpapers[index];
 
-                    final isTheSelectedWallpaper =
-                        progress > index - 0.5 && progress < index + 0.5;
+                      final isTheSelectedWallpaper =
+                          progress > index - 0.5 && progress < index + 0.5;
 
-                    if (isTheSelectedWallpaper) {
-                      selectedWallpaperIndex = index;
-                    }
+                      if (isTheSelectedWallpaper) {
+                        selectedWallpaperIndex = index;
+                      }
 
-                    return AnimatedPadding(
-                      curve: Curves.fastLinearToSlowEaseIn,
-                      duration:
-                          const Duration(milliseconds: Constants.kDuration * 2),
-                      padding: EdgeInsets.only(
-                        bottom: isTheSelectedWallpaper ? 36 : 0,
-                      ),
-                      child: AnimatedScale(
+                      return AnimatedPadding(
                         curve: Curves.fastLinearToSlowEaseIn,
-                        scale: isTheSelectedWallpaper ? 1.05 : 1.0,
                         duration: const Duration(
                             milliseconds: Constants.kDuration * 2),
-                        child: AnimatedAlign(
+                        padding: EdgeInsets.only(
+                            bottom: isTheSelectedWallpaper ? 36 : 0,
+                            left: 4,
+                            right: 4),
+                        child: AnimatedScale(
                           curve: Curves.fastLinearToSlowEaseIn,
+                          scale: isTheSelectedWallpaper ? 1.05 : 1.0,
                           duration: const Duration(
-                            microseconds: Constants.kDuration * 2,
-                          ),
-                          alignment: isTheSelectedWallpaper
-                              ? Alignment.bottomCenter
-                              : const Alignment(0, -1.8),
-                          child: PxWallPaperCard(
-                            key: UniqueKey(),
-                            wallPaper: wallpaper,
+                              milliseconds: Constants.kDuration * 2),
+                          child: AnimatedAlign(
+                            curve: Curves.fastLinearToSlowEaseIn,
+                            duration: const Duration(
+                              microseconds: Constants.kDuration * 2,
+                            ),
+                            alignment: isTheSelectedWallpaper
+                                ? Alignment.bottomCenter
+                                : const Alignment(0, -1.8),
+                            child: PxWallPaperCard(
+                              key: UniqueKey(),
+                              wallPaper: wallpaper,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
             ],

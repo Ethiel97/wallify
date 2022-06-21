@@ -28,8 +28,6 @@ class WallPaperRepository<T> extends IRepository {
       options.headers = {'Authorization': Constants.pexelsApiKey};
       options.headers = {'X-Api-Key': Constants.wallhavenApiKey};
 
-      // LogUtils.log("TYPE: ${options.data.runtimeType}");
-
       // Do something before request is sent
       return handler.next(options); //continue
       // If you want to resolve the request with some custom data，
@@ -41,6 +39,8 @@ class WallPaperRepository<T> extends IRepository {
         ..data = wallPaperProvider == WallPaperProvider.pexels
             ? response.data['photos']
             : response.data;
+
+      LogUtils.log("RESPONSE DATA: ${responseModified.data}");
 
       // Do something with response data
       return handler.next(responseModified); // continue

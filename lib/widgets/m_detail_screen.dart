@@ -4,60 +4,40 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:mobile/models/pexels/wallpaper.dart' as px;
+import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
-import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
-import 'package:mobile/views/base_view.dart';
-import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
-import '../utils/colors.dart';
+import '../utils/text_styles.dart';
 
-class WallpaperDetailScreen extends StatefulWidget {
-  const WallpaperDetailScreen({Key? key}) : super(key: key);
+mixin Details<T> {
+  late final T value;
 
-  @override
-  State<WallpaperDetailScreen> createState() => _WallpaperDetailScreenState();
-}
+  late double dragRatio;
 
-class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
   late DraggableScrollableController scrollableController;
-  double dragRatio = 0.21;
 
-  // calculate drag ratio with notificationscrolllistener
-  /*dragRatio = (notification.extent - notification.minExtent) /
-  (notification.maxExtent - notification.minExtent);*/
-  @override
-  void initState() {
-    scrollableController = DraggableScrollableController();
+  String get imgUrl => value.toString();
 
-    scrollableController.addListener(() {
-      dragRatio = scrollableController.size / 0.33;
+  String get photographer => value.toString();
 
-      print("dragratio :${dragRatio}");
-      print("dragratio inverse :${1 / dragRatio}");
-    });
-    super.initState();
-  }
+  List<Color> get colors => [];
 
-  @override
-  Widget build(BuildContext context) =>
-      BaseView<WallpaperViewModel<px.WallPaper>>(
-        key: UniqueKey(),
-        vmBuilder: (context) =>
-            Provider.of<WallpaperViewModel<px.WallPaper>>(context),
-        builder: buildScreen,
-      );
+  void download();
+
+  void applyWallPaper();
+
+  void save();
 
   Widget buildScreen(
-          BuildContext context, WallpaperViewModel wallpaperViewModel) =>
+          BuildContext context, WallpaperViewModel<T> wallpaperViewModel) =>
       Material(
         type: MaterialType.transparency,
         child: Stack(
           children: [
             Hero(
-              tag: wallpaperViewModel.selectedWallpaper.src.large2x,
+              tag: imgUrl,
               child: Container(
                 key: UniqueKey(),
                 width: double.infinity,
@@ -70,7 +50,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
                     ),
                     fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
-                      wallpaperViewModel.selectedWallpaper.src.large2x,
+                      imgUrl,
                     ),
                   ),
                 ),
@@ -173,7 +153,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
                               ),
                               Text(
                                 overflow: TextOverflow.ellipsis,
-                                "Photographe: ${wallpaperViewModel.selectedWallpaper.photographer}",
+                                "Photographe: ${photographer}",
                                 maxLines: 1,
                                 softWrap: true,
                                 style: TextStyles.textStyle.apply(
@@ -191,12 +171,21 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  buildActionButton(Iconsax.document_download,
-                                      () {}, 'Telecharger'),
                                   buildActionButton(
-                                      Iconsax.paintbucket, () {}, 'Appliquer'),
+                                    Iconsax.document_download,
+                                    () {},
+                                    'Telecharger',
+                                  ),
                                   buildActionButton(
-                                      Iconsax.like, () {}, 'Enregistrer'),
+                                    Iconsax.paintbucket,
+                                    () {},
+                                    'Appliquer',
+                                  ),
+                                  buildActionButton(
+                                    Iconsax.like,
+                                    () {},
+                                    'Enregistrer',
+                                  ),
                                 ],
                               ),
                               const SizedBox(
@@ -229,7 +218,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Theme.of(context)
+                color: Theme.of(Get.context!)
                     .textTheme
                     .bodyText1!
                     .color!
@@ -241,7 +230,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
                   sigmaX: 10,
                 ),
                 child: Icon(iconData,
-                    color: Theme.of(context).textTheme.bodyText1!.color!),
+                    color: Theme.of(Get.context!).textTheme.bodyText1!.color!),
               ),
             ),
           ),
@@ -251,10 +240,11 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
           Text(
             text,
             style: TextStyles.textStyle.apply(
-              color: TinyColor(Theme.of(context).textTheme.bodyText1!.color!)
-                  .tint()
-                  .darken()
-                  .color,
+              color:
+                  TinyColor(Theme.of(Get.context!).textTheme.bodyText1!.color!)
+                      .tint()
+                      .darken()
+                      .color,
               fontSizeDelta: -6,
               fontWeightDelta: 5,
             ),
@@ -281,7 +271,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
                 ? Icons.expand_more_outlined
                 : Icons.expand_less_outlined,
             size: 30,
-            color: Theme.of(context).textTheme.bodyText1!.color!,
+            color: Theme.of(Get.context!).textTheme.bodyText1!.color!,
           ),
         ),
       );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:mobile/screens/home_screen.dart';
+import 'package:mobile/screens/wallhaven/home_screen.dart';
 import 'package:mobile/screens/search_screen.dart';
 import 'package:provider/provider.dart';
 
