@@ -14,24 +14,26 @@ class WallPaper {
   @JsonKey(name: 'short_url')
   final String? shortUrl;
 
-  final String? views;
+  final int? views;
 
-  final String? favourites;
+  final int? favorites;
 
   final String? category;
 
   @JsonKey(name: 'dimension_x')
-  final String? dimensionX;
+  final int? dimensionX;
 
   @JsonKey(name: 'dimension_y')
-  final String? dimensionY;
+  final int? dimensionY;
 
   final String? resolution;
 
   @JsonKey(name: 'file_size')
-  final String? fileSize;
+  final int? fileSize;
 
   final List<String>? colors;
+
+  final String? ratio;
 
   final String? path;
 
@@ -47,7 +49,8 @@ class WallPaper {
     this.url,
     this.shortUrl,
     this.views,
-    this.favourites,
+    this.ratio,
+    this.favorites,
     this.category,
     this.dimensionX,
     this.dimensionY,

@@ -9,6 +9,7 @@ import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
+import 'package:mobile/widgets/w_wallpaper_tag.dart';
 import 'package:mobile/widgets/w_wh_wallpaper_card.dart';
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
@@ -94,9 +95,10 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   fit: BoxFit.cover,
                   image: CachedNetworkImageProvider(
-                    wallpaperViewModel.wallpapers[selectedWallpaperIndex].url!,
+                    wallpaperViewModel
+                        .wallpapers[selectedWallpaperIndex].thumbs!.large,
                     cacheKey: wallpaperViewModel
-                        .wallpapers[selectedWallpaperIndex].url!,
+                        .wallpapers[selectedWallpaperIndex].thumbs!.large,
                   ),
                 ),
               ),
@@ -131,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen>
                     Text(
                       "Explore awesome wallpapers",
                       style: TextStyles.textStyle.apply(
-                        fontSizeDelta: -2,
+                        fontSizeDelta: -4,
                         color: TinyColor(
                                 Theme.of(context).textTheme.bodyText1!.color!)
                             .tint()
@@ -147,32 +149,15 @@ class _HomeScreenState extends State<HomeScreen>
               ),
               SizedBox(
                 height: Get.height / 20,
-                child: ListView.builder(
-                  itemCount: Constants.pexelsTags.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(
-                      right: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(
-                        color: Theme.of(context).textTheme.bodyText1!.color!,
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        Constants.kBorderRadius,
-                      ),
-                    ),
-                    child: Text(
-                      Constants.pexelsTags[index],
-                      style: TextStyles.textStyle.apply(
-                        fontSizeDelta: -7,
-                        fontWeightDelta: 5,
-                        color: Theme.of(context).textTheme.bodyText1?.color,
-                      ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
+                  child: ListView.builder(
+                    itemCount: Constants.tags.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => WWallPaperTag(
+                      viewModel: wallpaperViewModel,
+                      tag: Constants.tags[index],
                     ),
                   ),
                 ),
@@ -202,9 +187,10 @@ class _HomeScreenState extends State<HomeScreen>
                         duration: const Duration(
                             milliseconds: Constants.kDuration * 2),
                         padding: EdgeInsets.only(
-                            bottom: isTheSelectedWallpaper ? 36 : 0,
-                            left: 4,
-                            right: 4),
+                          bottom: isTheSelectedWallpaper ? 36 : 0,
+                          left: 4,
+                          right: 4,
+                        ),
                         child: AnimatedScale(
                           curve: Curves.fastLinearToSlowEaseIn,
                           scale: isTheSelectedWallpaper ? 1.05 : 1.0,

@@ -13,7 +13,8 @@ class WhWallpaperCard extends StatelessWidget with WallpaperCard<WallPaper> {
     required this.wallPaper,
   }) : super(key: key);
 
-  String get imgUrl => wallPaper.url ?? imgUrl;
+  @override
+  String get imgUrl => wallPaper.path ?? imgUrl;
 
   @override
   Widget build(BuildContext context) => Consumer<WallpaperViewModel<WallPaper>>(

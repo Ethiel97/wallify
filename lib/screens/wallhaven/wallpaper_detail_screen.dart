@@ -36,8 +36,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   @override
   String get imgUrl => Provider.of<WallpaperViewModel<WallPaper>>(context)
       .selectedWallpaper
-      .thumbs!
-      .large;
+      .path!;
 
   @override
   String get photographer => "N/A";

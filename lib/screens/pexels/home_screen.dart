@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen>
                     Text(
                       "Explore awesome wallpapers",
                       style: TextStyles.textStyle.apply(
-                        fontSizeDelta: -2,
+                        fontSizeDelta: -4,
                         color: TinyColor(
                                 Theme.of(context).textTheme.bodyText1!.color!)
                             .tint()
@@ -150,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen>
               SizedBox(
                 height: Get.height / 20,
                 child: ListView.builder(
-                  itemCount: Constants.pexelsTags.length,
+                  itemCount: Constants.tags.length,
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) => Container(
@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                     child: Text(
-                      Constants.pexelsTags[index],
+                      Constants.tags[index],
                       style: TextStyles.textStyle.apply(
                         fontSizeDelta: -7,
                         fontWeightDelta: 5,

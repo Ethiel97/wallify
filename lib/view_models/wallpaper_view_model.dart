@@ -18,6 +18,8 @@ typedef WallPaperCallBack = void Function(String url);
 class WallpaperViewModel<T> extends BaseViewModel {
   List<T> wallpapers = [];
 
+  String selectedTag = "Cars";
+
   late T _selectedWallpaper;
 
   int page = 1;
@@ -123,25 +125,43 @@ class WallpaperViewModel<T> extends BaseViewModel {
   paginate() async {
     //handle pagination
     page += 1;
-    await fetchTopWallPapers(query: {'page': page});
+    await fetchTopWallPapers(query: {'page': page, 'current_page': page});
     reloadState();
   }
 
   searchWallpapers(String query) async {
+    selectedTag = Constants.tags
+        .firstWhere((element) => element.toLowerCase() == query.toLowerCase());
+    if (selectedTag.isNotEmpty) {
+      reloadState();
+    }
+
     try {
       if (query.isNotEmpty) {
-        debouncing(fn: () async {
-          // filteredQuotes.clear();
-          isLoading = true;
-          List<T> results =
-              await wallpaperRepository.searchItems(query: {'query': query});
-          filteredWallpapers = [...results, ...filteredWallpapers];
-        });
+        LogUtils.log(query);
+
+        debouncing(
+          fn: () async {
+            isLoading = true;
+
+            List<T> results = await wallpaperRepository
+                .searchItems(query: {'query': selectedTag, 'q': selectedTag});
+
+            // filteredWallpapers = [...results, ...filteredWallpapers];
+
+            wallpapers = results;
+            reloadState();
+
+            pageController.animateToPage(0,
+                duration: const Duration(milliseconds: Constants.kDuration),
+                curve: Curves.easeInOutCubicEmphasized);
+
+            finishLoading();
+          },
+        );
       }
     } catch (e) {
       LogUtils.error(e);
-    } finally {
-      finishLoading();
     }
   }
 

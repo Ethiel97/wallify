@@ -18,7 +18,6 @@ abstract class BaseViewModel<T extends Object> with ChangeNotifier {
 
   FutureOr<void> _initState;
 
-
   int get size => 0;
 
   int get favSize => 0;
@@ -96,9 +95,7 @@ abstract class BaseViewModel<T extends Object> with ChangeNotifier {
     // if this function is called before 500ms [waitForMs] expired
     //cancel the previous call
 
-    if (_debounceTimer!.isActive) {
-      _debounceTimer?.cancel();
-    }
+    _debounceTimer?.cancel();
 
     /// set a 500ms [waitForMs] timer for the [fn] to be called
     _debounceTimer = Timer(Duration(milliseconds: waitForMs), fn);

@@ -10,7 +10,15 @@ class Constants {
   static String? wallhavenApiKey = dotenv.env['WALLHAVEN_API_KEY'];
   static String? wallhavenApiHost = dotenv.env['WALLHAVEN_API_HOST'];
 
-  static List<String>  pexelsTags = ['Cars', 'People', 'Buildings','Mountains'];
+  static List<String> tags = [
+    'Cars',
+    'People',
+    'Buildings',
+    'Mountains',
+    'Music',
+    'Basketball',
+    'Football'
+  ];
 }
 
 enum WallPaperProvider {

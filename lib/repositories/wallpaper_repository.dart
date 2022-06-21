@@ -28,6 +28,20 @@ class WallPaperRepository<T> extends IRepository {
       options.headers = {'Authorization': Constants.pexelsApiKey};
       options.headers = {'X-Api-Key': Constants.wallhavenApiKey};
 
+      options.path +="&";
+      String lastKey = "";
+      IRepository.defaultParams.forEach((key, value) {
+        lastKey = key;
+      });
+
+      IRepository.defaultParams.forEach((key, value) {
+        options.path += "$key=$value${lastKey == key ? '' : '&'}";
+      });
+
+      LogUtils.log("PATH: ${options.path}");
+
+      // options.
+
       // Do something before request is sent
       return handler.next(options); //continue
       // If you want to resolve the request with some custom data，
@@ -38,9 +52,7 @@ class WallPaperRepository<T> extends IRepository {
       Response responseModified = response
         ..data = wallPaperProvider == WallPaperProvider.pexels
             ? response.data['photos']
-            : response.data;
-
-      LogUtils.log("RESPONSE DATA: ${responseModified.data}");
+            : response.data['data'];
 
       // Do something with response data
       return handler.next(responseModified); // continue
@@ -87,10 +99,6 @@ class WallPaperRepository<T> extends IRepository {
       url += "$key=$value${lastKey == key ? '' : '&'}";
     });
 
-    /*query = {
-      ...IRrepository.defaultParams,
-    };*/
-
     /*print(url);
 
     var httpresponse = await http.get(
@@ -115,10 +123,6 @@ class WallPaperRepository<T> extends IRepository {
   FutureOr<List<T>> searchItems({Map<String, dynamic> query = const {}}) async {
     String url = "${baseApiUrl}search?";
 
-    query = {
-      ...IRepository.defaultParams,
-    };
-
     String lastKey = "";
     query.forEach((key, value) {
       lastKey = key;
@@ -127,6 +131,8 @@ class WallPaperRepository<T> extends IRepository {
     query.forEach((key, value) {
       url += "$key=$value${lastKey == key ? '' : '&'}";
     });
+
+    LogUtils.log("URL: $url");
 
     Response response = await dio.get(url);
 
