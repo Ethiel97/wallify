@@ -12,6 +12,7 @@ mixin WallpaperCard<T> {
 
   Widget buildCard(BuildContext context) => Hero(
         tag: imgUrl,
+        transitionOnUserGestures: true,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(Constants.kBorderRadius),
           child: CachedNetworkImage(
@@ -20,7 +21,7 @@ mixin WallpaperCard<T> {
             cacheKey: imgUrl,
             imageBuilder: (context, imageProvider) => Container(
               height: Get.height * .7,
-              width: double.infinity,
+              width: Get.width,
               margin: const EdgeInsets.symmetric(
                 vertical: 20,
                 horizontal: 8,
@@ -40,13 +41,13 @@ mixin WallpaperCard<T> {
                     // wallpaper.src.large,
                     imgUrl,
                   ),
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.cover,
                 ),
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(0, 8),
                     blurRadius: 16,
-                    color: AppColors.darkColor.withOpacity(.08),
+                    color: Theme.of(context).backgroundColor.withOpacity(.08),
                   ),
                 ],
               ),
@@ -62,7 +63,7 @@ mixin WallpaperCard<T> {
             Constants.kBorderRadius,
           ),
           child: Container(
-            height: Get.height * .7,
+            // height: Get.height * .7,
             width: double.infinity,
             margin: const EdgeInsets.symmetric(
               vertical: 20,
@@ -76,7 +77,8 @@ mixin WallpaperCard<T> {
                 BoxShadow(
                   offset: const Offset(0, 8),
                   blurRadius: 16,
-                  color: AppColors.darkColor.withOpacity(.04),
+                  color:
+                      Theme.of(Get.context!).backgroundColor.withOpacity(.08),
                 ),
               ],
             ),

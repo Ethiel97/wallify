@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
 import 'package:mobile/widgets/m_detail_screen.dart';
@@ -15,7 +17,7 @@ class WallpaperDetailScreen extends StatefulWidget {
 }
 
 class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
-    with Details<WallPaper> {
+    with DetailsMixin<WallPaper> {
   // calculate drag ratio with notificationscrolllistener
   /*dragRatio = (notification.extent - notification.minExtent) /
   (notification.maxExtent - notification.minExtent);*/
@@ -25,10 +27,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
     dragRatio = 0.21;
 
     scrollableController.addListener(() {
-      dragRatio = scrollableController.size / 0.33;
-
-      print("dragratio :${dragRatio}");
-      print("dragratio inverse :${1 / dragRatio}");
+      dragRatio = scrollableController.size / sheetMaxSize;
     });
     super.initState();
   }
@@ -45,7 +44,6 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
       .photographer;
 
   @override
-  // TODO: implement colors
   List<Color> get colors => [
         TinyColor.fromString(Provider.of<WallpaperViewModel<WallPaper>>(context)
                 .selectedWallpaper
@@ -54,35 +52,39 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
       ];
 
   @override
-  Widget build(BuildContext context) {
-    return BaseView<WallpaperViewModel<WallPaper>>(
-      key: UniqueKey(),
-      vmBuilder: (context) =>
-          Provider.of<WallpaperViewModel<WallPaper>>(context),
-      builder: buildScreen,
-    );
-  }
+  Widget build(BuildContext context) => BaseView<WallpaperViewModel<WallPaper>>(
+        key: UniqueKey(),
+        vmBuilder: (context) =>
+            Provider.of<WallpaperViewModel<WallPaper>>(context),
+        builder: buildScreen,
+      );
 
   @override
   void applyWallPaper() {
     var viewModel = Provider.of<WallpaperViewModel<WallPaper>>(context);
 
     viewModel.confirmAction(
-        message: "Are you sure you want to apply this wallpaper?",
-        action: Provider.of<WallpaperViewModel<WallPaper>>(context)
-            .applyWallPaper(viewModel.selectedWallpaper.src.large2x),
-        actionText: "Yes, apply!");
+      message:
+          AppLocalizations.of(Get.context!)!.wallpaper_application_confirmation,
+      action: () {
+        viewModel.applyWallPaper(viewModel.selectedWallpaper.src.large2x);
+      },
+      actionText: AppLocalizations.of(Get.context!)!.yes_apply,
+    );
   }
 
   @override
   void download() {
-    var viewModel = Provider.of<WallpaperViewModel<WallPaper>>(context);
+    var viewModel =
+        Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
 
     viewModel.confirmAction(
-      message: "Are you sure you want to download this wallpaper?",
-      action: Provider.of<WallpaperViewModel<WallPaper>>(context)
-          .downloadWallPaper(viewModel.selectedWallpaper.src.large2x),
-      actionText: "Yes, download!",
+      message:
+          AppLocalizations.of(Get.context!)!.wallpaper_download_confirmation,
+      action: () {
+        viewModel.downloadWallPaper(viewModel.selectedWallpaper.src.large2x);
+      },
+      actionText: AppLocalizations.of(Get.context!)!.yes_download,
     );
   }
 

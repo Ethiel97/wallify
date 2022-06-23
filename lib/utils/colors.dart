@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
 mixin AppColors {
   // static Color get primaryColor => Color();
@@ -9,7 +10,9 @@ mixin AppColors {
 
   static Color get screenBackgroundColor => const Color(0xff060606);
 
-  static Color get darkColor => const Color(0xff140F2D);
+  static Color get darkColor =>  TinyColor.fromString('#140F2D').tint(4).color;
+
+  static Color get primaryColor => const Color(0xff12c2e9);
 
   static Color get accentColor => const Color(0xffE2282A);
 }

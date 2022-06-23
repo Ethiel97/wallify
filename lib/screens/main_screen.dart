@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mobile/screens/wallhaven/home_screen.dart';
-import 'package:mobile/screens/search_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/navigation_provider.dart';
 import '../widgets/w_nav_item.dart';
+import 'wallhaven/search_screen.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -38,6 +38,7 @@ class MainScreen extends StatelessWidget {
           body: Stack(
             children: [
               IndexedStack(
+                alignment: Alignment.center,
                 children: [
                   screens[navigationProvider.currentIndex],
                 ],
@@ -45,18 +46,24 @@ class MainScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 24.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: Wrap(
+                    // mainAxisSize: MainAxisSize.max,
+                    runAlignment: WrapAlignment.spaceBetween,
+                    // crossAxisAlignment: WrapCrossAlignment.center,
+                    runSpacing: 20.0,
+                    spacing: 50,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       ...List.generate(
                         3,
-                        (index) => (NavItem(
-                          icon: icons[index],
-                          index: index,
-                        )),
+                        (index) => Transform.translate(
+                          offset: Offset(0, index == 1 ? -18 : 0),
+                          child: NavItem(
+                            icon: icons[index],
+                            index: index,
+                          ),
+                        ),
                       ).toList()
                     ],
                   ),

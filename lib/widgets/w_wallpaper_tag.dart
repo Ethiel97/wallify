@@ -18,6 +18,9 @@ class WWallPaperTag extends StatelessWidget {
         borderRadius: BorderRadius.circular(Constants.kBorderRadius),
         child: GestureDetector(
           onTap: () {
+            //TODO - set tag text to search text field
+            // viewModel.searchQueryTEC.text = tag;
+
             viewModel.searchWallpapers(tag);
           },
           child: AnimatedContainer(

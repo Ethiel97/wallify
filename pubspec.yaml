@@ -38,7 +38,8 @@ dependencies:
   async_wallpaper:
   cached_network_image:
   flutter_cache_manager:
-  permission_handler:
+  staggered_grid_view_flutter:
+  masonry_grid: ^1.0.0
   http:
   secure_shared_preferences:
   logger:
@@ -50,9 +51,9 @@ dependencies:
   get:
   tinycolor2:
   intl:
-  firebase_messaging: ^11.4.1
+  firebase_messaging: ^11.4.2
   sizer:
-  firebase_core: ^1.17.1
+  firebase_core: ^1.18.0
   google_fonts:
   json_annotation:
   shimmer_animation:
@@ -70,7 +71,6 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   build_runner:
   json_serializable:
-  get:
   flutter_launcher_icons:
 
 # For information on the generic Dart part of this file, see the
@@ -79,8 +79,12 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 
 flutter_icons:
-  image_path: 'assets/img/ico.png'
+  image_path: 'assets/images/ico.png'
   ios: true
+  remove_alpha_ios: true
+  android: true
+  adaptive_icon_background: '#ffffff'
+
 
 flutter:
 

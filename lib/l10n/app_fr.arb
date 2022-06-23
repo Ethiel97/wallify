@@ -1,7 +1,7 @@
 {
-  "daily_fuel": "Ton carburant quotidien \uD83D\uDE0E",
   "browse_awesome_wallpapers": "Découvrez de magnifiques fonds d'écrans",
   "search_here": "Recherchez ici",
+  "photograph": "Photographe",
   "download": "Télécharger",
   "apply": "Appliquer",
   "save": "Enregistrer",
@@ -12,6 +12,7 @@
   "search": "Recherche",
   "notification": "Notification",
   "successfully_downloaded": "Fond d'écran téléchargé avec succès",
+  "successfully_applied": "Nouveau fond d'écran défini avec succès",
   "yes_apply": "Oui, définir comme d'écran!",
   "yes_download": "Oui, télécharger!",
   "wallpaper_application_confirmation": "Voulez-vous vraiment l'utiliser comme fond d'écran?",

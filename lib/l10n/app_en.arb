@@ -1,21 +1,21 @@
 {
-  "search_here": "Search here",
   "browse_awesome_wallpapers": "Browse awesome wallpapers",
+  "search_here": "Search here",
   "photograph": "Photograph",
   "download": "Download",
   "apply": "Apply",
   "save": "Save",
+  "by": "Par",
   "check_network_connection": "Please check your network connection!",
   "skip": "Skip",
   "home": "Home",
   "search": "Search",
   "saved": "Saved",
   "notification": "Notification",
-  "check_out_this_quote": "Check out this quote",
   "successfully_downloaded": "Wallpaper successfully downloaded",
+  "successfully_applied": "Wallpaper successfully applied",
   "yes_apply": "Yes, apply!",
   "yes_download": "Yes, download!",
   "wallpaper_application_confirmation": "Are you sure you want to apply this wallpaper?",
-  "wallpaper_download_confirmation": "Are you sure you want to download this wallpaper?",
-  "on_dailyQ": "On dailyQ"
+  "wallpaper_download_confirmation": "Are you sure you want to download this wallpaper?"
 }

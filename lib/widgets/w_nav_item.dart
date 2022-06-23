@@ -3,6 +3,7 @@ import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
 class NavItem extends StatelessWidget {
   final IconData icon;
@@ -16,38 +17,37 @@ class NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Consumer<NavigationProvider>(
-        builder: (context, navigationProvider, _) => Transform.translate(
-          offset: Offset(
-            0,
-            navigationProvider.currentIndex == index ? -10 : 0,
+        builder: (context, navigationProvider, _) => AnimatedScale(
+          curve: Curves.fastLinearToSlowEaseIn,
+          duration: const Duration(
+            milliseconds: Constants.kDuration,
           ),
-          child: AnimatedScale(
+          scale: navigationProvider.currentIndex == index ? 1.03 : 1.0,
+          child: AnimatedContainer(
             curve: Curves.fastLinearToSlowEaseIn,
-            duration: Duration(milliseconds: Constants.kDuration),
-            scale: navigationProvider.currentIndex == index ? 1.03 : 1.0,
-            child: AnimatedContainer(
-              curve: Curves.fastLinearToSlowEaseIn,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.darkColor.withOpacity(.4),
-                    offset: Offset(0, 4),
-                    blurRadius: 8,
-                  )
-                ],
-                borderRadius: BorderRadius.circular(100),
-                color: navigationProvider.currentIndex == index
-                    ? Theme.of(context).textTheme.bodyText1?.color
-                    : Theme.of(context).backgroundColor,
-              ),
-              duration: const Duration(milliseconds: 300),
-              child: navigationProvider.currentIndex == index
-                  ? RadiantGradientMask(
-                      child: buildIconButton(navigationProvider),
-                    )
-                  : buildIconButton(navigationProvider),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.darkColor.withOpacity(.4),
+                  offset: const Offset(0, 4),
+                  blurRadius: 8,
+                )
+              ],
+              borderRadius: BorderRadius.circular(100),
+              color: navigationProvider.currentIndex == index
+                  ? Theme.of(context).textTheme.bodyText1?.color
+                  : TinyColor(Theme.of(context).backgroundColor)
+                      .lighten(4)
+                      .color
+                      .withOpacity(.85),
             ),
+            duration: const Duration(milliseconds: 300),
+            child: navigationProvider.currentIndex == index
+                ? RadiantGradientMask(
+                    child: buildIconButton(navigationProvider),
+                  )
+                : buildIconButton(navigationProvider),
           ),
         ),
       );

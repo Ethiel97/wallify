@@ -53,7 +53,7 @@ class WallPaper {
         id: id ?? this.id,
         width: width ?? this.width,
         height: height ?? this.height,
-        src: wallpaperSrc ?? this.src,
+        src: wallpaperSrc ?? src,
         url: url ?? this.url,
         photographer: photographer ?? this.photographer,
         photographerUrl: photographerUrl ?? this.photographerUrl,

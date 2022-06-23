@@ -28,7 +28,7 @@ class WallPaperRepository<T> extends IRepository {
       options.headers = {'Authorization': Constants.pexelsApiKey};
       options.headers = {'X-Api-Key': Constants.wallhavenApiKey};
 
-      options.path +="&";
+      options.path += "&";
       String lastKey = "";
       IRepository.defaultParams.forEach((key, value) {
         lastKey = key;

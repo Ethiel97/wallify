@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:mobile/models/wallhaven/wallpaper.dart';
 import 'package:mobile/utils/colors.dart';
@@ -86,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen>
             duration: const Duration(milliseconds: Constants.kDuration),
             child: Container(
               key: UniqueKey(),
+              height: Get.height,
               width: double.infinity,
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -106,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
         Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.darkColor,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -131,7 +133,9 @@ class _HomeScreenState extends State<HomeScreen>
                       height: 4,
                     ),
                     Text(
-                      "Explore awesome wallpapers",
+                      /*wallpaperViewModel
+                          .wallpapers[selectedWallpaperIndex].category!,*/
+                      AppLocalizations.of(context)!.browse_awesome_wallpapers,
                       style: TextStyles.textStyle.apply(
                         fontSizeDelta: -4,
                         color: TinyColor(
@@ -182,34 +186,38 @@ class _HomeScreenState extends State<HomeScreen>
                         selectedWallpaperIndex = index;
                       }
 
-                      return AnimatedPadding(
-                        curve: Curves.fastLinearToSlowEaseIn,
-                        duration: const Duration(
-                            milliseconds: Constants.kDuration * 2),
-                        padding: EdgeInsets.only(
-                          bottom: isTheSelectedWallpaper ? 36 : 0,
-                          left: 4,
-                          right: 4,
-                        ),
-                        child: AnimatedScale(
-                          curve: Curves.fastLinearToSlowEaseIn,
-                          scale: isTheSelectedWallpaper ? 1.05 : 1.0,
-                          duration: const Duration(
-                              milliseconds: Constants.kDuration * 2),
-                          child: AnimatedAlign(
-                            curve: Curves.fastLinearToSlowEaseIn,
+                      return Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          AnimatedPositioned(
                             duration: const Duration(
-                              microseconds: Constants.kDuration * 2,
+                              milliseconds: Constants.kDuration,
                             ),
-                            alignment: isTheSelectedWallpaper
-                                ? Alignment.bottomCenter
-                                : const Alignment(0, -1.8),
-                            child: WhWallpaperCard(
-                              key: UniqueKey(),
-                              wallPaper: wallpaper,
+                            top: isTheSelectedWallpaper ? -12 : 0,
+                            left: 0,
+                            right: 0,
+
+                            child: AnimatedScale(
+                              curve: Curves.fastLinearToSlowEaseIn,
+                              scale: isTheSelectedWallpaper ? 1.01 : .92,
+                              duration: const Duration(
+                                  milliseconds: Constants.kDuration * 2),
+                              child: AnimatedAlign(
+                                curve: Curves.fastLinearToSlowEaseIn,
+                                duration: const Duration(
+                                  microseconds: Constants.kDuration * 2,
+                                ),
+                                alignment: isTheSelectedWallpaper
+                                    ? Alignment.bottomCenter
+                                    : const Alignment(0, -1.5),
+                                child: WhWallpaperCard(
+                                  key: UniqueKey(),
+                                  wallPaper: wallpaper,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       );
                     },
                   ),

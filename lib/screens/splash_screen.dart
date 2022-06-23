@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
+import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/startup.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:tinycolor2/tinycolor2.dart';
@@ -110,7 +110,7 @@ class _SplashScreenState extends State<SplashScreen>
     try {
       return (await SecureStorageService.readItem(key: firstLaunch)).isNotEmpty;
     } catch (e) {
-      print("Exception: ${e}");
+      LogUtils.log(e);
       return true;
     }
   }

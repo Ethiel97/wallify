@@ -34,9 +34,6 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
 
     scrollableController.addListener(() {
       dragRatio = scrollableController.size / 0.33;
-
-      print("dragratio :${dragRatio}");
-      print("dragratio inverse :${1 / dragRatio}");
     });
     super.initState();
   }

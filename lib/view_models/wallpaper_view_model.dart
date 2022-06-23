@@ -4,22 +4,27 @@ import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/base_view_model.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
-typedef WallPaperCallBack = void Function(String url);
+typedef WallPaperCallBack = Future<dynamic> Function(String url);
 
 class WallpaperViewModel<T> extends BaseViewModel {
   List<T> wallpapers = [];
 
-  String selectedTag = "Cars";
+  String? selectedTag = "Cars";
 
+  TextEditingController searchQueryTEC = TextEditingController(text: '');
+  ScrollController scrollController = ScrollController();
+
+  String searchQuery = "";
   late T _selectedWallpaper;
 
   int page = 1;
@@ -33,7 +38,10 @@ class WallpaperViewModel<T> extends BaseViewModel {
   defSelectedWallpaper(T wallpaper, WallPaperProvider wallPaperProvider) {
     _selectedWallpaper = wallpaper;
     reloadState();
-    Get.toNamed("wallpaperDetail${wallPaperProvider.toString().capitalize!}",
+
+    String route = wallPaperProvider.description.capitalizeFirst!;
+
+    Get.toNamed("/wallpaperDetail$route",
         arguments: {'wallpaper': selectedWallpaper});
     reloadState();
   }
@@ -44,36 +52,46 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
   WallpaperViewModel({required this.wallpaperRepository});
 
-  confirmAction({
+  void confirmAction({
     String confirmText = "Confirmation",
     required String message,
-    required WallPaperCallBack action,
+    required VoidCallback action,
     required String actionText,
   }) {
     Get.snackbar(
       confirmText,
       message,
       colorText: Theme.of(Get.context!).textTheme.bodyText1!.color,
-      backgroundColor: Theme.of(Get.context!).backgroundColor,
-      mainButton: TextButton.icon(
-        icon: Icon(
+      snackPosition: SnackPosition.TOP,
+      // backgroundColor: Theme.of(Get.context!).backgroundColor,
+
+      padding: const EdgeInsets.symmetric(
+        vertical: 12,
+        horizontal: 20,
+      ),
+      duration: const Duration(milliseconds: Constants.kDuration * 20),
+      mainButton: TextButton(
+        /*icon: Icon(
           Iconsax.paintbucket,
           color: Theme.of(Get.context!).textTheme.bodyText1!.color,
-        ),
+        ),*/
         style: ButtonStyle(
+          elevation: MaterialStateProperty.all(0.0),
           backgroundColor: MaterialStateProperty.all(
-            Theme.of(Get.context!).colorScheme.secondary,
-          ),
-          textStyle: MaterialStateProperty.all(
-            TextStyles.textStyle.apply(
-                color: Theme.of(Get.context!).textTheme.bodyText1!.color),
+            Colors.transparent,
           ),
         ),
         onPressed: () {
-          action;
+          action();
         },
-        label: Text(
+        child: Text(
           actionText,
+          style: TextStyles.textStyle.apply(
+              color: TinyColor(
+                Theme.of(Get.context!).colorScheme.secondary,
+              ).lighten(15).color,
+              fontSizeDelta: -4,
+              fontWeightDelta: 10),
         ),
       ),
     );
@@ -83,8 +101,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
   FutureOr<void> init() async {
     //listening to pageview changes
     pageController.addListener(() async {
-      notifyListeners();
-
+      //notifyListeners
+      reloadState();
       if (pageController.hasClients) {
         //if the user reaches the last item, we search for the
         // next page results using pagination method
@@ -95,6 +113,14 @@ class WallpaperViewModel<T> extends BaseViewModel {
         }
       }
     });
+
+    scrollController.addListener(() {
+
+      if(scrollController.hasClients){
+        LogUtils.log("SCROLLING: ${scrollController.offset}");
+      }
+    });
+
     await fetchTopWallPapers();
   }
 
@@ -129,32 +155,45 @@ class WallpaperViewModel<T> extends BaseViewModel {
     reloadState();
   }
 
-  searchWallpapers(String query) async {
-    selectedTag = Constants.tags
-        .firstWhere((element) => element.toLowerCase() == query.toLowerCase());
-    if (selectedTag.isNotEmpty) {
+  searchWallpapers(String query,
+      {int delay = 500, String page = 'Search'}) async {
+
+    searchQueryTEC.text = query;
+
+    selectedTag = Constants.tags.firstWhereOrNull(
+        (element) => element.toLowerCase() == query.toLowerCase());
+
+    /*if (selectedTag != null && selectedTag!.isNotEmpty) {
       reloadState();
-    }
+    }*/
 
     try {
       if (query.isNotEmpty) {
         LogUtils.log(query);
 
         debouncing(
+          waitForMs: delay,
           fn: () async {
             isLoading = true;
 
             List<T> results = await wallpaperRepository
-                .searchItems(query: {'query': selectedTag, 'q': selectedTag});
+                .searchItems(query: {'query': query, 'q': query});
 
             // filteredWallpapers = [...results, ...filteredWallpapers];
 
-            wallpapers = results;
-            reloadState();
+            if (page == 'Search') {
+              filteredWallpapers = results;
+              reloadState();
+            }
 
-            pageController.animateToPage(0,
-                duration: const Duration(milliseconds: Constants.kDuration),
-                curve: Curves.easeInOutCubicEmphasized);
+            if (page == 'Home') {
+              wallpapers = results;
+              reloadState();
+
+              pageController.animateToPage(0,
+                  duration: const Duration(milliseconds: Constants.kDuration),
+                  curve: Curves.easeInOutCubicEmphasized);
+            }
 
             finishLoading();
           },
@@ -169,15 +208,16 @@ class WallpaperViewModel<T> extends BaseViewModel {
     try {
       var file = await DefaultCacheManager().getSingleFile(url);
 
+      LogUtils.log("FILE: ${file.toString()}");
       await GallerySaver.saveImage(file.path, albumName: Constants.appName);
 
       Get.snackbar(
-        "Notification",
-        "Successfully Downloaded",
+        AppLocalizations.of(Get.context!)!.notification,
+        AppLocalizations.of(Get.context!)!.successfully_downloaded,
         colorText: Colors.white,
       );
     } catch (e) {
-      LogUtils.error("Could not save to gallery due to: ${e}");
+      LogUtils.error("Could not save to gallery due to: $e");
     }
   }
 
@@ -192,8 +232,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
       );
 
       Get.snackbar(
-        "Notification",
-        "Fond d'ecran applique avec succes",
+        AppLocalizations.of(Get.context!)!.notification,
+        AppLocalizations.of(Get.context!)!.successfully_applied,
         colorText: Colors.white,
       );
     } on PlatformException {
