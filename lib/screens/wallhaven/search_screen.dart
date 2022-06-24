@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/wallhaven/wallpaper.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
+import 'package:mobile/widgets/m_search_screen.dart';
 import 'package:mobile/widgets/w_wh_wallpaper_card.dart';
 import 'package:provider/provider.dart';
-
-import '../../widgets/m_search_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);

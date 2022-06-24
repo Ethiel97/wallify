@@ -49,6 +49,7 @@ class WallPaperRepository<T> extends IRepository {
       // If you want to reject the request with a error message,
       // you can reject a `DioError` object eg: `handler.reject(dioError)`
     }, onResponse: (response, handler) {
+      LogUtils.log("uri: ${response.realUri.path.toString()}");
       Response responseModified = response
         ..data = wallPaperProvider == WallPaperProvider.pexels
             ? response.data['photos']
@@ -131,8 +132,6 @@ class WallPaperRepository<T> extends IRepository {
     query.forEach((key, value) {
       url += "$key=$value${lastKey == key ? '' : '&'}";
     });
-
-    LogUtils.log("URL: $url");
 
     Response response = await dio.get(url);
 

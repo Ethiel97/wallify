@@ -80,8 +80,8 @@ class _HomeScreenState extends State<HomeScreen>
       children: [
         ImageFiltered(
           imageFilter: ImageFilter.blur(
-            sigmaY: 25,
-            sigmaX: 25,
+            sigmaY: 18,
+            sigmaX: 18,
           ),
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: Constants.kDuration),
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
         Scaffold(
-          backgroundColor: AppColors.darkColor,
+          backgroundColor: Colors.transparent,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

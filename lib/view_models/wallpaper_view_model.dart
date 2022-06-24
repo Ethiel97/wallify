@@ -33,7 +33,12 @@ class WallpaperViewModel<T> extends BaseViewModel {
     viewportFraction: .85,
   );
 
+  ScrollController tagsListScrollController = ScrollController();
+  ScrollController colorsListScrollController = ScrollController();
+
   List<T> filteredWallpapers = [];
+
+  List<T> filteredWallpapersByColor = [];
 
   defSelectedWallpaper(T wallpaper, WallPaperProvider wallPaperProvider) {
     _selectedWallpaper = wallpaper;
@@ -114,9 +119,20 @@ class WallpaperViewModel<T> extends BaseViewModel {
       }
     });
 
-    scrollController.addListener(() {
+    tagsListScrollController.addListener(() {
+      if (tagsListScrollController.hasClients) {
+        LogUtils.log("SCROLLING tags: ${tagsListScrollController.offset}");
+      }
+    });
 
-      if(scrollController.hasClients){
+    colorsListScrollController.addListener(() {
+      if (colorsListScrollController.hasClients) {
+        LogUtils.log("SCROLLING tags: ${colorsListScrollController.offset}");
+      }
+    });
+
+    scrollController.addListener(() {
+      if (scrollController.hasClients) {
         LogUtils.log("SCROLLING: ${scrollController.offset}");
       }
     });
@@ -155,9 +171,12 @@ class WallpaperViewModel<T> extends BaseViewModel {
     reloadState();
   }
 
-  searchWallpapers(String query,
-      {int delay = 500, String page = 'Search'}) async {
-
+  searchWallpapers(
+    String query, {
+    int delay = 500,
+    String page = 'Search',
+    Map<String, Object> details = const {},
+  }) async {
     searchQueryTEC.text = query;
 
     selectedTag = Constants.tags.firstWhereOrNull(
@@ -168,7 +187,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
     }*/
 
     try {
-      if (query.isNotEmpty) {
+      if (query.isNotEmpty || details.isNotEmpty) {
         LogUtils.log(query);
 
         debouncing(
@@ -177,7 +196,12 @@ class WallpaperViewModel<T> extends BaseViewModel {
             isLoading = true;
 
             List<T> results = await wallpaperRepository
-                .searchItems(query: {'query': query, 'q': query});
+                .searchItems(query: {'query': query, 'q': query, ...details});
+
+            if (details.isNotEmpty && details.containsKey('colors')) {
+              filteredWallpapersByColor = results;
+              reloadState();
+            }
 
             // filteredWallpapers = [...results, ...filteredWallpapers];
 
@@ -230,6 +254,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
         file.path,
         AsyncWallpaper.HOME_SCREEN,
       );
+
+      LogUtils.log("WALLPAPER RESULT: $result");
 
       Get.snackbar(
         AppLocalizations.of(Get.context!)!.notification,

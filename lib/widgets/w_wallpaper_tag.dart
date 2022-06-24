@@ -13,6 +13,8 @@ class WWallPaperTag extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  bool get isSelected => tag == viewModel.selectedTag;
+
   @override
   Widget build(BuildContext context) => ClipRRect(
         borderRadius: BorderRadius.circular(Constants.kBorderRadius),
@@ -33,25 +35,35 @@ class WWallPaperTag extends StatelessWidget {
               right: 12,
             ),
             decoration: BoxDecoration(
-              color: tag == viewModel.selectedTag
-                  ? Theme.of(context).textTheme.bodyText1!.color!
+              color: isSelected
+                  // ? Theme.of(context).textTheme.bodyText1!.color!
+                  ? Theme.of(context).colorScheme.secondary
                   : Colors.transparent,
               border: Border.all(
-                color: Theme.of(context).textTheme.bodyText1!.color!,
+                // color: Theme.of(context).textTheme.bodyText1!.color!,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.secondary
+                    : Theme.of(context).textTheme.bodyText1!.color!,
               ),
               borderRadius: BorderRadius.circular(
                 Constants.kBorderRadius,
               ),
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 10),
+                  blurRadius: 20,
+                  color: Theme.of(context).backgroundColor.withOpacity(.06),
+                ),
+              ],
             ),
             child: Text(
               tag,
               style: TextStyles.textStyle.apply(
-                fontSizeDelta: -7,
-                fontWeightDelta: 5,
-                color: tag == viewModel.selectedTag
-                    ? Theme.of(context).backgroundColor
-                    : Theme.of(context).textTheme.bodyText1?.color,
-              ),
+                  fontSizeDelta: -7,
+                  fontWeightDelta: 5,
+                  color:
+                      // ? Theme.of(context).backgroundColor
+                      Theme.of(context).textTheme.bodyText1?.color),
             ),
           ),
         ),

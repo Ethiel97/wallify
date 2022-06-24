@@ -45,8 +45,8 @@ mixin WallpaperCard<T> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    offset: const Offset(0, 8),
-                    blurRadius: 16,
+                    offset: const Offset(0, 10),
+                    blurRadius: 20,
                     color: Theme.of(context).backgroundColor.withOpacity(.08),
                   ),
                 ],
@@ -57,13 +57,13 @@ mixin WallpaperCard<T> {
         ),
       );
 
-  Widget get loader => Shimmer(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(
-            Constants.kBorderRadius,
-          ),
+  Widget get loader => ClipRRect(
+        borderRadius: BorderRadius.circular(
+          Constants.kBorderRadius,
+        ),
+        child: Shimmer(
           child: Container(
-            // height: Get.height * .7,
+            height: Get.height * .7,
             width: double.infinity,
             margin: const EdgeInsets.symmetric(
               vertical: 20,

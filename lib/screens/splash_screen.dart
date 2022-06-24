@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
       );
 
     alignmentAnimation = Tween<AlignmentGeometry>(
-      begin: const Alignment(0,20),
+      begin: const Alignment(0, 20),
       end: Alignment.center,
     ).animate(
       CurvedAnimation(
@@ -189,6 +189,9 @@ class _SplashScreenState extends State<SplashScreen>
                             20,
                           ),
                           decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              Constants.kBorderRadius,
+                            ),
                             color: Colors.transparent,
                             border: Border.all(
                               color: Colors.white,
@@ -196,7 +199,7 @@ class _SplashScreenState extends State<SplashScreen>
                             ),
                           ),
                           child: Text(
-                             Constants.appName.toLowerCase(),
+                            Constants.appName.toLowerCase(),
                             style: TextStyles.textStyle.apply(
                               color: Colors.white,
                               fontWeightDelta: 5,

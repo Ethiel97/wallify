@@ -6,7 +6,7 @@ import 'package:mobile/widgets/m_wallpaper_card.dart';
 import 'package:provider/provider.dart';
 
 class PxWallPaperCard extends StatelessWidget with WallpaperCard<WallPaper> {
-  WallPaper wallPaper;
+  final WallPaper wallPaper;
 
   PxWallPaperCard({
     Key? key,

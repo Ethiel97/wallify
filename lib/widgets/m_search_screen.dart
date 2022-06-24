@@ -7,6 +7,7 @@ import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
+import 'package:mobile/widgets/w_color_tag.dart';
 import 'package:mobile/widgets/w_wallpaper_tag.dart';
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
@@ -39,7 +40,7 @@ mixin SearchMixin<T> {
               const SizedBox(
                 height: 48,
               ),
-              Text(
+              /*Text(
                 Constants.appName.toLowerCase(),
                 textAlign: TextAlign.center,
                 style: TextStyles.textStyle.apply(
@@ -50,30 +51,58 @@ mixin SearchMixin<T> {
               ),
               const SizedBox(
                 height: 12,
-              ),
+              ),*/
               searchField(wallpaperViewModel),
+              const SizedBox(
+                height: 24,
+              ),
+              // TODO implement sliverlist
+              Text(
+                AppLocalizations.of(context)!.color_tone,
+                style: TextStyles.textStyle.apply(
+                  color: Theme.of(context).textTheme.bodyText1!.color!,
+                  fontSizeDelta: -2,
+                ),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              SizedBox(
+                height: Get.height / 16,
+                child: ListView.builder(
+                  padding: const EdgeInsets.only(left: 0.0),
+                  controller: wallpaperViewModel.colorsListScrollController,
+                  itemCount: Constants.colors.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => ColorTag<T>(
+                    radius: Constants.kBorderRadius / 2,
+                    size: 50,
+                    color: Constants.colors[index],
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 36,
               ),
               SizedBox(
-                height: Get.height / 20,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
-                  child: ListView.builder(
-                    itemCount: Constants.tags.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => WWallPaperTag(
-                      viewModel: wallpaperViewModel,
-                      tag: Constants.tags[index],
-                    ),
+                height: Get.height / 18,
+                child: ListView.builder(
+                  padding: const EdgeInsets.only(left: 0.0),
+                  controller: wallpaperViewModel.tagsListScrollController,
+                  itemCount: Constants.tags.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => WWallPaperTag(
+                    viewModel: wallpaperViewModel,
+                    tag: Constants.tags[index],
                   ),
                 ),
               ),
               wallpaperViewModel.filteredWallpapers.isNotEmpty
                   ? MasonryGrid(
                       staggered: true,
-                      column: 2,
+                      column: 3,
                       children: List.generate(
                         wallpaperViewModel.filteredWallpapers.length,
                         (i) => SizedBox(
@@ -91,39 +120,81 @@ mixin SearchMixin<T> {
         ),
       );
 
-  Widget searchField(WallpaperViewModel wallpaperViewModel) => Container(
-        // padding: const EdgeInsets.
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: TinyColor(Theme.of(Get.context!).backgroundColor)
-              .color
-              .lighten()
-              .withOpacity(.45),
-          borderRadius: BorderRadius.circular(
-            Constants.kBorderRadius,
-          ),
-        ),
-        child: TextField(
-          controller: wallpaperViewModel.searchQueryTEC,
-          onSubmitted: (text) {
-            search();
-          },
-          /*onChanged: (text) async {
-            search(text);
-          },*/
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              Iconsax.search_normal,
-              color: Theme.of(Get.context!).textTheme.bodyText1?.color,
-              size: 18,
+  Widget searchField(WallpaperViewModel wallpaperViewModel) => Row(
+        children: [
+          Expanded(
+            child: Container(
+              // padding: const EdgeInsets.
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: TinyColor(Theme.of(Get.context!).backgroundColor)
+                    .color
+                    .lighten()
+                    .withOpacity(.45),
+                borderRadius: BorderRadius.circular(
+                  Constants.kBorderRadius,
+                ),
+              ),
+              child: TextField(
+                style: TextStyles.textStyle.apply(
+                  color: Theme.of(Get.context!).textTheme.bodyText1?.color,
+                  fontSizeDelta: -4,
+                ),
+                controller: wallpaperViewModel.searchQueryTEC,
+                onSubmitted: (text) {
+                  search();
+                },
+                /*onChanged: (text) async {
+                  search(text);
+                },*/
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Iconsax.search_normal,
+                    color: Theme.of(Get.context!).textTheme.bodyText1?.color,
+                    size: 18,
+                  ),
+                  border: InputBorder.none,
+                  hintText: AppLocalizations.of(Get.context!)!.search_here,
+                  hintStyle: TextStyles.textStyle.apply(
+                    color: TinyColor(
+                            Theme.of(Get.context!).textTheme.bodyText1!.color!)
+                        .darken()
+                        .tint()
+                        .color,
+                    fontSizeDelta: -2,
+                  ),
+                ),
+              ),
             ),
-            border: InputBorder.none,
-            hintText: AppLocalizations.of(Get.context!)!.search_here,
-            hintStyle: TextStyle(
-              color: Theme.of(Get.context!).textTheme.bodyText1?.color,
-              fontSize: 13,
-            ),
           ),
-        ),
+          const SizedBox(
+            width: 12,
+          ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(
+                width: .8,
+                color: TinyColor(
+                  Theme.of(Get.context!).textTheme.bodyText1!.color!,
+                ).color,
+              ),
+              borderRadius: BorderRadius.circular(
+                Constants.kBorderRadius,
+              ),
+              color: TinyColor(Theme.of(Get.context!).backgroundColor)
+                  .color
+                  .tint()
+                  .withOpacity(.6),
+            ),
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Iconsax.filter_search,
+                size: 20,
+                color: Theme.of(Get.context!).textTheme.bodyText1?.color,
+              ),
+            ),
+          )
+        ],
       );
 }

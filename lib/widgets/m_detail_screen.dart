@@ -8,6 +8,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
+import 'package:mobile/widgets/w_color_tag.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 import '../utils/text_styles.dart';
@@ -29,30 +30,10 @@ mixin DetailsMixin<T> {
 
   List<Widget> get colorsWidget => [
         ...colors
-            .map(
-              (e) => GestureDetector(
-                onTap: () {
-                  //TODO- implement search wallpapers based on colors
-                },
-                child: Container(
-                  height: 35,
-                  width: 35,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(0, 4),
-                        blurRadius: 8,
-                        color: Theme.of(Get.context!)
-                            .backgroundColor
-                            .withOpacity(.08),
-                      ),
-                    ],
-                    shape: BoxShape.circle,
-                    color: e,
-                  ),
-                ),
-              ),
-            )
+            .map((e) => ColorTag<T>(
+                  color: e,
+                  radius: Constants.kBorderRadius * 100,
+                ))
             .toList()
       ];
 

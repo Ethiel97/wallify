@@ -42,6 +42,7 @@ dependencies:
   masonry_grid: ^1.0.0
   http:
   secure_shared_preferences:
+  flutter_secure_storage:
   logger:
   gallery_saver: ^2.3.2
   flutter_dotenv: ^5.0.2

@@ -5,6 +5,12 @@ import 'package:mobile/utils/secure_storage.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
+enum AppTheme {
+  dark,
+  light;
+
+ String get description => name;
+}
 class ThemeProvider with ChangeNotifier {
   final String _themeMode = 'THEME_STATUS';
   String _currentTheme = 'dark';

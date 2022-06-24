@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:tinycolor2/tinycolor2.dart';
 
 class Constants {
-  static const double kBorderRadius = 20;
+  static const double kBorderRadius = 15;
   static const int kDuration = 200;
   static const String appName = "Wallinice";
   static const int perPageResults = 20;
@@ -22,7 +25,7 @@ class Constants {
     'Buildings',
     'Mountains',
     'Music',
-    'Nature',
+    'Landscape',
     'Science',
     'Comics',
     'Travel',
@@ -42,6 +45,37 @@ class Constants {
     'Technology',
     'Basketball',
     'Football'
+  }.toList()
+    ..shuffle();
+
+  static List<Color> colors = {
+    const Color(0xff660000),
+    const Color(0xff990000),
+    const Color(0xffcc0000),
+    const Color(0xffcc3333),
+    const Color(0xffea4c88),
+    const Color(0xff993399),
+    const Color(0xff333399),
+    const Color(0xff0066cc),
+    const Color(0xff0099cc),
+    const Color(0xff66cccc),
+    const Color(0xff77cc33),
+    const Color(0xff669900),
+    const Color(0xff336600),
+    const Color(0xff666600),
+    const Color(0xff999900),
+    const Color(0xffcccc33),
+    const Color(0xffffcc33),
+    const Color(0xffff9900),
+    const Color(0xffff6600),
+    const Color(0xffcc6633),
+    const Color(0xff996633),
+    const Color(0xff663300),
+    const Color(0xff000000),
+    const Color(0xff999999),
+    const Color(0xffcccccc),
+    const Color(0xffffffff),
+    const Color(0xff424153),
   }.toList()
     ..shuffle();
 }
