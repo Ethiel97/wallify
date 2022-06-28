@@ -4,6 +4,7 @@ import 'package:mobile/screens/onboarding_screen.dart';
 import 'package:mobile/screens/pexels/home_screen.dart';
 import 'package:mobile/screens/pexels/wallpaper_detail_screen.dart' as px;
 import 'package:mobile/screens/splash_screen.dart';
+import 'package:mobile/screens/wallhaven/wallpaper_by_color_screen.dart' as wh;
 import 'package:mobile/screens/wallhaven/wallpaper_detail_screen.dart' as wh;
 
 const String splash = '/splash';
@@ -15,6 +16,7 @@ const String landing = '/main';
 const String auth = '/auth';
 const String wallpaperDetailPx = '/wallpaperDetailPexels';
 const String wallpaperDetailWh = '/wallpaperDetailWallhaven';
+const String wallpaperByColorWh = '/wallpaperDetailByColorWh';
 
 Map<String, WidgetBuilder> appRoutes = {
   splash: (context) => const SplashScreen(
@@ -28,6 +30,9 @@ Map<String, WidgetBuilder> appRoutes = {
       ),
   landing: (context) => const MainScreen(
         key: ValueKey("d"),
+      ),
+  wallpaperByColorWh: (context) => const wh.WallpaperByColorScreen(
+        key: ValueKey("e"),
       ),
   wallpaperDetailPx: (context) => const px.WallpaperDetailScreen(
         key: ValueKey("e"),

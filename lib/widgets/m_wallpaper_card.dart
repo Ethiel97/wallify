@@ -10,6 +10,8 @@ mixin WallpaperCard<T> {
 
   String get imgUrl => value.toString();
 
+  String get cacheKey => value.toString();
+
   Widget buildCard(BuildContext context) => Hero(
         tag: imgUrl,
         transitionOnUserGestures: true,
@@ -18,7 +20,7 @@ mixin WallpaperCard<T> {
           child: CachedNetworkImage(
             fit: BoxFit.cover,
             imageUrl: imgUrl,
-            cacheKey: imgUrl,
+            cacheKey: cacheKey,
             errorWidget: (context, error, dynamic) => loader,
             imageBuilder: (context, imageProvider) => Container(
               height: Get.height * .7,

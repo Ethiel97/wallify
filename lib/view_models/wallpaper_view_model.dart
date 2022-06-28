@@ -27,6 +27,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
   TextEditingController searchQueryTEC = TextEditingController(text: '');
   ScrollController searchPageScrollController = ScrollController();
+  ScrollController wallpapersByColorPageScrollController = ScrollController();
 
   double searchPageMaxScrollExtent = 0.0;
 
@@ -151,6 +152,18 @@ class WallpaperViewModel<T> extends BaseViewModel {
         }
       }
     });
+
+    wallpapersByColorPageScrollController.addListener(() {
+      if (searchPageScrollController.hasClients) {
+        // LogUtils.log("SEARCH PAGE SCROLLING: ${searchPageScrollController.position.pixels}");
+        // LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
+
+        if (wallpapersByColorPageScrollController.position.pixels ==
+            searchPageMaxScrollExtent) {
+          loadMore();
+        }
+      }
+    });
   }
 
   fetchTopWallPapers({Map<String, dynamic> query = const {'q': 'Cars'}}) async {
@@ -227,13 +240,15 @@ class WallpaperViewModel<T> extends BaseViewModel {
           fn: () async {
             isLoading = true;
 
+            var requestQuery = {'query': query, 'q': query};
+
             List<T> results = await wallpaperRepository
-                .searchItems(query: {'query': query, 'q': query, ...details});
+                .searchItems(query: {...requestQuery, ...details});
 
             if (details.isNotEmpty && details.containsKey('colors')) {
               filteredWallpapersByColor = [...results];
 
-              print("COLORS RESULT: ${filteredWallpapers.length}");
+              print("COLORS RESULT: ${filteredWallpapersByColor.length}");
               reloadState();
             }
 
@@ -284,7 +299,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
     }
   }
 
-  downloadWallPaper(String url) async {
+  void downloadWallPaper(String url) async {
     try {
       var file = await DefaultCacheManager().getSingleFile(url);
 
@@ -301,7 +316,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
     }
   }
 
-  applyWallPaper(String url) async {
+  void applyWallPaper(String url) async {
     String result;
     var file = await DefaultCacheManager().getSingleFile(url);
     // Platform messages may fail, so we use a try/catch PlatformException.

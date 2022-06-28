@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
@@ -27,6 +29,8 @@ class ColorTag<T> extends StatelessWidget {
               delay: 300,
               details: {'colors': TinyColor(color).toHex8().substring(2)},
             );
+
+            Get.toNamed(wallpaperByColorWh);
             //TODO- implement search wallpapers based on colors
           },
           child: Container(

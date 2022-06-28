@@ -17,6 +17,9 @@ class PxWallPaperCard extends StatelessWidget with WallpaperCard<WallPaper> {
   String get imgUrl => wallPaper.src.large2x;
 
   @override
+  String get cacheKey => wallPaper.id.toString();
+
+  @override
   Widget build(BuildContext context) => Consumer<WallpaperViewModel<WallPaper>>(
         builder: (context, viewModel, _) => GestureDetector(
           onLongPress: () {

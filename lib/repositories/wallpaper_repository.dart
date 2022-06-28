@@ -38,8 +38,7 @@ class WallPaperRepository<T> extends IRepository {
         options.path += "$key=$value${lastKey == key ? '' : '&'}";
       });
 
-      // LogUtils.log("PATH: ${options.path}");
-
+      LogUtils.log("PATH: ${options.path}");
       // options.
 
       // Do something before request is sent
@@ -74,14 +73,17 @@ class WallPaperRepository<T> extends IRepository {
     String url = "${baseApiUrl}photos/$id?";
 
     String lastKey = "";
-    query.forEach((key, value) {
-      lastKey = key;
-    });
+    if (query.isNotEmpty) {
+      query.forEach((key, value) {
+        lastKey = key;
+      });
 
-    query.forEach((key, value) {
-      url += "$key=$value${lastKey == key ? '' : '&'}";
-    });
-
+      query.forEach((key, value) {
+        if ((value as String).trim().isNotEmpty) {
+          url += "$key=$value${lastKey == key ? '' : '&'}";
+        }
+      });
+    }
     Response response = await dio.get(url);
 
     return creatorCallback(response.data);
@@ -92,13 +94,17 @@ class WallPaperRepository<T> extends IRepository {
     String url = "${baseApiUrl}search?";
 
     String lastKey = "";
-    query.forEach((key, value) {
-      lastKey = key;
-    });
+    if (query.isNotEmpty) {
+      query.forEach((key, value) {
+        lastKey = key;
+      });
 
-    query.forEach((key, value) {
-      url += "$key=$value${lastKey == key ? '' : '&'}";
-    });
+      query.forEach((key, value) {
+        if ((value as String).trim().isNotEmpty) {
+          url += "$key=$value${lastKey == key ? '' : '&'}";
+        }
+      });
+    }
 
     /*print(url);
 
@@ -125,13 +131,18 @@ class WallPaperRepository<T> extends IRepository {
     String url = "${baseApiUrl}search?";
 
     String lastKey = "";
-    query.forEach((key, value) {
-      lastKey = key;
-    });
 
-    query.forEach((key, value) {
-      url += "$key=$value${lastKey == key ? '' : '&'}";
-    });
+    if (query.isNotEmpty) {
+      query.forEach((key, value) {
+        lastKey = key;
+      });
+
+      query.forEach((key, value) {
+        if ((value as String).trim().isNotEmpty) {
+          url += "$key=$value${lastKey == key ? '' : '&'}";
+        }
+      });
+    }
 
     Response response = await dio.get(url);
 
