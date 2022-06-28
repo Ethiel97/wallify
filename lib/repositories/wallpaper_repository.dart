@@ -38,7 +38,7 @@ class WallPaperRepository<T> extends IRepository {
         options.path += "$key=$value${lastKey == key ? '' : '&'}";
       });
 
-      LogUtils.log("PATH: ${options.path}");
+      // LogUtils.log("PATH: ${options.path}");
 
       // options.
 
@@ -49,7 +49,7 @@ class WallPaperRepository<T> extends IRepository {
       // If you want to reject the request with a error message,
       // you can reject a `DioError` object eg: `handler.reject(dioError)`
     }, onResponse: (response, handler) {
-      LogUtils.log("uri: ${response.realUri.path.toString()}");
+      // LogUtils.log("uri: ${response.realUri.path.toString()}");
       Response responseModified = response
         ..data = wallPaperProvider == WallPaperProvider.pexels
             ? response.data['photos']

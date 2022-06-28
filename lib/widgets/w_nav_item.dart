@@ -40,7 +40,7 @@ class NavItem extends StatelessWidget {
                   : TinyColor(Theme.of(context).backgroundColor)
                       .lighten(4)
                       .color
-                      .withOpacity(.85),
+                      .withOpacity(.88),
             ),
             duration: const Duration(milliseconds: 300),
             child: navigationProvider.currentIndex == index

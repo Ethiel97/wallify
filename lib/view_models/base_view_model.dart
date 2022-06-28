@@ -28,7 +28,7 @@ abstract class BaseViewModel<T extends Object> with ChangeNotifier {
 
   FutureOr<void> init();
 
-  void paginate();
+  void loadMore();
 
   void _init() async {
     isLoading = true;

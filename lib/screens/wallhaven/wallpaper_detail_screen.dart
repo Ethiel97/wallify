@@ -17,7 +17,7 @@ class WallpaperDetailScreen extends StatefulWidget {
 }
 
 class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
-    with DetailsMixin<WallPaper> {
+    with DetailsMixin<WallPaper>, AutomaticKeepAliveClientMixin {
   // calculate drag ratio with notificationscrolllistener
   /*dragRatio = (notification.extent - notification.minExtent) /
   (notification.maxExtent - notification.minExtent);*/
@@ -41,6 +41,9 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   String get photographer => "N/A";
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   List<Color> get colors => [
         ...List.from(Provider.of<WallpaperViewModel<WallPaper>>(context)
                 .selectedWallpaper
@@ -52,6 +55,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BaseView<WallpaperViewModel<WallPaper>>(
       key: UniqueKey(),
       vmBuilder: (context) =>

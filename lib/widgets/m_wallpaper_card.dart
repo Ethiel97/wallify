@@ -19,6 +19,7 @@ mixin WallpaperCard<T> {
             fit: BoxFit.cover,
             imageUrl: imgUrl,
             cacheKey: imgUrl,
+            errorWidget: (context, error, dynamic) => loader,
             imageBuilder: (context, imageProvider) => Container(
               height: Get.height * .7,
               width: Get.width,
@@ -47,7 +48,7 @@ mixin WallpaperCard<T> {
                   BoxShadow(
                     offset: const Offset(0, 10),
                     blurRadius: 20,
-                    color: Theme.of(context).backgroundColor.withOpacity(.08),
+                    color: Theme.of(context).backgroundColor.withOpacity(.04),
                   ),
                 ],
               ),

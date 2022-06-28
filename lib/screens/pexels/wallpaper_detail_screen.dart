@@ -17,7 +17,7 @@ class WallpaperDetailScreen extends StatefulWidget {
 }
 
 class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
-    with DetailsMixin<WallPaper> {
+    with DetailsMixin<WallPaper>, AutomaticKeepAliveClientMixin {
   // calculate drag ratio with notificationscrolllistener
   /*dragRatio = (notification.extent - notification.minExtent) /
   (notification.maxExtent - notification.minExtent);*/
@@ -31,6 +31,9 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
     });
     super.initState();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   String get imgUrl => Provider.of<WallpaperViewModel<WallPaper>>(context)
@@ -52,12 +55,16 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
       ];
 
   @override
-  Widget build(BuildContext context) => BaseView<WallpaperViewModel<WallPaper>>(
-        key: UniqueKey(),
-        vmBuilder: (context) =>
-            Provider.of<WallpaperViewModel<WallPaper>>(context),
-        builder: buildScreen,
-      );
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return BaseView<WallpaperViewModel<WallPaper>>(
+      key: UniqueKey(),
+      vmBuilder: (context) =>
+          Provider.of<WallpaperViewModel<WallPaper>>(context),
+      builder: buildScreen,
+    );
+  }
 
   @override
   void applyWallPaper() {

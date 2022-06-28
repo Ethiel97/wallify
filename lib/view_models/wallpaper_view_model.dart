@@ -7,11 +7,13 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
+import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/base_view_model.dart';
+import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 typedef WallPaperCallBack = Future<dynamic> Function(String url);
@@ -21,13 +23,18 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
   String? selectedTag = "Cars";
 
+  String previousQuery = "";
+
   TextEditingController searchQueryTEC = TextEditingController(text: '');
-  ScrollController scrollController = ScrollController();
+  ScrollController searchPageScrollController = ScrollController();
+
+  double searchPageMaxScrollExtent = 0.0;
 
   String searchQuery = "";
   late T _selectedWallpaper;
 
-  int page = 1;
+  int currentPaginationPageSearch = 1;
+  int currentPaginationPageHome = 1;
   PageController pageController = PageController(
     initialPage: 0,
     viewportFraction: .85,
@@ -48,7 +55,6 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
     Get.toNamed("/wallpaperDetail$route",
         arguments: {'wallpaper': selectedWallpaper});
-    reloadState();
   }
 
   final WallPaperRepository<T> wallpaperRepository;
@@ -92,11 +98,12 @@ class WallpaperViewModel<T> extends BaseViewModel {
         child: Text(
           actionText,
           style: TextStyles.textStyle.apply(
-              color: TinyColor(
-                Theme.of(Get.context!).colorScheme.secondary,
-              ).lighten(15).color,
-              fontSizeDelta: -4,
-              fontWeightDelta: 10),
+            color: TinyColor(
+              Theme.of(Get.context!).colorScheme.secondary,
+            ).lighten(15).color,
+            fontSizeDelta: -4,
+            fontWeightDelta: 10,
+          ),
         ),
       ),
     );
@@ -105,6 +112,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
   @override
   FutureOr<void> init() async {
     //listening to pageview changes
+    await fetchTopWallPapers();
+
     pageController.addListener(() async {
       //notifyListeners
       reloadState();
@@ -112,32 +121,36 @@ class WallpaperViewModel<T> extends BaseViewModel {
         //if the user reaches the last item, we search for the
         // next page results using pagination method
         if (pageController.page?.floor() ==
-            (Constants.perPageResults * page) - 1) {
+            (Constants.perPageResults * currentPaginationPageHome) - 1) {
           // print("END OF SCROLLING");
-          paginate();
+          loadMore();
         }
       }
     });
 
     tagsListScrollController.addListener(() {
       if (tagsListScrollController.hasClients) {
-        LogUtils.log("SCROLLING tags: ${tagsListScrollController.offset}");
+        // LogUtils.log("SCROLLING tags: ${tagsListScrollController.offset}");
       }
     });
 
     colorsListScrollController.addListener(() {
       if (colorsListScrollController.hasClients) {
-        LogUtils.log("SCROLLING tags: ${colorsListScrollController.offset}");
+        // LogUtils.log("SCROLLING tags: ${colorsListScrollController.offset}");
       }
     });
 
-    scrollController.addListener(() {
-      if (scrollController.hasClients) {
-        LogUtils.log("SCROLLING: ${scrollController.offset}");
+    searchPageScrollController.addListener(() {
+      if (searchPageScrollController.hasClients) {
+        // LogUtils.log("SEARCH PAGE SCROLLING: ${searchPageScrollController.position.pixels}");
+        // LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
+
+        if (searchPageScrollController.position.pixels ==
+            searchPageMaxScrollExtent) {
+          loadMore();
+        }
       }
     });
-
-    await fetchTopWallPapers();
   }
 
   fetchTopWallPapers({Map<String, dynamic> query = const {'q': 'Cars'}}) async {
@@ -164,23 +177,42 @@ class WallpaperViewModel<T> extends BaseViewModel {
   }
 
   @override
-  paginate() async {
+  loadMore() async {
     //handle pagination
-    page += 1;
-    await fetchTopWallPapers(query: {'page': page, 'current_page': page});
-    reloadState();
+
+    if (Provider.of<NavigationProvider>(Get.context!, listen: false)
+            .currentIndex ==
+        1) {
+      currentPaginationPageHome += 1;
+
+      await fetchTopWallPapers(query: {
+        'page': currentPaginationPageHome,
+        'current_page': currentPaginationPageHome
+      });
+      reloadState();
+    } else {
+      currentPaginationPageSearch += 1;
+
+      await searchWallpapers(searchQueryTEC.text,
+          details: {'page': currentPaginationPageSearch});
+    }
   }
 
   searchWallpapers(
     String query, {
     int delay = 500,
-    String page = 'Search',
     Map<String, Object> details = const {},
   }) async {
+    int navigationCurrentPage =
+        Provider.of<NavigationProvider>(Get.context!, listen: false)
+            .currentIndex;
     searchQueryTEC.text = query;
 
+    bool isSameCategory = previousQuery == query;
+
     selectedTag = Constants.tags.firstWhereOrNull(
-        (element) => element.toLowerCase() == query.toLowerCase());
+      (element) => element.toLowerCase() == query.toLowerCase(),
+    );
 
     /*if (selectedTag != null && selectedTag!.isNotEmpty) {
       reloadState();
@@ -199,24 +231,46 @@ class WallpaperViewModel<T> extends BaseViewModel {
                 .searchItems(query: {'query': query, 'q': query, ...details});
 
             if (details.isNotEmpty && details.containsKey('colors')) {
-              filteredWallpapersByColor = results;
+              filteredWallpapersByColor = [...results];
+
+              print("COLORS RESULT: ${filteredWallpapers.length}");
               reloadState();
             }
 
-            // filteredWallpapers = [...results, ...filteredWallpapers];
+            //search page
+            else if (navigationCurrentPage == 0) {
+              filteredWallpapers = [
+                if (isSameCategory) ...filteredWallpapers,
+                ...results,
+              ];
 
-            if (page == 'Search') {
-              filteredWallpapers = results;
-              reloadState();
-            }
+              if (searchPageScrollController.hasClients) {
+                print("ANIMATING TO END");
 
-            if (page == 'Home') {
-              wallpapers = results;
-              reloadState();
-
-              pageController.animateToPage(0,
+                searchPageScrollController.animateTo(
+                  searchPageMaxScrollExtent * currentPaginationPageHome,
                   duration: const Duration(milliseconds: Constants.kDuration),
-                  curve: Curves.easeInOutCubicEmphasized);
+                  curve: Curves.easeInOutCubicEmphasized,
+                );
+              }
+              // reloadState();
+            }
+
+            //home page
+            else if (navigationCurrentPage == 1) {
+              wallpapers = [
+                ...results,
+                if (isSameCategory) ...wallpapers,
+              ];
+              reloadState();
+
+              if (pageController.hasClients) {
+                pageController.animateToPage(
+                  0,
+                  duration: const Duration(milliseconds: Constants.kDuration),
+                  curve: Curves.easeInOutCubicEmphasized,
+                );
+              }
             }
 
             finishLoading();
@@ -225,6 +279,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
       }
     } catch (e) {
       LogUtils.error(e);
+    } finally {
+      previousQuery = searchQueryTEC.text;
     }
   }
 

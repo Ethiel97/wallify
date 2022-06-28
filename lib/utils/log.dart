@@ -1,7 +1,7 @@
 import 'package:logger/logger.dart';
 
 class DebugUtils {
-  static void info(dynamic message) {
+  static void info(Object message) {
     Logger().i(message);
   }
 }
@@ -12,11 +12,11 @@ final logger = _logInstance;
 // ignore: avoid_classes_with_only_static_members
 class LogUtils {
   // static Logger get logger => _logInstance;
-  static void log(dynamic message) {
+  static void log(Object message) {
     _logInstance.i(message);
   }
 
-  static void error(dynamic message) {
+  static void error(Object message) {
     _logInstance.e(message);
   }
 }

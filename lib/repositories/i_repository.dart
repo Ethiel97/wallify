@@ -5,9 +5,9 @@ import 'package:mobile/utils/constants.dart';
 abstract class IRepository<T> {
   static const Map defaultParams = {
     'per_page': Constants.perPageResults,
-    'purity': 110,
+    'purity': 100,
     'sorting': 'relevance',
-    'order': 'desc,'
+    'order': 'desc'
   };
 
   FutureOr<List<T>> getItems({Map<String, dynamic> query = const {}});

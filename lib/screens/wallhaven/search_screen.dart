@@ -14,18 +14,25 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen>
-    with SearchMixin<WallPaper> {
+    with SearchMixin<WallPaper>, AutomaticKeepAliveClientMixin {
   @override
-  Widget build(BuildContext context) => BaseView<WallpaperViewModel<WallPaper>>(
-        key: UniqueKey(),
-        vmBuilder: (context) =>
-            Provider.of<WallpaperViewModel<WallPaper>>(context),
-        builder: buildScreen,
-      );
+  Widget build(BuildContext context) {
+    super.build(context);
+    return BaseView<WallpaperViewModel<WallPaper>>(
+      key: UniqueKey(),
+      vmBuilder: (context) =>
+          Provider.of<WallpaperViewModel<WallPaper>>(context),
+      builder: buildScreen,
+    );
+  }
 
   @override
   Widget setWallPaperCard(int index) => WhWallpaperCard(
-        wallPaper: Provider.of<WallpaperViewModel<WallPaper>>(context)
-            .filteredWallpapers[index],
+        wallPaper:
+            Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+                .filteredWallpapers[index],
       );
+
+  @override
+  bool get wantKeepAlive => true;
 }

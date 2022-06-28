@@ -30,77 +30,95 @@ mixin SearchMixin<T> {
         backgroundColor: Theme.of(Get.context!).backgroundColor,
         extendBodyBehindAppBar: false,
         body: Consumer<ThemeProvider>(
-          builder: (context, themeProvider, _) => ListView(
-            physics: const ClampingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 18,
-            ),
-            children: [
-              const SizedBox(
-                height: 48,
+          builder: (context, themeProvider, _) =>
+              NotificationListener<ScrollNotification>(
+            onNotification: (ScrollNotification scrollNotification) {
+              wallpaperViewModel.searchPageMaxScrollExtent =
+                  scrollNotification.metrics.maxScrollExtent;
+
+              return false;
+            },
+            child: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.vertical,
+              controller: wallpaperViewModel.searchPageScrollController,
+              physics: const ClampingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 18,
               ),
-              /*Text(
-                Constants.appName.toLowerCase(),
-                textAlign: TextAlign.center,
-                style: TextStyles.textStyle.apply(
-                  fontWeightDelta: 5,
-                  fontSizeDelta: 2,
-                  color: Theme.of(context).textTheme.bodyText1!.color,
+              children: [
+                const SizedBox(
+                  height: 48,
                 ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),*/
-              searchField(wallpaperViewModel),
-              const SizedBox(
-                height: 24,
-              ),
-              // TODO implement sliverlist
-              Text(
-                AppLocalizations.of(context)!.color_tone,
-                style: TextStyles.textStyle.apply(
-                  color: Theme.of(context).textTheme.bodyText1!.color!,
-                  fontSizeDelta: -2,
+                /*Text(
+                      Constants.appName.toLowerCase(),
+                      textAlign: TextAlign.center,
+                      style: TextStyles.textStyle.apply(
+                        fontWeightDelta: 5,
+                        fontSizeDelta: 2,
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),*/
+                searchField(wallpaperViewModel),
+                const SizedBox(
+                  height: 24,
                 ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              SizedBox(
-                height: Get.height / 16,
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(left: 0.0),
-                  controller: wallpaperViewModel.colorsListScrollController,
-                  itemCount: Constants.colors.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => ColorTag<T>(
-                    radius: Constants.kBorderRadius / 2,
-                    size: 50,
-                    color: Constants.colors[index],
+                // TODO implement sliverlist
+                Text(
+                  AppLocalizations.of(context)!.color_tone,
+                  style: TextStyles.textStyle.apply(
+                    color: Theme.of(context).textTheme.bodyText1!.color!,
+                    fontSizeDelta: -2,
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 36,
-              ),
-              SizedBox(
-                height: Get.height / 18,
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(left: 0.0),
-                  controller: wallpaperViewModel.tagsListScrollController,
-                  itemCount: Constants.tags.length,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => WWallPaperTag(
-                    viewModel: wallpaperViewModel,
-                    tag: Constants.tags[index],
+                const SizedBox(
+                  height: 12,
+                ),
+                SizedBox(
+                  height: Get.height / 16,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(left: 0.0),
+                    controller: wallpaperViewModel.colorsListScrollController,
+                    itemCount: Constants.colors.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => ColorTag<T>(
+                      radius: Constants.kBorderRadius / 2,
+                      size: 50,
+                      color: Constants.colors[index],
+                    ),
                   ),
                 ),
-              ),
-              wallpaperViewModel.filteredWallpapers.isNotEmpty
-                  ? MasonryGrid(
+                const SizedBox(
+                  height: 36,
+                ),
+                SizedBox(
+                  height: Get.height / 18,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(left: 0.0),
+                    controller: wallpaperViewModel.tagsListScrollController,
+                    itemCount: Constants.tags.length,
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) => WWallPaperTag(
+                      viewModel: wallpaperViewModel,
+                      tag: Constants.tags[index],
+                    ),
+                  ),
+                ),
+                if (wallpaperViewModel.filteredWallpapers.isNotEmpty)
+                  NotificationListener<ScrollNotification>(
+                    onNotification: (ScrollNotification notification) {
+                      /* LogUtils.log(
+                              "SCROLL EXTENT: ${notification.metrics.pixels}");
+                      */
+                      return false;
+                    },
+                    child: MasonryGrid(
                       staggered: true,
                       column: 3,
                       children: List.generate(
@@ -110,12 +128,15 @@ mixin SearchMixin<T> {
                           child: setWallPaperCard(i),
                         ),
                       ).toList(),
-                    )
-                  : Image.asset(
-                      'assets/images/empty-${themeProvider.currentTheme}.png',
-                      fit: BoxFit.contain,
                     ),
-            ],
+                  )
+                else
+                  Image.asset(
+                    'assets/images/empty-${themeProvider.currentTheme}.png',
+                    fit: BoxFit.contain,
+                  ),
+              ],
+            ),
           ),
         ),
       );

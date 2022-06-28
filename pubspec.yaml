@@ -38,9 +38,9 @@ dependencies:
   async_wallpaper:
   cached_network_image:
   flutter_cache_manager:
-  staggered_grid_view_flutter:
   masonry_grid: ^1.0.0
   http:
+  flutter_staggered_grid_view:
   secure_shared_preferences:
   flutter_secure_storage:
   logger:

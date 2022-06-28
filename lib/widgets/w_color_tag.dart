@@ -22,12 +22,11 @@ class ColorTag<T> extends StatelessWidget {
         builder: (context, wallpaperViewModel, _) => GestureDetector(
           onTap: () {
             LogUtils.log("COLOR: ${color.toTinyColor().toHex8().substring(2)}");
-            /*wallpaperViewModel.searchWallpapers(
+            wallpaperViewModel.searchWallpapers(
               '',
               delay: 300,
-              page: '',
               details: {'colors': TinyColor(color).toHex8().substring(2)},
-            );*/
+            );
             //TODO- implement search wallpapers based on colors
           },
           child: Container(
