@@ -23,6 +23,8 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   (notification.maxExtent - notification.minExtent);*/
   @override
   void initState() {
+    // TODO fix scrollablecontroller bug
+
     scrollableController = DraggableScrollableController();
     dragRatio = 0.21;
 
@@ -39,6 +41,10 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
 
   @override
   String get photographer => "N/A";
+
+  @override
+  String get imgSize =>
+      "${(Provider.of<WallpaperViewModel<WallPaper>>(context).selectedWallpaper.fileSize! / 10000000).toStringAsFixed(2)}MB";
 
   @override
   bool get wantKeepAlive => true;

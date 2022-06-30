@@ -29,9 +29,9 @@ class NavItem extends StatelessWidget {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.darkColor.withOpacity(.4),
-                  offset: const Offset(0, 4),
-                  blurRadius: 8,
+                  color: AppColors.darkColor.withOpacity(.02),
+                  offset: const Offset(0, 16),
+                  blurRadius: 32,
                 )
               ],
               borderRadius: BorderRadius.circular(100),

@@ -7,7 +7,7 @@ class Constants {
   static const double kBorderRadius = 15;
   static const int kDuration = 150;
   static const String appName = "Wallinice";
-  static const int perPageResults = 64;
+  static const int perPageResults = 32;
   static String? pexelsApiKey = dotenv.env['PEXELS_API_KEY'];
   static String? pexelsApiHost = dotenv.env['PEXELS_API_HOST'];
   static String? wallhavenApiKey = dotenv.env['WALLHAVEN_API_KEY'];

@@ -138,7 +138,7 @@ class WallPaperRepository<T> extends IRepository {
       });
 
       query.forEach((key, value) {
-        if ((value as String).trim().isNotEmpty) {
+        if (value is String && (value).trim().isNotEmpty) {
           url += "$key=$value${lastKey == key ? '' : '&'}";
         }
       });

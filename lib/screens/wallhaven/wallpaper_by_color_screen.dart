@@ -21,6 +21,10 @@ class WallpaperByColorScreenState extends State<WallpaperByColorScreen>
   bool get wantKeepAlive => true;
 
   @override
+  Color get selectedColor =>
+      Provider.of<WallpaperViewModel<WallPaper>>(context).selectedColor;
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return BaseView<WallpaperViewModel<WallPaper>>(

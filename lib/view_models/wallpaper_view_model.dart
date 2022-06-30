@@ -25,6 +25,15 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
   String previousQuery = "";
 
+  Color _selectedColor = Colors.black;
+
+  Color get selectedColor => _selectedColor;
+
+  set selectedColor(Color selectedColor) {
+    _selectedColor = selectedColor;
+    reloadState();
+  }
+
   TextEditingController searchQueryTEC = TextEditingController(text: '');
   ScrollController searchPageScrollController = ScrollController();
   ScrollController wallpapersByColorPageScrollController = ScrollController();
@@ -244,12 +253,14 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
             List<T> results = await wallpaperRepository
                 .searchItems(query: {...requestQuery, ...details});
-
             if (details.isNotEmpty && details.containsKey('colors')) {
               filteredWallpapersByColor = [...results];
-
+              // reloadState();
+              _selectedColor = details['color'] as Color;
+              // reloadState();
               print("COLORS RESULT: ${filteredWallpapersByColor.length}");
-              reloadState();
+              finishLoading();
+              return;
             }
 
             //search page
@@ -287,14 +298,13 @@ class WallpaperViewModel<T> extends BaseViewModel {
                 );
               }
             }
-
-            finishLoading();
           },
         );
       }
     } catch (e) {
       LogUtils.error(e);
     } finally {
+      finishLoading();
       previousQuery = searchQueryTEC.text;
     }
   }

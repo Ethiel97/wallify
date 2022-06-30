@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 mixin WallpapersByColorsMixin<T> {
   Widget setWallPaperCard(int index);
 
+  Color get selectedColor => Colors.black54;
+
   Widget buildScreen(
           BuildContext context, WallpaperViewModel<T> wallpaperViewModel) =>
       Scaffold(
@@ -23,14 +25,33 @@ mixin WallpapersByColorsMixin<T> {
               // size: 32,
               color: Theme.of(context).textTheme.bodyText1!.color,
             ),
-            onPressed: () => Get.back(),
+            onPressed: () {
+              // wallpaperViewModel.reloadState();
+              Get.back();
+            },
           ),
-          title: Text(
-            AppLocalizations.of(context)!.colors,
-            style: TextStyles.textStyle.apply(
-              color: Theme.of(context).textTheme.bodyText1!.color,
-              fontSizeDelta: 3,
-            ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.colors,
+                style: TextStyles.textStyle.apply(
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                  fontSizeDelta: 3,
+                ),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              Expanded(
+                child: Container(
+                  color: selectedColor,
+                  // radius: Constants.kBorderRadius,
+                  // size: 20,
+                ),
+              ),
+            ],
           ),
           elevation: 0.0,
           backgroundColor: Colors.transparent,

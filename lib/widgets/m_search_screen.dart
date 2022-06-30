@@ -90,6 +90,7 @@ mixin SearchMixin<T> {
                       radius: Constants.kBorderRadius / 2,
                       size: 50,
                       color: Constants.colors[index],
+
                     ),
                   ),
                 ),

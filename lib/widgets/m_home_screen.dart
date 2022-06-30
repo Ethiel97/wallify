@@ -40,9 +40,10 @@ mixin HomeScreenMixin<T> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
-                    AppColors.darkColor.withOpacity(.90),
-                    BlendMode.overlay,
+                    AppColors.darkColor.withOpacity(.15),
+                    BlendMode.srcOver,
                   ),
+                  filterQuality: FilterQuality.high,
                   fit: BoxFit.cover,
                   image: CachedNetworkImageProvider(
                     selectedWallPaperImgUrl,
@@ -84,10 +85,11 @@ mixin HomeScreenMixin<T> {
                       AppLocalizations.of(context)!.browse_awesome_wallpapers,
                       style: TextStyles.textStyle.apply(
                         fontSizeDelta: -4,
+                        fontWeightDelta: 4,
                         color: TinyColor(
                                 Theme.of(context).textTheme.bodyText1!.color!)
-                            .tint()
-                            .darken()
+                            .tint(20)
+                            .lighten()
                             .color,
                       ),
                     ),

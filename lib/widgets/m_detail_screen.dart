@@ -28,11 +28,21 @@ mixin DetailsMixin<T> {
 
   List<Color> get colors => [];
 
+  String get imgSize => value.toString();
+
   List<Widget> get colorsWidget => [
         ...colors
             .map((e) => ColorTag<T>(
                   color: e,
                   radius: Constants.kBorderRadius * 100,
+
+                  /*voidCallback: () => scrollableController.animateTo(
+                    .07,
+                    duration: const Duration(
+                      milliseconds: Constants.kDuration,
+                    ),
+                    curve: Curves.easeIn,
+                  ),*/
                 ))
             .toList()
       ];
@@ -44,7 +54,9 @@ mixin DetailsMixin<T> {
   void save();
 
   Widget buildScreen(
-          BuildContext context, WallpaperViewModel<T> wallpaperViewModel) =>
+    BuildContext context,
+    WallpaperViewModel<T> wallpaperViewModel,
+  ) =>
       Material(
         type: MaterialType.transparency,
         child: Stack(
@@ -59,8 +71,8 @@ mixin DetailsMixin<T> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
-                      AppColors.darkColor.withOpacity(.92),
-                      BlendMode.overlay,
+                      AppColors.darkColor.withOpacity(.2),
+                      BlendMode.srcOver,
                     ),
                     fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
@@ -100,7 +112,9 @@ mixin DetailsMixin<T> {
                               Iconsax.arrow_left_1,
                               size: 32,
                             ),
-                            onPressed: () => Get.back(),
+                            onPressed: () {
+                              Get.back();
+                            },
                           ),
                         ),
                       ),
@@ -154,117 +168,135 @@ mixin DetailsMixin<T> {
                   right: 12,
                   bottom: 0,
                 ),
-                child: DraggableScrollableSheet(
-                  controller: scrollableController,
-                  expand: true,
-                  initialChildSize: .07,
-                  maxChildSize: sheetMaxSize,
-                  minChildSize: .07,
-                  builder: (context, controller) => SingleChildScrollView(
-                    controller: controller,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        topLeft:
-                            const Radius.circular(Constants.kBorderRadius * 2),
-                        topRight:
-                            const Radius.circular(Constants.kBorderRadius * 2),
-                        bottomLeft: Radius.circular(
-                            dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
-                        bottomRight: Radius.circular(
-                            dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
-                      ),
-                      child: AnimatedContainer(
-                        duration: const Duration(seconds: Constants.kDuration),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .backgroundColor
-                              .withOpacity(dragRatio),
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(
-                                Constants.kBorderRadius * 2),
-                            topRight: const Radius.circular(
-                                Constants.kBorderRadius * 2),
-                            bottomLeft: Radius.circular(
-                              dragRatio == 1 ? Constants.kBorderRadius * 2 : 0,
-                            ),
-                            bottomRight: Radius.circular(dragRatio == 1
-                                ? Constants.kBorderRadius * 2
-                                : 0),
-                          ),
-                        ),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(
-                            sigmaY: dragRatio * 25,
-                            sigmaX: dragRatio * 25,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              buildDraggableControlButton(),
-                              const SizedBox(
-                                height: 4,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: colorsWidget,
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                overflow: TextOverflow.ellipsis,
-                                "${AppLocalizations.of(context)!.photograph}: $photographer",
-                                maxLines: 1,
-                                softWrap: true,
-                                style: TextStyles.textStyle.apply(
-                                  fontWeightDelta: 4,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .color!,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 24,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  buildActionButton(
-                                    Iconsax.document_download,
-                                    download,
-                                    AppLocalizations.of(context)!.download,
-                                  ),
-                                  buildActionButton(
-                                    Iconsax.paintbucket,
-                                    applyWallPaper,
-                                    AppLocalizations.of(context)!.apply,
-                                  ),
-                                  buildActionButton(
-                                    Iconsax.like,
-                                    save,
-                                    AppLocalizations.of(context)!.save,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 24,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                child: buildBottomSheet(),
               ),
             ),
             // AnimatedCrossFade(firstChild: null,
           ],
+        ),
+      );
+
+  DraggableScrollableSheet buildBottomSheet() => DraggableScrollableSheet(
+        // controller: scrollableController,
+        expand: true,
+        initialChildSize: .07,
+        maxChildSize: sheetMaxSize,
+        minChildSize: .07,
+        builder: (context, controller) => SingleChildScrollView(
+          controller: controller,
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(Constants.kBorderRadius * 2),
+              topRight: const Radius.circular(Constants.kBorderRadius * 2),
+              bottomLeft: Radius.circular(
+                  dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
+              bottomRight: Radius.circular(
+                  dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
+            ),
+            child: AnimatedContainer(
+              duration: const Duration(seconds: Constants.kDuration),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).backgroundColor.withOpacity(dragRatio),
+                borderRadius: BorderRadius.only(
+                  topLeft: const Radius.circular(Constants.kBorderRadius * 2),
+                  topRight: const Radius.circular(Constants.kBorderRadius * 2),
+                  bottomLeft: Radius.circular(
+                    dragRatio == 1 ? Constants.kBorderRadius * 2 : 0,
+                  ),
+                  bottomRight: Radius.circular(
+                      dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
+                ),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(
+                  sigmaY: dragRatio * 25,
+                  sigmaX: dragRatio * 25,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    buildDraggableControlButton(),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: colorsWidget,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Text(
+                      overflow: TextOverflow.ellipsis,
+                      "${AppLocalizations.of(Get.context!)!.photograph}: $photographer",
+                      maxLines: 1,
+                      softWrap: true,
+                      style: TextStyles.textStyle.apply(
+                        fontSizeDelta: -3,
+                        fontWeightDelta: 4,
+                        color: Theme.of(context).textTheme.bodyText1!.color!,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.save,
+                            size: 20,
+                            color: Theme.of(Get.context!)
+                                .textTheme
+                                .bodyText1!
+                                .color!),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          imgSize,
+                          style: TextStyles.textStyle.apply(
+                            color: Theme.of(Get.context!)
+                                .textTheme
+                                .bodyText1!
+                                .color!,
+                            fontSizeDelta: -2,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        buildActionButton(
+                          Iconsax.document_download,
+                          download,
+                          AppLocalizations.of(Get.context!)!.download,
+                        ),
+                        buildActionButton(
+                          Iconsax.paintbucket,
+                          applyWallPaper,
+                          AppLocalizations.of(Get.context!)!.apply,
+                        ),
+                        buildActionButton(
+                          Iconsax.like,
+                          save,
+                          AppLocalizations.of(Get.context!)!.save,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       );
 
@@ -326,13 +358,13 @@ mixin DetailsMixin<T> {
         ),
         child: IconButton(
           onPressed: () {
-            scrollableController.animateTo(
+            /*buildBottomSheet().controller?.animateTo(
               dragRatio == 1 ? .07 : sheetMaxSize,
               duration: const Duration(
                 milliseconds: Constants.kDuration,
               ),
               curve: Curves.easeIn,
-            );
+            );*/
           },
           icon: Icon(
             dragRatio == 1

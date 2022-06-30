@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/constants.dart';
-import 'package:mobile/utils/log.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
@@ -10,11 +9,14 @@ import 'package:tinycolor2/tinycolor2.dart';
 class ColorTag<T> extends StatelessWidget {
   final Color color;
   final double radius;
+  final VoidCallback? voidCallback;
+
   final double size;
 
   const ColorTag({
     Key? key,
     required this.color,
+    this.voidCallback,
     this.radius = Constants.kBorderRadius,
     this.size = 35,
   }) : super(key: key);
@@ -22,16 +24,22 @@ class ColorTag<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Consumer<WallpaperViewModel<T>>(
         builder: (context, wallpaperViewModel, _) => GestureDetector(
-          onTap: () {
-            LogUtils.log("COLOR: ${color.toTinyColor().toHex8().substring(2)}");
+          onTap: () async {
+            try {
+              voidCallback!();
+            } catch (e) {
+              print(e);
+            }
+            Get.toNamed(wallpaperByColorWh);
+
             wallpaperViewModel.searchWallpapers(
               '',
               delay: 300,
-              details: {'colors': TinyColor(color).toHex8().substring(2)},
+              details: {
+                'colors': TinyColor(color).toHex8().substring(2),
+                'color': color,
+              },
             );
-
-            Get.toNamed(wallpaperByColorWh);
-            //TODO- implement search wallpapers based on colors
           },
           child: Container(
             height: size,

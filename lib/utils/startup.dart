@@ -18,6 +18,10 @@ class Startup {
     await dotenv.load(fileName: '.env');
     await Firebase.initializeApp();
     FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
     setTransparentStatusBar();
   }

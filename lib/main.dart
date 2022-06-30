@@ -105,6 +105,33 @@ class _MyAppState extends State<MyApp> {
         builder: (context, themeProvider, _) => Sizer(
           builder: (context, orientation, deviceType) => OverlaySupport(
             child: GetMaterialApp(
+              builder: (context, widget) {
+                Widget error = const Text('...rendering error...');
+                // if (widget is Scaffold || widget is Navigator || widget is Material) {
+                error = Container(
+                  height: Get.height / 2,
+                  child: Opacity(
+                      opacity: 1, child: Scaffold(body: Center(child: error))),
+                );
+                // }
+
+                if (Get.currentRoute == wallpaperDetailWh ||
+                    Get.currentRoute == wallpaperByColorWh) {
+                  ErrorWidget.builder =
+                      (FlutterErrorDetails errorDetails) => const Material(
+                            type: MaterialType.transparency,
+                            child: Opacity(
+                              opacity: 1,
+                              child: Center(
+                                child: Text(""),
+                              ),
+                            ),
+                          );
+                }
+
+                if (widget != null) return widget;
+                throw ('widget is null');
+              },
               title: Constants.appName.toLowerCase(),
               localizationsDelegates: const [
                 AppLocalizations.delegate,
