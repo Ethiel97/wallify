@@ -53,6 +53,8 @@ mixin DetailsMixin<T> {
 
   void save();
 
+  void share();
+
   Widget buildScreen(
     BuildContext context,
     WallpaperViewModel<T> wallpaperViewModel,
@@ -286,6 +288,11 @@ mixin DetailsMixin<T> {
                           Iconsax.like,
                           save,
                           AppLocalizations.of(Get.context!)!.save,
+                        ),
+                        buildActionButton(
+                          Iconsax.share,
+                          share,
+                          AppLocalizations.of(Get.context!)!.share,
                         ),
                       ],
                     ),

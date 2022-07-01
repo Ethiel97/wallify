@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     secondAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3500),
+      duration: const Duration(milliseconds: 2500),
     )..repeat(
         reverse: true,
       );
@@ -149,7 +149,15 @@ class _SplashScreenState extends State<SplashScreen>
                     gradient: LinearGradient(
                       tileMode: TileMode.repeated,
                       colors: [
-                        TinyColor(const Color(0xff8A2387))
+                        Theme.of(context).primaryColor.withOpacity(.33),
+                        Theme.of(context)
+                            .colorScheme
+                            .secondary
+                            .withOpacity(.33),
+                        TinyColor(const Color(0xffF27121))
+                            .color
+                            .withOpacity(.33)
+                        /* TinyColor(const Color(0xff8A2387))
                             .color
                             .withOpacity(.33),
                         TinyColor(const Color(0xffE94057))
@@ -157,7 +165,7 @@ class _SplashScreenState extends State<SplashScreen>
                             .withOpacity(.33),
                         TinyColor(const Color(0xffF27121))
                             .color
-                            .withOpacity(.33),
+                            .withOpacity(.33),*/
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,

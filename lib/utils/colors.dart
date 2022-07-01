@@ -15,5 +15,7 @@ mixin AppColors {
 
   static Color get primaryColor => const Color(0xff12c2e9);
 
-  static Color get accentColor => const Color(0xffE2282A);
+
+  static Color get accentColor => const Color(0xffc471ed);
+  // static Color get accentColor => const Color(0xffE2282A);
 }

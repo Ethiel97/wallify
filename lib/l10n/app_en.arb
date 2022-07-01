@@ -15,9 +15,11 @@
   "successfully_downloaded": "Wallpaper successfully downloaded",
   "successfully_applied": "Wallpaper successfully applied",
   "yes_apply": "Yes, apply!",
+  "share": "Share",
   "yes_download": "Yes, download!",
   "wallpaper_application_confirmation": "Are you sure you want to apply this wallpaper?",
   "wallpaper_download_confirmation": "Are you sure you want to download this wallpaper?",
+  "beautiful_wallpaper_wallinice": "I found this beautiful wallpaper on wallinice that I'm sharing with you",
   "color_tone": "The color tone",
   "colors": "Colors"
 }

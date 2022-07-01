@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> {
               builder: (context, widget) {
                 Widget error = const Text('...rendering error...');
                 // if (widget is Scaffold || widget is Navigator || widget is Material) {
-                error = Container(
+                error = SizedBox(
                   height: Get.height / 2,
                   child: Opacity(
                       opacity: 1, child: Scaffold(body: Center(child: error))),

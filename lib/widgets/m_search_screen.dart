@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:masonry_grid/masonry_grid.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
@@ -41,7 +41,6 @@ mixin SearchMixin<T> {
             child: ListView(
               shrinkWrap: true,
               scrollDirection: Axis.vertical,
-              controller: wallpaperViewModel.searchPageScrollController,
               physics: const ClampingScrollPhysics(),
               padding: const EdgeInsets.symmetric(
                 vertical: 12,
@@ -79,18 +78,19 @@ mixin SearchMixin<T> {
                   height: 12,
                 ),
                 SizedBox(
-                  height: Get.height / 16,
+                  height: Get.height / 20,
                   child: ListView.builder(
                     padding: const EdgeInsets.only(left: 0.0),
                     controller: wallpaperViewModel.colorsListScrollController,
                     itemCount: Constants.colors.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => ColorTag<T>(
-                      radius: Constants.kBorderRadius / 2,
-                      size: 50,
-                      color: Constants.colors[index],
-
+                    itemBuilder: (context, index) => FittedBox(
+                      child: ColorTag<T>(
+                        radius: Constants.kBorderRadius / 2,
+                        size: 50,
+                        color: Constants.colors[index],
+                      ),
                     ),
                   ),
                 ),
@@ -98,44 +98,39 @@ mixin SearchMixin<T> {
                   height: 36,
                 ),
                 SizedBox(
-                  height: Get.height / 18,
+                  height: Get.height / 20,
                   child: ListView.builder(
                     padding: const EdgeInsets.only(left: 0.0),
                     controller: wallpaperViewModel.tagsListScrollController,
                     itemCount: Constants.tags.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => WWallPaperTag(
-                      viewModel: wallpaperViewModel,
-                      tag: Constants.tags[index],
+                    itemBuilder: (context, index) => FittedBox(
+                      child: WWallPaperTag(
+                        viewModel: wallpaperViewModel,
+                        tag: Constants.tags[index],
+                      ),
                     ),
                   ),
                 ),
-                if (wallpaperViewModel.filteredWallpapers.isNotEmpty)
-                  NotificationListener<ScrollNotification>(
-                    onNotification: (ScrollNotification notification) {
-                      /* LogUtils.log(
-                              "SCROLL EXTENT: ${notification.metrics.pixels}");
-                      */
-                      return false;
-                    },
-                    child: MasonryGrid(
-                      staggered: true,
-                      column: 3,
-                      children: List.generate(
-                        wallpaperViewModel.filteredWallpapers.length,
-                        (i) => SizedBox(
-                          height: Get.height * (i % 2 == 0 ? .25 : .3),
+                (wallpaperViewModel.filteredWallpapers.isNotEmpty)
+                    ? MasonryGridView.count(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 4,
+                        shrinkWrap: true,
+                        controller:
+                            wallpaperViewModel.searchPageScrollController,
+                        crossAxisSpacing: 4,
+                        itemCount: wallpaperViewModel.filteredWallpapers.length,
+                        itemBuilder: (context, i) => SizedBox(
+                          height: Get.height * ((i % 2) == 0 ? .25 : .3),
                           child: setWallPaperCard(i),
                         ),
-                      ).toList(),
-                    ),
-                  )
-                else
-                  Image.asset(
-                    'assets/images/empty-${themeProvider.currentTheme}.png',
-                    fit: BoxFit.contain,
-                  ),
+                      )
+                    : Image.asset(
+                        'assets/images/empty-${themeProvider.currentTheme}.png',
+                        fit: BoxFit.contain,
+                      ),
               ],
             ),
           ),

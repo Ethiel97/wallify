@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +28,6 @@ class ColorTag<T> extends StatelessWidget {
             } catch (e) {
               print(e);
             }
-            Get.toNamed(wallpaperByColorWh);
 
             wallpaperViewModel.searchWallpapers(
               '',

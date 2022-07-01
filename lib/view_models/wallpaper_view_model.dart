@@ -9,11 +9,13 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
+import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/base_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 typedef WallPaperCallBack = Future<dynamic> Function(String url);
@@ -37,8 +39,11 @@ class WallpaperViewModel<T> extends BaseViewModel {
   TextEditingController searchQueryTEC = TextEditingController(text: '');
   ScrollController searchPageScrollController = ScrollController();
   ScrollController wallpapersByColorPageScrollController = ScrollController();
+  ScrollController tagsListScrollController = ScrollController();
+  ScrollController colorsListScrollController = ScrollController();
 
   double searchPageMaxScrollExtent = 0.0;
+  double wallpapersBycolorMaxScrollExtent = 0.0;
 
   String searchQuery = "";
   late T _selectedWallpaper;
@@ -50,14 +55,11 @@ class WallpaperViewModel<T> extends BaseViewModel {
     viewportFraction: .85,
   );
 
-  ScrollController tagsListScrollController = ScrollController();
-  ScrollController colorsListScrollController = ScrollController();
-
   List<T> filteredWallpapers = [];
 
   List<T> filteredWallpapersByColor = [];
 
-  defSelectedWallpaper(T wallpaper, WallPaperProvider wallPaperProvider) {
+  void defSelectedWallpaper(T wallpaper, WallPaperProvider wallPaperProvider) {
     _selectedWallpaper = wallpaper;
     reloadState();
 
@@ -102,9 +104,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
             Colors.transparent,
           ),
         ),
-        onPressed: () {
-          action();
-        },
+        onPressed: () => action(),
         child: Text(
           actionText,
           style: TextStyles.textStyle.apply(
@@ -123,6 +123,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
   FutureOr<void> init() async {
     //listening to pageview changes
     await fetchTopWallPapers();
+
+    // Get.bottomSheet(bottomsheet)
 
     pageController.addListener(() async {
       //notifyListeners
@@ -152,23 +154,24 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
     searchPageScrollController.addListener(() {
       if (searchPageScrollController.hasClients) {
-        // LogUtils.log("SEARCH PAGE SCROLLING: ${searchPageScrollController.position.pixels}");
-        // LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
+        LogUtils.log(
+            "SEARCH PAGE SCROLLING: ${searchPageScrollController.offset}");
+        LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
 
-        if (searchPageScrollController.position.pixels ==
+        /*if (searchPageScrollController.position.pixels ==
             searchPageMaxScrollExtent) {
           loadMore();
-        }
+        }*/
       }
     });
 
     wallpapersByColorPageScrollController.addListener(() {
-      if (searchPageScrollController.hasClients) {
+      if (wallpapersByColorPageScrollController.hasClients) {
         // LogUtils.log("SEARCH PAGE SCROLLING: ${searchPageScrollController.position.pixels}");
         // LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
 
         if (wallpapersByColorPageScrollController.position.pixels ==
-            searchPageMaxScrollExtent) {
+            wallpapersBycolorMaxScrollExtent) {
           loadMore();
         }
       }
@@ -260,6 +263,9 @@ class WallpaperViewModel<T> extends BaseViewModel {
               // reloadState();
               print("COLORS RESULT: ${filteredWallpapersByColor.length}");
               finishLoading();
+
+              Get.toNamed(wallpaperByColorWh);
+
               return;
             }
 
@@ -298,6 +304,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
                 );
               }
             }
+
+            finishLoading();
           },
         );
       }
@@ -323,6 +331,27 @@ class WallpaperViewModel<T> extends BaseViewModel {
       );
     } catch (e) {
       LogUtils.error("Could not save to gallery due to: $e");
+    }
+  }
+
+  //TODO: add deep linking or app url
+  void shareWallPaper(String url) async {
+    try {
+      var file = await DefaultCacheManager().getSingleFile(url);
+
+      await Share.shareFiles([file.path],
+          subject: AppLocalizations.of(Get.context!)!.browse_awesome_wallpapers,
+          text:
+              AppLocalizations.of(Get.context!)!.beautiful_wallpaper_wallinice);
+      LogUtils.log("FILE: ${file.toString()}");
+
+      /*Get.snackbar(
+        AppLocalizations.of(Get.context!)!.notification,
+        AppLocalizations.of(Get.context!)!.successfully_downloaded,
+        colorText: Colors.white,
+      );*/
+    } catch (e) {
+      LogUtils.error("Could not share wallpaper: $e");
     }
   }
 

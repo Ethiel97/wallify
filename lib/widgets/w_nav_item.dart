@@ -71,12 +71,12 @@ class RadiantGradientMask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ShaderMask(
-        shaderCallback: (bounds) => const LinearGradient(
+        shaderCallback: (bounds) => LinearGradient(
           // center: Alignment.center,
           // radius: .4,
           colors: [
-            Color(0xff12c2e9),
-            Color(0xffc471ed),
+            Theme.of(context).primaryColor,
+            Theme.of(context).colorScheme.secondary,
             // Color(0xfff64f59),
           ],
           tileMode: TileMode.mirror,

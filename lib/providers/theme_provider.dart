@@ -23,8 +23,8 @@ class ThemeProvider with ChangeNotifier {
     backgroundColor: AppColors.screenBackgroundColor,
     scaffoldBackgroundColor: AppColors.screenBackgroundColor,
     visualDensity: VisualDensity.adaptivePlatformDensity,
+    primaryColor: AppColors.primaryColor,
     textTheme: TextTheme(
-
       bodyText1: TextStyles.textStyle.apply(
         color: Colors.white,
       ),
@@ -37,7 +37,6 @@ class ThemeProvider with ChangeNotifier {
     ),
     colorScheme: ColorScheme.fromSwatch(
       primarySwatch: Colors.grey,
-
       brightness: Brightness.dark,
     ).copyWith(
       secondary: AppColors.accentColor,
@@ -50,6 +49,7 @@ class ThemeProvider with ChangeNotifier {
     backgroundColor: AppColors.whiteBackgroundColor.darken(4),
     scaffoldBackgroundColor: AppColors.whiteBackgroundColor,
     primarySwatch: Colors.grey,
+    primaryColor: AppColors.primaryColor,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     iconTheme: IconThemeData(color: AppColors.screenBackgroundColor),
     textTheme: TextTheme(

@@ -35,10 +35,12 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
+  share_plus:
   async_wallpaper:
   cached_network_image:
   flutter_cache_manager:
-  masonry_grid: ^1.0.0
+  mocktail:
+  firebase_dynamic_links:
   http:
   flutter_staggered_grid_view:
   secure_shared_preferences:

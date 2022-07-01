@@ -22,7 +22,6 @@ class WWallPaperTag extends StatelessWidget {
           onTap: () {
             //TODO - set tag text to search text field
             // viewModel.searchQueryTEC.text = tag;
-
             viewModel.searchWallpapers(tag);
           },
           child: AnimatedContainer(
@@ -50,9 +49,11 @@ class WWallPaperTag extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  offset: const Offset(0, 10),
-                  blurRadius: 20,
-                  color: Theme.of(context).backgroundColor.withOpacity(.06),
+                  offset: Offset(0, isSelected ? 15 : 0),
+                  blurRadius: isSelected ? 30 : 0,
+                  color: Theme.of(context)
+                      .backgroundColor
+                      .withOpacity(isSelected ? 0.02 : .00),
                 ),
               ],
             ),

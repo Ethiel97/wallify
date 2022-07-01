@@ -72,13 +72,14 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
 
   @override
   void applyWallPaper() {
-    var viewModel = Provider.of<WallpaperViewModel<WallPaper>>(context);
+    var viewModel =
+        Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
 
     viewModel.confirmAction(
       message:
           AppLocalizations.of(Get.context!)!.wallpaper_application_confirmation,
       action: () {
-        viewModel.applyWallPaper(viewModel.selectedWallpaper.thumbs!.large);
+        viewModel.applyWallPaper(viewModel.selectedWallpaper.path!);
       },
       actionText: AppLocalizations.of(Get.context!)!.yes_apply,
     );
@@ -102,5 +103,24 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   @override
   void save() {
     // TODO: implement save
+  }
+
+  @override
+  void share() {
+
+    var viewModel =
+    Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
+
+    viewModel.shareWallPaper(viewModel.selectedWallpaper.path!);
+
+
+    /*viewModel.confirmAction(
+      message:
+      AppLocalizations.of(Get.context!)!.wallpaper_download_confirmation,
+      action: () {
+        viewModel.downloadWallPaper(viewModel.selectedWallpaper.path!);
+      },
+      actionText: AppLocalizations.of(Get.context!)!.yes_download,
+    );*/
   }
 }
