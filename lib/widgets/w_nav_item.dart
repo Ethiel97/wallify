@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/navigation_provider.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +17,10 @@ class NavItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Consumer<NavigationProvider>(
-        builder: (context, navigationProvider, _) => AnimatedScale(
+  Widget build(BuildContext context) =>
+      Consumer2<NavigationProvider, ThemeProvider>(
+        builder: (context, navigationProvider, themeProvider, _) =>
+            AnimatedScale(
           curve: Curves.fastLinearToSlowEaseIn,
           duration: const Duration(
             milliseconds: Constants.kDuration,
@@ -25,18 +28,21 @@ class NavItem extends StatelessWidget {
           scale: navigationProvider.currentIndex == index ? 1.03 : 1.0,
           child: AnimatedContainer(
             curve: Curves.fastLinearToSlowEaseIn,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
                   color: AppColors.darkColor.withOpacity(.02),
-                  offset: const Offset(0, 16),
-                  blurRadius: 32,
-                )
+                  offset: const Offset(0, 20),
+                  blurRadius: 40,
+                  spreadRadius: 30,
+                ),
               ],
-              borderRadius: BorderRadius.circular(100),
+              borderRadius: BorderRadius.circular(Constants.kBorderRadius * 10),
               color: navigationProvider.currentIndex == index
-                  ? Theme.of(context).textTheme.bodyText1?.color
+                  ? themeProvider.currentTheme == AppTheme.dark.description
+                      ? Theme.of(context).textTheme.bodyText1?.color
+                      : AppColors.whiteBackgroundColor
                   : TinyColor(Theme.of(context).backgroundColor)
                       .lighten(4)
                       .color
@@ -55,7 +61,7 @@ class NavItem extends StatelessWidget {
   IconButton buildIconButton(NavigationProvider navigationProvider) =>
       IconButton(
         icon: Icon(
-          size: navigationProvider.currentIndex == index ? 28 : 24,
+          size: navigationProvider.currentIndex == index ? 32 : 24,
           icon,
         ),
         onPressed: () {
@@ -71,14 +77,19 @@ class RadiantGradientMask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ShaderMask(
+        blendMode: BlendMode.srcIn,
         shaderCallback: (bounds) => LinearGradient(
           // center: Alignment.center,
           // radius: .4,
           colors: [
-            Theme.of(context).primaryColor,
-            Theme.of(context).colorScheme.secondary,
+            // Theme.of(context).primaryColor,
+            // Theme.of(context).colorScheme.secondary,
+            AppColors.primaryColor,
+            AppColors.accentColor,
+            // Colors.blueGrey,
             // Color(0xfff64f59),
           ],
+
           tileMode: TileMode.mirror,
         ).createShader(bounds),
         child: child,

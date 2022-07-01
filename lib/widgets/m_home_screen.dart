@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
-import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
@@ -40,7 +39,7 @@ mixin HomeScreenMixin<T> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
-                    AppColors.darkColor.withOpacity(.15),
+                    Theme.of(context).backgroundColor.withOpacity(.15),
                     BlendMode.srcOver,
                   ),
                   filterQuality: FilterQuality.high,
@@ -88,8 +87,7 @@ mixin HomeScreenMixin<T> {
                         fontWeightDelta: 4,
                         color: TinyColor(
                                 Theme.of(context).textTheme.bodyText1!.color!)
-                            .tint(20)
-                            .lighten()
+                            .shade()
                             .color,
                       ),
                     ),
@@ -125,7 +123,7 @@ mixin HomeScreenMixin<T> {
                     physics: const ClampingScrollPhysics(),
                     itemCount: wallpaperViewModel.wallpapers.length,
                     itemBuilder: (context, index) {
-                      final wallpaper = wallpaperViewModel.wallpapers[index];
+                      // final wallpaper = wallpaperViewModel.wallpapers[index];
 
                       final isTheSelectedWallpaper =
                           progress > index - 0.5 && progress < index + 0.5;

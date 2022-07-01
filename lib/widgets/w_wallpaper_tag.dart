@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
@@ -60,11 +61,14 @@ class WWallPaperTag extends StatelessWidget {
             child: Text(
               tag,
               style: TextStyles.textStyle.apply(
-                  fontSizeDelta: -7,
-                  fontWeightDelta: 5,
-                  color:
-                      // ? Theme.of(context).backgroundColor
-                      Theme.of(context).textTheme.bodyText1?.color),
+                fontSizeDelta: -7,
+                fontWeightDelta: 5,
+                color:
+                    // ? Theme.of(context).backgroundColor
+                    isSelected
+                        ? AppColors.textColor
+                        : Theme.of(context).textTheme.bodyText1?.color,
+              ),
             ),
           ),
         ),

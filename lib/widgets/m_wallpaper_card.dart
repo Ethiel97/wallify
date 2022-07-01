@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 mixin WallpaperCard<T> {
@@ -65,6 +67,11 @@ mixin WallpaperCard<T> {
           Constants.kBorderRadius,
         ),
         child: Shimmer(
+          color: Provider.of<ThemeProvider>(Get.context!, listen: false)
+                      .currentTheme ==
+                  AppTheme.light.description
+              ? Theme.of(Get.context!).colorScheme.secondary
+              : Theme.of(Get.context!).primaryColor,
           child: Container(
             height: Get.height * .7,
             width: double.infinity,
@@ -78,8 +85,9 @@ mixin WallpaperCard<T> {
               ),
               boxShadow: [
                 BoxShadow(
-                  offset: const Offset(0, 8),
-                  blurRadius: 16,
+                  offset: const Offset(0, 16),
+                  blurRadius: 32,
+                  spreadRadius: 64,
                   color:
                       Theme.of(Get.context!).backgroundColor.withOpacity(.08),
                 ),

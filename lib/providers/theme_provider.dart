@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/secure_storage.dart';
+import 'package:mobile/utils/startup.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
@@ -9,11 +9,12 @@ enum AppTheme {
   dark,
   light;
 
- String get description => name;
+  String get description => name;
 }
+
 class ThemeProvider with ChangeNotifier {
   final String _themeMode = 'THEME_STATUS';
-  String _currentTheme = 'dark';
+  String _currentTheme = AppTheme.dark.description;
 
   TextStyle textStyle = TextStyles.textStyle;
 
@@ -26,10 +27,10 @@ class ThemeProvider with ChangeNotifier {
     primaryColor: AppColors.primaryColor,
     textTheme: TextTheme(
       bodyText1: TextStyles.textStyle.apply(
-        color: Colors.white,
+        color: AppColors.textColor,
       ),
       bodyText2: TextStyles.textStyle.apply(
-        color: Colors.white,
+        color: AppColors.textColor,
       ),
     ),
     iconTheme: const IconThemeData(
@@ -89,44 +90,45 @@ class ThemeProvider with ChangeNotifier {
       }
       notifyListeners();
 
-      changeStatusBarColor();
+      Startup().setTransparentStatusBar();
     }).catchError((e) {
       debugPrint(e);
+      setDarkMode();
+      Startup().setTransparentStatusBar();
     });
   }
 
   void setDarkMode() {
     _themeData = _darkTheme;
-    _currentTheme = 'dark';
+    _currentTheme = AppTheme.dark.description;
     SecureStorageService.saveItem(key: _themeMode, data: _currentTheme);
     notifyListeners();
   }
 
   void toggleMode() {
-    if (_currentTheme == 'dark') {
+    if (_currentTheme == AppTheme.dark.description) {
       setLightMode();
     } else {
       setDarkMode();
     }
-
-    changeStatusBarColor();
+    Startup().setTransparentStatusBar();
   }
 
   void setLightMode() {
     _themeData = _lightTheme;
-    _currentTheme = 'light';
+    _currentTheme = AppTheme.light.description;
     SecureStorageService.saveItem(key: _themeMode, data: _currentTheme);
 
     notifyListeners();
   }
 
-  changeStatusBarColor() {
+/*changeStatusBarColor() {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: currentTheme == 'dark'
+        statusBarColor: currentTheme == AppTheme.dark.description
             ? AppColors.screenBackgroundColor
             : AppColors.whiteBackgroundColor.darken(4),
       ),
     );
-  }
+  }*/
 }

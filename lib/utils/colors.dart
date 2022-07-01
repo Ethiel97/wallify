@@ -6,6 +6,8 @@ mixin AppColors {
 
   static Color get darkBackgroundColor => const Color(0xff060606);
 
+  static Color get textColor => const Color(0xfff5f6f7).toTinyColor().lighten().color;
+
   static Color get whiteBackgroundColor => const Color(0xfff5f6f7);
 
   static Color get screenBackgroundColor =>

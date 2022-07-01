@@ -17,7 +17,7 @@ class NotificationService {
 
     var title = remoteMessage.notification?.title;
     var body = remoteMessage.notification?.body;
-    var data = remoteMessage.data;
+    // var data = remoteMessage.data;
 
     //TODO - display a dialog for the random quote
     Widget toastWidget = Material(

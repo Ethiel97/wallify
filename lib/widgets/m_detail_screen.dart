@@ -9,7 +9,6 @@ import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/widgets/w_color_tag.dart';
-import 'package:tinycolor2/tinycolor2.dart';
 
 import '../utils/text_styles.dart';
 
@@ -61,6 +60,7 @@ mixin DetailsMixin<T> {
   ) =>
       Material(
         type: MaterialType.transparency,
+        color: Theme.of(context).backgroundColor,
         child: Stack(
           children: [
             Hero(
@@ -110,9 +110,10 @@ mixin DetailsMixin<T> {
                             sigmaX: 25,
                           ),
                           child: IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Iconsax.arrow_left_1,
                               size: 32,
+                              color: AppColors.textColor,
                             ),
                             onPressed: () {
                               Get.back();
@@ -142,9 +143,10 @@ mixin DetailsMixin<T> {
                             sigmaX: 25,
                           ),
                           child: IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Iconsax.paintbucket,
                               size: 30,
+                              color: AppColors.textColor,
                             ),
                             onPressed: () => Get.back(),
                           ),
@@ -238,7 +240,8 @@ mixin DetailsMixin<T> {
                       style: TextStyles.textStyle.apply(
                         fontSizeDelta: -3,
                         fontWeightDelta: 4,
-                        color: Theme.of(context).textTheme.bodyText1!.color!,
+                        // color: Theme.of(context).textTheme.bodyText1!.color!,
+                        color: AppColors.textColor,
                       ),
                     ),
                     const SizedBox(
@@ -247,22 +250,26 @@ mixin DetailsMixin<T> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.save,
-                            size: 20,
-                            color: Theme.of(Get.context!)
-                                .textTheme
-                                .bodyText1!
-                                .color!),
+                        Icon(
+                          Icons.save,
+                          size: 20,
+                          /*color: Theme.of(Get.context!)
+                              .textTheme
+                              .bodyText1!
+                              .color!,*/
+                          color: AppColors.textColor,
+                        ),
                         const SizedBox(
                           width: 8,
                         ),
                         Text(
                           imgSize,
                           style: TextStyles.textStyle.apply(
-                            color: Theme.of(Get.context!)
+                            /*color: Theme.of(Get.context!)
                                 .textTheme
                                 .bodyText1!
-                                .color!,
+                                .color!,*/
+                            color: AppColors.textColor,
                             fontSizeDelta: -2,
                           ),
                         ),
@@ -334,9 +341,11 @@ mixin DetailsMixin<T> {
                     sigmaY: 10,
                     sigmaX: 10,
                   ),
-                  child: Icon(iconData,
-                      color:
-                          Theme.of(Get.context!).textTheme.bodyText1!.color!),
+                  child: Icon(
+                    iconData,
+                    // color: Theme.of(Get.context!).textTheme.bodyText1!.color!,
+                    color: AppColors.textColor,
+                  ),
                 ),
               ),
             ),
@@ -346,11 +355,12 @@ mixin DetailsMixin<T> {
             Text(
               text,
               style: TextStyles.textStyle.apply(
-                color: TinyColor(
+                /* color: TinyColor(
                         Theme.of(Get.context!).textTheme.bodyText1!.color!)
                     .tint()
                     .darken()
-                    .color,
+                    .color,*/
+                color: AppColors.textColor,
                 fontSizeDelta: -6,
                 fontWeightDelta: 5,
               ),
@@ -378,7 +388,7 @@ mixin DetailsMixin<T> {
                 ? Icons.expand_more_outlined
                 : Icons.expand_less_outlined,
             size: 30,
-            color: Theme.of(Get.context!).textTheme.bodyText1!.color!,
+            color: AppColors.textColor,
           ),
         ),
       );

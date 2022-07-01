@@ -27,7 +27,12 @@ mixin SearchMixin<T> {
   Widget buildScreen(
           BuildContext context, WallpaperViewModel<T> wallpaperViewModel) =>
       Scaffold(
-        backgroundColor: Theme.of(Get.context!).backgroundColor,
+        backgroundColor: Theme.of(Get.context!)
+            .backgroundColor
+            .toTinyColor()
+            .shade(15)
+            .color
+            .withOpacity(.06),
         extendBodyBehindAppBar: false,
         body: Consumer<ThemeProvider>(
           builder: (context, themeProvider, _) =>
@@ -146,8 +151,13 @@ mixin SearchMixin<T> {
               decoration: BoxDecoration(
                 color: TinyColor(Theme.of(Get.context!).backgroundColor)
                     .color
-                    .lighten()
-                    .withOpacity(.45),
+                    .tint(
+                        Provider.of<ThemeProvider>(Get.context!, listen: false)
+                                    .currentTheme ==
+                                AppTheme.dark.description
+                            ? 10
+                            : 92)
+                    .withOpacity(.55),
                 borderRadius: BorderRadius.circular(
                   Constants.kBorderRadius,
                 ),
@@ -155,7 +165,8 @@ mixin SearchMixin<T> {
               child: TextField(
                 style: TextStyles.textStyle.apply(
                   color: Theme.of(Get.context!).textTheme.bodyText1?.color,
-                  fontSizeDelta: -4,
+                  fontSizeDelta: -5,
+                  fontWeightDelta: 1,
                 ),
                 controller: wallpaperViewModel.searchQueryTEC,
                 onSubmitted: (text) {
@@ -165,11 +176,9 @@ mixin SearchMixin<T> {
                   search(text);
                 },*/
                 decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Iconsax.search_normal,
-                    color: Theme.of(Get.context!).textTheme.bodyText1?.color,
-                    size: 18,
-                  ),
+                  prefixIcon: Icon(Iconsax.search_normal,
+                      color: Theme.of(Get.context!).textTheme.bodyText1?.color,
+                      size: 20),
                   border: InputBorder.none,
                   hintText: AppLocalizations.of(Get.context!)!.search_here,
                   hintStyle: TextStyles.textStyle.apply(

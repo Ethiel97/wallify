@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/app_router.dart';
+import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/text_styles.dart';
@@ -84,15 +85,23 @@ class WallpaperViewModel<T> extends BaseViewModel {
     Get.snackbar(
       confirmText,
       message,
-      colorText: Theme.of(Get.context!).textTheme.bodyText1!.color,
+      messageText: Text(
+        message,
+        style: TextStyles.textStyle.apply(
+          color: AppColors.textColor,
+          fontSizeDelta: -4.2,
+          fontWeightDelta: 1,
+        ),
+      ),
+      // colorText: Theme.of(Get.context!).textTheme.bodyText1!.color,
+      colorText: AppColors.textColor,
       snackPosition: SnackPosition.TOP,
       // backgroundColor: Theme.of(Get.context!).backgroundColor,
-
       padding: const EdgeInsets.symmetric(
         vertical: 12,
         horizontal: 20,
       ),
-      duration: const Duration(milliseconds: Constants.kDuration * 20),
+      duration: const Duration(milliseconds: Constants.kDuration * 42),
       mainButton: TextButton(
         /*icon: Icon(
           Iconsax.paintbucket,
@@ -261,7 +270,6 @@ class WallpaperViewModel<T> extends BaseViewModel {
               // reloadState();
               _selectedColor = details['color'] as Color;
               // reloadState();
-              print("COLORS RESULT: ${filteredWallpapersByColor.length}");
               finishLoading();
 
               Get.toNamed(wallpaperByColorWh);
@@ -277,7 +285,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
               ];
 
               if (searchPageScrollController.hasClients) {
-                print("ANIMATING TO END");
+                // print("ANIMATING TO END");
 
                 searchPageScrollController.animateTo(
                   searchPageMaxScrollExtent * currentPaginationPageHome,
