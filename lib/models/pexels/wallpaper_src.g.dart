@@ -3,6 +3,65 @@
 part of 'wallpaper_src.dart';
 
 // **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class WallPaperSrcAdapter extends TypeAdapter<WallPaperSrc> {
+  @override
+  final int typeId = 4;
+
+  @override
+  WallPaperSrc read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return WallPaperSrc(
+      fields[0] as String,
+      fields[1] as String,
+      fields[7] as String,
+      fields[6] as String,
+      fields[2] as String,
+      fields[3] as String,
+      fields[4] as String,
+      fields[5] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, WallPaperSrc obj) {
+    writer
+      ..writeByte(8)
+      ..writeByte(0)
+      ..write(obj.original)
+      ..writeByte(1)
+      ..write(obj.tiny)
+      ..writeByte(2)
+      ..write(obj.large)
+      ..writeByte(3)
+      ..write(obj.large2x)
+      ..writeByte(4)
+      ..write(obj.medium)
+      ..writeByte(5)
+      ..write(obj.small)
+      ..writeByte(6)
+      ..write(obj.portrait)
+      ..writeByte(7)
+      ..write(obj.landscape);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WallPaperSrcAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+// **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 

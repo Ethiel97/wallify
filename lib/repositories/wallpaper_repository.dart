@@ -6,7 +6,7 @@ import 'package:mobile/repositories/i_repository.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 
-class WallPaperRepository<T> extends IRepository {
+class WallPaperRepository<T> extends IRepository<T> {
   var dio = Dio();
 
   final CreatorCallback creatorCallback;
@@ -23,49 +23,47 @@ class WallPaperRepository<T> extends IRepository {
     dio.interceptors.add(interceptorsWrapper());
   }
 
-  InterceptorsWrapper interceptorsWrapper() {
-    return InterceptorsWrapper(onRequest: (options, handler) {
-      options.headers = {'Authorization': Constants.pexelsApiKey};
-      options.headers = {'X-Api-Key': Constants.wallhavenApiKey};
+  InterceptorsWrapper interceptorsWrapper() =>
+      InterceptorsWrapper(onRequest: (options, handler) {
+        options.headers = {'Authorization': Constants.pexelsApiKey};
+        options.headers = {'X-Api-Key': Constants.wallhavenApiKey};
 
-      options.path += "&";
-      String lastKey = "";
-      IRepository.defaultParams.forEach((key, value) {
-        lastKey = key;
+        options.path += "&";
+        String lastKey = "";
+        IRepository.defaultParams.forEach((key, value) {
+          lastKey = key;
+        });
+
+        IRepository.defaultParams.forEach((key, value) {
+          options.path += "$key=$value${lastKey == key ? '' : '&'}";
+        });
+
+        // options.
+
+        // Do something before request is sent
+        return handler.next(options); //continue
+        // If you want to resolve the request with some custom data，
+        // you can resolve a `Response` object eg: `handler.resolve(response)`.
+        // If you want to reject the request with a error message,
+        // you can reject a `DioError` object eg: `handler.reject(dioError)`
+      }, onResponse: (response, handler) {
+        // LogUtils.log("uri: ${response.realUri.path.toString()}");
+        Response responseModified = response
+          ..data = wallPaperProvider == WallPaperProvider.pexels
+              ? response.data['photos']
+              : response.data['data'];
+
+        // Do something with response data
+        return handler.next(responseModified); // continue
+        // If you want to reject the request with a error message,
+        // you can reject a `DioError` object eg: `handler.reject(dioError)`
+      }, onError: (DioError e, handler) {
+        LogUtils.log("dio error ${e.response?.data}");
+        // Do something with response error
+        return handler.resolve(e.response!); //continue
+        // If you want to resolve the request with some custom data，
+        // you can resolve a `Response` object eg: `handler.resolve(response)`.
       });
-
-      IRepository.defaultParams.forEach((key, value) {
-        options.path += "$key=$value${lastKey == key ? '' : '&'}";
-      });
-
-      LogUtils.log("PATH: ${options.path}");
-      // options.
-
-      // Do something before request is sent
-      return handler.next(options); //continue
-      // If you want to resolve the request with some custom data，
-      // you can resolve a `Response` object eg: `handler.resolve(response)`.
-      // If you want to reject the request with a error message,
-      // you can reject a `DioError` object eg: `handler.reject(dioError)`
-    }, onResponse: (response, handler) {
-      // LogUtils.log("uri: ${response.realUri.path.toString()}");
-      Response responseModified = response
-        ..data = wallPaperProvider == WallPaperProvider.pexels
-            ? response.data['photos']
-            : response.data['data'];
-
-      // Do something with response data
-      return handler.next(responseModified); // continue
-      // If you want to reject the request with a error message,
-      // you can reject a `DioError` object eg: `handler.reject(dioError)`
-    }, onError: (DioError e, handler) {
-      LogUtils.log("dio error ${e.response?.data}");
-      // Do something with response error
-      return handler.resolve(e.response!); //continue
-      // If you want to resolve the request with some custom data，
-      // you can resolve a `Response` object eg: `handler.resolve(response)`.
-    });
-  }
 
   @override
   FutureOr<T> getItem(String id,

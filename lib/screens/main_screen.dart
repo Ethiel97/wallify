@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
+import 'package:mobile/screens/wallhaven/fav_screen.dart';
 import 'package:mobile/screens/wallhaven/home_screen.dart';
 import 'package:mobile/widgets/w_nav_item.dart';
 import 'package:provider/provider.dart';
@@ -14,13 +15,13 @@ class MainScreen extends StatelessWidget {
   List<Widget> get screens => [
         const SearchScreen(),
         const HomeScreen(),
-        const HomeScreen(),
+        const FavScreen(),
       ];
 
   List<IconData> get icons => [
         Iconsax.search_normal,
         Iconsax.home1,
-        Iconsax.user,
+        Iconsax.heart_tick,
       ];
 
   @override
@@ -76,7 +77,7 @@ class MainScreen extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    top: 34.0,
+                    top: 38.0,
                     right: 10,
                   ),
                   child: IconButton(
@@ -90,7 +91,7 @@ class MainScreen extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

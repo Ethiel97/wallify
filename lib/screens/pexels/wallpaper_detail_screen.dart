@@ -98,6 +98,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   @override
   void save() {
     // TODO: implement save
+
   }
 
   @override

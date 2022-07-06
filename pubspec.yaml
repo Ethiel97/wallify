@@ -54,9 +54,12 @@ dependencies:
   get:
   tinycolor2:
   intl:
-  firebase_messaging: ^11.4.2
+  firebase_messaging: ^11.4.4
+  hive_flutter:
+  hive:
+  hive_generator:
   sizer:
-  firebase_core: ^1.18.0
+  firebase_core: ^1.19.1
   google_fonts:
   json_annotation:
   shimmer_animation:

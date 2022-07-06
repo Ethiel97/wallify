@@ -25,7 +25,7 @@ class NavItem extends StatelessWidget {
           duration: const Duration(
             milliseconds: Constants.kDuration,
           ),
-          scale: navigationProvider.currentIndex == index ? 1.03 : .9,
+          scale: navigationProvider.currentIndex == index ? 1.01 : .92,
           child: AnimatedContainer(
             curve: Curves.fastLinearToSlowEaseIn,
             padding: const EdgeInsets.all(10),
@@ -46,7 +46,7 @@ class NavItem extends StatelessWidget {
                   : TinyColor(Theme.of(context).backgroundColor)
                       .lighten(4)
                       .color
-                      .withOpacity(.88),
+                      .withOpacity(.9),
             ),
             duration: const Duration(milliseconds: 300),
             child: navigationProvider.currentIndex == index

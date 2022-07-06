@@ -40,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen>
     );*/
 
     animationController.forward();
-
     super.initState();
   }
 
@@ -53,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   String get selectedWallPaperImgUrl =>
       Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
-          .wallpapers[selectedWallpaperIndex]
+          .wallpapers[selectedWallpaperIndex + 1]
           .thumbs!
           .large;
 
@@ -67,8 +66,9 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget setWallPaperCard(int index) => WhWallpaperCard(
-        wallPaper:
-            Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
-                .wallpapers[index],
+        wallPaper: Provider.of<WallpaperViewModel<WallPaper>>(
+          context,
+          listen: false,
+        ).wallpapers[index],
       );
 }

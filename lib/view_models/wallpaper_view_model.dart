@@ -7,6 +7,8 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mobile/models/pexels/wallpaper.dart' as px;
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/app_router.dart';
@@ -61,6 +63,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
   List<T> filteredWallpapersByColor = [];
 
+  late Box<T> boxWallpapers;
+
   void defSelectedWallpaper(T wallpaper, WallPaperProvider wallPaperProvider) {
     _selectedWallpaper = wallpaper;
     // reloadState();
@@ -74,6 +78,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
   final WallPaperRepository<T> wallpaperRepository;
 
   T get selectedWallpaper => _selectedWallpaper;
+
+  List<T> get savedWallpapers => boxWallpapers.values.toList();
 
   WallpaperViewModel({required this.wallpaperRepository});
 
@@ -134,14 +140,19 @@ class WallpaperViewModel<T> extends BaseViewModel {
   @override
   FutureOr<void> init() async {
     //listening to pageview changes
+
+    boxWallpapers = Hive.box(T is px.WallPaper
+        ? Constants.savedPxWallpapersBox
+        : Constants.savedWhWallpapersBox);
+
     await fetchTopWallPapers();
 
     // Get.bottomSheet(bottomsheet)
     pageController.addListener(() async {
       //notifyListeners
 
-        homeScreenCurrentPage = pageController.page!.floor();
-        reloadState();
+      homeScreenCurrentPage = pageController.page!.floor();
+      reloadState();
 
       // reloadState();
       if (pageController.hasClients) {
@@ -346,6 +357,90 @@ class WallpaperViewModel<T> extends BaseViewModel {
     } catch (e) {
       LogUtils.error("Could not save to gallery due to: $e");
     }
+  }
+
+  void saveWallpaper(T wallpaper) {
+    if (!boxWallpapers.containsKey(wallpaper?.toString())) {
+      // wallpaper = wallpaper?.copyWith(saved: true);
+      boxWallpapers.put(wallpaper.toString(), wallpaper);
+
+      Get.snackbar(
+        AppLocalizations.of(Get.context!)!.notification,
+        AppLocalizations.of(Get.context!)!.wallpaper_saved_successfully,
+        mainButton: TextButton(
+          /*icon: Icon(
+          Iconsax.paintbucket,
+          color: Theme.of(Get.context!).textTheme.bodyText1!.color,
+        ),*/
+          style: ButtonStyle(
+            elevation: MaterialStateProperty.all(0.0),
+            backgroundColor: MaterialStateProperty.all(
+              Colors.transparent,
+            ),
+          ),
+          onPressed: () => goToFavScreen(),
+          child: Text(
+            AppLocalizations.of(Get.context!)!.view_saved_wallpapers,
+            style: TextStyles.textStyle.apply(
+              color: TinyColor(
+                Theme.of(Get.context!).colorScheme.secondary,
+              ).darken(15).color,
+              fontSizeDelta: -4,
+              fontWeightDelta: 10,
+            ),
+          ),
+        ),
+      );
+    } else {
+      removeWallpaper(wallpaper);
+    }
+
+    reloadState();
+  }
+
+  void removeWallpaper(T wallpaper) {
+    // quote = quote.copyWith(saved: false);
+    boxWallpapers.delete(wallpaper.toString());
+    reloadState();
+
+    Get.snackbar(
+      AppLocalizations.of(Get.context!)!.notification,
+      AppLocalizations.of(Get.context!)!.wallpaper_removed_successfully,
+      colorText: Colors.white,
+      mainButton: TextButton(
+        /*icon: Icon(
+          Iconsax.paintbucket,
+          color: Theme.of(Get.context!).textTheme.bodyText1!.color,
+        ),*/
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all(0.0),
+          backgroundColor: MaterialStateProperty.all(
+            Colors.transparent,
+          ),
+        ),
+        onPressed: () {
+          goToFavScreen();
+        },
+        child: Text(
+          AppLocalizations.of(Get.context!)!.view_saved_wallpapers,
+          style: TextStyles.textStyle.apply(
+            color: TinyColor(
+              Theme.of(Get.context!).colorScheme.secondary,
+            ).darken(15).color,
+            fontSizeDelta: -4,
+            fontWeightDelta: 10,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void goToFavScreen() {
+    Get.offNamedUntil(landing, (route) => false);
+    Provider.of<NavigationProvider>(
+      Get.context!,
+      listen: false,
+    ).currentIndex = 2;
   }
 
   //TODO: add deep linking or app url

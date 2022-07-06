@@ -14,6 +14,9 @@ class Constants {
   static String? wallhavenApiHost = dotenv.env['WALLHAVEN_API_HOST'];
   static const String randomWallpaperTopic = "RANDOM_WALLPAPER";
 
+  static const String savedWhWallpapersBox = 'whWallpapers';
+  static const String savedPxWallpapersBox = 'pxWallpapers';
+
   static List<String> tags = {
     'Cars',
     'Minimalism',

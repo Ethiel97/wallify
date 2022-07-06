@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
 import 'package:mobile/widgets/m_detail_screen.dart';
@@ -109,6 +110,22 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   @override
   void save() {
     // TODO: implement save
+    var viewModel =
+        Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
+
+    var navigationProvider =
+        Provider.of<NavigationProvider>(context, listen: false);
+
+    //check if user is on the favorite screen
+    viewModel.confirmAction(
+      message: AppLocalizations.of(Get.context!)!.wallpaper_save_confirmation,
+      action: () {
+        viewModel.saveWallpaper(viewModel.selectedWallpaper);
+      },
+      actionText: navigationProvider.currentIndex == 2
+          ? AppLocalizations.of(Get.context!)!.remove
+          : AppLocalizations.of(Get.context!)!.save,
+    );
   }
 
   @override

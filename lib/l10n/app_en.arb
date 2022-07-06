@@ -5,6 +5,7 @@
   "download": "Download",
   "apply": "Apply",
   "save": "Save",
+  "remove": "Remove",
   "by": "Par",
   "check_network_connection": "Please check your network connection!",
   "skip": "Skip",
@@ -18,8 +19,14 @@
   "share": "Share",
   "yes_download": "Yes, download!",
   "wallpaper_application_confirmation": "Are you sure you want to apply this wallpaper?",
+  "wallpaper_save_confirmation": "Are you sure you want to save this wallpaper?",
+  "wallpaper_remove_confirmation": "Are you sure you want to remove this wallpaper from your favorite?",
   "wallpaper_download_confirmation": "Are you sure you want to download this wallpaper?",
   "beautiful_wallpaper_wallinice": "I found this beautiful wallpaper on wallinice that I'm sharing with you",
   "color_tone": "The color tone",
-  "colors": "Colors"
+  "colors": "Colors",
+  "my_favorite": "Favorite",
+  "wallpaper_saved_successfully": "wallpaper saved successfully",
+  "wallpaper_removed_successfully": "wallpaper removed successfully",
+  "view_saved_wallpapers": "View"
 }

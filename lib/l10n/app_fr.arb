@@ -5,6 +5,7 @@
   "download": "Télécharger",
   "apply": "Appliquer",
   "save": "Enregistrer",
+  "remove": "Enlever des favoris",
   "by": "Par",
   "check_network_connection": "Veuillez vérifier connexion internet svp!",
   "skip": "Passer",
@@ -16,10 +17,17 @@
   "yes_apply": "Oui, définir comme d'écran!",
   "yes_download": "Oui, télécharger!",
   "wallpaper_application_confirmation": "Voulez-vous vraiment l'utiliser comme fond d'écran?",
+  "wallpaper_save_confirmation": "Voulez-vous vraiment l'ajouter à vos favoris?",
+  "wallpaper_remove_confirmation": "Voulez-vous vraiment le supprimer à vos favoris?",
   "wallpaper_download_confirmation": "Voulez-vous vraiment télécharger ce fond d'écran?",
   "beautiful_wallpaper_wallinice": "J'ai trouvé ce magnifique fond d'écran sur wallinice que je partage avec toi",
   "saved": "Favoris",
   "share": "Partager",
   "color_tone": "Ton des couleurs",
-  "colors": "Les couleurs"
+  "colors": "Les couleurs",
+  "my_favorite": "Coup de cœur",
+  "wallpaper_saved_successfully": "Enrégistré avec succès",
+  "wallpaper_removed_successfully": "Supprimé avec succès",
+  "view_saved_wallpapers": "Voir"
+
 }
