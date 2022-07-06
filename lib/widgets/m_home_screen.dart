@@ -17,12 +17,12 @@ mixin HomeScreenMixin<T> {
 
   Widget setWallPaperCard(int index);
 
-  Widget buildScreen(
-      BuildContext context, WallpaperViewModel<T> wallpaperViewModel) {
-    final progress = wallpaperViewModel.pageController.hasClients
-        ? (wallpaperViewModel.pageController.page ?? 0)
-        : 0;
+  void handlePagination() {}
 
+  Widget buildScreen(
+    BuildContext context,
+    WallpaperViewModel<T> wallpaperViewModel,
+  ) {
     return Stack(
       children: [
         ImageFiltered(
@@ -71,7 +71,7 @@ mixin HomeScreenMixin<T> {
                     Text(
                       Constants.appName.toLowerCase(),
                       style: TextStyles.textStyle.apply(
-                          fontSizeDelta: 14,
+                          fontSizeDelta: 12,
                           fontWeightDelta: 20,
                           color: Theme.of(context).textTheme.bodyText1?.color),
                     ),
@@ -117,16 +117,18 @@ mixin HomeScreenMixin<T> {
               ),
               Flexible(
                 child: SizedBox(
-                  height: Get.height * .71,
+                  height: Get.height * .7,
                   child: PageView.builder(
                     controller: wallpaperViewModel.pageController,
-                    physics: const ClampingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     itemCount: wallpaperViewModel.wallpapers.length,
                     itemBuilder: (context, index) {
                       // final wallpaper = wallpaperViewModel.wallpapers[index];
-
                       final isTheSelectedWallpaper =
-                          progress > index - 0.5 && progress < index + 0.5;
+                          wallpaperViewModel.homeScreenCurrentPage >
+                                  index - 0.5 &&
+                              wallpaperViewModel.homeScreenCurrentPage <
+                                  index + 0.5;
 
                       if (isTheSelectedWallpaper) {
                         selectedWallpaperIndex = index;
@@ -139,23 +141,24 @@ mixin HomeScreenMixin<T> {
                             duration: const Duration(
                               milliseconds: Constants.kDuration,
                             ),
-                            top: isTheSelectedWallpaper ? -12 : 0,
+                            top: isTheSelectedWallpaper ? -15 : 0,
                             left: 0,
                             right: 0,
                             child: AnimatedScale(
-                              curve: Curves.fastLinearToSlowEaseIn,
-                              scale: isTheSelectedWallpaper ? 1.01 : .92,
+                              curve: Curves.elasticInOut,
+                              scale: isTheSelectedWallpaper ? 1.005 : .95,
                               duration: const Duration(
-                                  milliseconds: Constants.kDuration * 2),
+                                  milliseconds: Constants.kDuration),
                               child: AnimatedAlign(
-                                  curve: Curves.fastLinearToSlowEaseIn,
-                                  duration: const Duration(
-                                    microseconds: Constants.kDuration * 2,
-                                  ),
-                                  alignment: isTheSelectedWallpaper
-                                      ? Alignment.bottomCenter
-                                      : const Alignment(0, -1.5),
-                                  child: setWallPaperCard(index)),
+                                curve: Curves.elasticInOut,
+                                duration: const Duration(
+                                  microseconds: Constants.kDuration,
+                                ),
+                                alignment: isTheSelectedWallpaper
+                                    ? Alignment.bottomCenter
+                                    : const Alignment(0, -1.5),
+                                child: setWallPaperCard(index),
+                              ),
                             ),
                           ),
                         ],

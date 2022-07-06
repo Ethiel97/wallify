@@ -52,7 +52,7 @@ mixin WallpaperCard<T> {
                   BoxShadow(
                     offset: const Offset(0, 10),
                     blurRadius: 20,
-                    color: Theme.of(context).backgroundColor.withOpacity(.04),
+                    color: Theme.of(context).backgroundColor.withOpacity(.03),
                   ),
                 ],
               ),

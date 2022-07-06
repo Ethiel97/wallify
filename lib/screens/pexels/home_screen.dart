@@ -71,9 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
     BuildContext context,
     WallpaperViewModel<px.WallPaper> wallpaperViewModel,
   ) {
-    final progress = wallpaperViewModel.pageController.hasClients
-        ? (wallpaperViewModel.pageController.page ?? 0)
-        : 0;
+    final progress = 0;
 
     return Stack(
       children: [

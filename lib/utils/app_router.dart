@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/screens/main_screen.dart';
 import 'package:mobile/screens/onboarding_screen.dart';
-import 'package:mobile/screens/pexels/home_screen.dart';
+// import 'package:mobile/screens/pexels/home_screen.dart';
 import 'package:mobile/screens/pexels/wallpaper_detail_screen.dart' as px;
 import 'package:mobile/screens/splash_screen.dart';
 import 'package:mobile/screens/wallhaven/wallpaper_by_color_screen.dart' as wh;
@@ -24,9 +24,6 @@ Map<String, WidgetBuilder> appRoutes = {
       ),
   onBoarding: (context) => const OnboardingScreen(
         key: ValueKey("b"),
-      ),
-  home: (context) => const HomeScreen(
-        key: ValueKey("c"),
       ),
   landing: (context) => const MainScreen(
         key: ValueKey("d"),

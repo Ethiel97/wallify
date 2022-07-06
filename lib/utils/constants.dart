@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Constants {
   static const double kBorderRadius = 15;
-  static const int kDuration = 150;
+  static const int kDuration = 130;
   static const String appName = "Wallinice";
   static const int perPageResults = 32;
   static String? pexelsApiKey = dotenv.env['PEXELS_API_KEY'];

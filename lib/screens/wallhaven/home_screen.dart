@@ -15,10 +15,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen>
-    with
-        SingleTickerProviderStateMixin,
-        AutomaticKeepAliveClientMixin,
-        HomeScreenMixin<WallPaper> {
+    with SingleTickerProviderStateMixin, HomeScreenMixin<WallPaper> {
   late AnimationController animationController;
 
   // late Animation slideAnimation;
@@ -61,18 +58,12 @@ class _HomeScreenState extends State<HomeScreen>
           .large;
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return BaseView<WallpaperViewModel<WallPaper>>(
-      key: UniqueKey(),
-      vmBuilder: (context) =>
-          Provider.of<WallpaperViewModel<WallPaper>>(context),
-      builder: buildScreen,
-    );
-  }
+  Widget build(BuildContext context) => BaseView<WallpaperViewModel<WallPaper>>(
+        key: UniqueKey(),
+        vmBuilder: (context) =>
+            Provider.of<WallpaperViewModel<WallPaper>>(context),
+        builder: buildScreen,
+      );
 
   @override
   Widget setWallPaperCard(int index) => WhWallpaperCard(

@@ -21,7 +21,7 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
   BaseViewState createState() => BaseViewState<T>();
 }
 
-class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
+class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> with AutomaticKeepAliveClientMixin{
 
   @override
   void initState() {
@@ -35,12 +35,16 @@ class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider<T>.value(
+  Widget build(BuildContext context) {
+    super.build(context);
+    return ChangeNotifierProvider<T>.value(
+
         value: widget.vmBuilder(context),
         child: Consumer<T>(
           builder: _buildScreenContent,
         ),
       );
+  }
 
   Widget _buildScreenContent(
     BuildContext context,
@@ -118,4 +122,7 @@ class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
           ),
         ),
       );
+
+  @override
+  bool get wantKeepAlive => true;
 }

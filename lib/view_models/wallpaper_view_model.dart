@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/app_router.dart';
-import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/text_styles.dart';
@@ -31,6 +30,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
   Color _selectedColor = Colors.black;
 
   Color get selectedColor => _selectedColor;
+
+  int homeScreenCurrentPage = 0;
 
   set selectedColor(Color selectedColor) {
     _selectedColor = selectedColor;
@@ -89,12 +90,13 @@ class WallpaperViewModel<T> extends BaseViewModel {
         message,
         style: TextStyles.textStyle.apply(
           color: Theme.of(Get.context!).backgroundColor,
-          fontSizeDelta: -4.2,
+          fontSizeDelta: -4.4,
           fontWeightDelta: 1,
         ),
       ),
+      // titleText: ,
       // colorText: Theme.of(Get.context!).textTheme.bodyText1!.color,
-      colorText: AppColors.textColor,
+      colorText: Theme.of(Get.context!).backgroundColor,
       snackPosition: SnackPosition.TOP,
       // backgroundColor: Theme.of(Get.context!).backgroundColor,
       padding: const EdgeInsets.symmetric(
@@ -120,7 +122,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
           style: TextStyles.textStyle.apply(
             color: TinyColor(
               Theme.of(Get.context!).colorScheme.secondary,
-            ).lighten(15).color,
+            ).darken(15).color,
             fontSizeDelta: -4,
             fontWeightDelta: 10,
           ),
@@ -135,10 +137,13 @@ class WallpaperViewModel<T> extends BaseViewModel {
     await fetchTopWallPapers();
 
     // Get.bottomSheet(bottomsheet)
-
     pageController.addListener(() async {
       //notifyListeners
-      reloadState();
+
+        homeScreenCurrentPage = pageController.page!.floor();
+        reloadState();
+
+      // reloadState();
       if (pageController.hasClients) {
         //if the user reaches the last item, we search for the
         // next page results using pagination method

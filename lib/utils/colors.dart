@@ -6,7 +6,7 @@ mixin AppColors {
 
   static Color get darkBackgroundColor => const Color(0xff060606);
 
-  static Color get textColor => const Color(0xfff5f6f7).toTinyColor().lighten().color;
+  static Color get textColor => Colors.white.toTinyColor().lighten(2).color;
 
   static Color get whiteBackgroundColor => const Color(0xfff5f6f7);
 
@@ -17,7 +17,6 @@ mixin AppColors {
 
   static Color get primaryColor => const Color(0xff12c2e9);
 
-
   static Color get accentColor => const Color(0xffc471ed);
-  // static Color get accentColor => const Color(0xffE2282A);
+// static Color get accentColor => const Color(0xffE2282A);
 }

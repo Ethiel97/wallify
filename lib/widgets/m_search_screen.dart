@@ -13,11 +13,11 @@ import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 mixin SearchMixin<T> {
-  void search() {
+  Future<void> search() async {
     var viewModel =
         Provider.of<WallpaperViewModel<T>>(Get.context!, listen: false);
 
-    if (viewModel.searchQueryTEC.text.isNotEmpty) {
+    if (viewModel.searchQueryTEC.text.trim().isNotEmpty) {
       viewModel.searchWallpapers(viewModel.searchQueryTEC.text, delay: 1200);
     }
   }
@@ -53,7 +53,7 @@ mixin SearchMixin<T> {
               ),
               children: [
                 const SizedBox(
-                  height: 70,
+                  height: 72,
                 ),
                 /*Text(
                       Constants.appName.toLowerCase(),
@@ -71,7 +71,7 @@ mixin SearchMixin<T> {
                 const SizedBox(
                   height: 24,
                 ),
-                // TODO implement sliverlist
+                // TODO implement slivers
                 Text(
                   AppLocalizations.of(context)!.color_tone,
                   style: TextStyles.textStyle.apply(

@@ -76,7 +76,7 @@ class MainScreen extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    top: 30.0,
+                    top: 34.0,
                     right: 10,
                   ),
                   child: IconButton(
