@@ -22,9 +22,15 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
 }
 
 class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
+
+  @override
+  void initState() {
+    super.initState();
+    Startup().setTransparentStatusBar();
+
+  }
   @override
   void didChangeDependencies() {
-    Startup().setTransparentStatusBar();
     super.didChangeDependencies();
   }
 

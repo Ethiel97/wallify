@@ -53,7 +53,7 @@ mixin SearchMixin<T> {
               ),
               children: [
                 const SizedBox(
-                  height: 48,
+                  height: 70,
                 ),
                 /*Text(
                       Constants.appName.toLowerCase(),
@@ -85,6 +85,7 @@ mixin SearchMixin<T> {
                 SizedBox(
                   height: Get.height / 20,
                   child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.only(left: 0.0),
                     controller: wallpaperViewModel.colorsListScrollController,
                     itemCount: Constants.colors.length,
@@ -105,6 +106,7 @@ mixin SearchMixin<T> {
                 SizedBox(
                   height: Get.height / 20,
                   child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.only(left: 0.0),
                     controller: wallpaperViewModel.tagsListScrollController,
                     itemCount: Constants.tags.length,
@@ -183,19 +185,16 @@ mixin SearchMixin<T> {
                   hintText: AppLocalizations.of(Get.context!)!.search_here,
                   hintStyle: TextStyles.textStyle.apply(
                     color: TinyColor(
-                            Theme.of(Get.context!).textTheme.bodyText1!.color!)
-                        .darken()
-                        .tint()
-                        .color,
+                      Theme.of(Get.context!).textTheme.bodyText1!.color!,
+                    ).darken().tint().color,
                     fontSizeDelta: -2,
                   ),
                 ),
               ),
             ),
           ),
-          const SizedBox(
-            width: 12,
-          ),
+
+/*
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(
@@ -220,7 +219,8 @@ mixin SearchMixin<T> {
                 color: Theme.of(Get.context!).textTheme.bodyText1?.color,
               ),
             ),
-          )
+          ),
+*/
         ],
       );
 }

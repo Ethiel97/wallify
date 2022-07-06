@@ -43,6 +43,12 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   String get photographer => "N/A";
 
   @override
+  String get cacheKey => Provider.of<WallpaperViewModel<WallPaper>>(context)
+      .selectedWallpaper
+      .id
+      .toString();
+
+  @override
   String get imgSize =>
       "${(Provider.of<WallpaperViewModel<WallPaper>>(context).selectedWallpaper.fileSize! / 10000000).toStringAsFixed(2)}MB";
 
@@ -107,12 +113,10 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
 
   @override
   void share() {
-
     var viewModel =
-    Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
+        Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
 
     viewModel.shareWallPaper(viewModel.selectedWallpaper.path!);
-
 
     /*viewModel.confirmAction(
       message:

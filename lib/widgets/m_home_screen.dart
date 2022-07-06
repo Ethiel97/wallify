@@ -39,7 +39,7 @@ mixin HomeScreenMixin<T> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   colorFilter: ColorFilter.mode(
-                    Theme.of(context).backgroundColor.withOpacity(.15),
+                    Theme.of(context).backgroundColor.withOpacity(.25),
                     BlendMode.srcOver,
                   ),
                   filterQuality: FilterQuality.high,

@@ -25,7 +25,7 @@ class NavItem extends StatelessWidget {
           duration: const Duration(
             milliseconds: Constants.kDuration,
           ),
-          scale: navigationProvider.currentIndex == index ? 1.03 : 1.0,
+          scale: navigationProvider.currentIndex == index ? 1.03 : .9,
           child: AnimatedContainer(
             curve: Curves.fastLinearToSlowEaseIn,
             padding: const EdgeInsets.all(10),

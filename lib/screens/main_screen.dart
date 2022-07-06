@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:mobile/providers/navigation_provider.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/screens/wallhaven/home_screen.dart';
+import 'package:mobile/widgets/w_nav_item.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/navigation_provider.dart';
-import '../widgets/w_nav_item.dart';
 import 'wallhaven/search_screen.dart';
 
 class MainScreen extends StatelessWidget {
@@ -23,8 +24,9 @@ class MainScreen extends StatelessWidget {
       ];
 
   @override
-  Widget build(BuildContext context) => Consumer<NavigationProvider>(
-        builder: (context, navigationProvider, _) => Scaffold(
+  Widget build(BuildContext context) =>
+      Consumer2<NavigationProvider, ThemeProvider>(
+        builder: (context, navigationProvider, themeProvider, _) => Scaffold(
           backgroundColor: Theme.of(context).backgroundColor,
           extendBodyBehindAppBar: true,
           extendBody: true,
@@ -38,6 +40,7 @@ class MainScreen extends StatelessWidget {
           body: Stack(
             children: [
               IndexedStack(
+                key: UniqueKey(),
                 alignment: Alignment.center,
                 children: [
                   screens[navigationProvider.currentIndex],
@@ -69,6 +72,25 @@ class MainScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 30.0,
+                    right: 10,
+                  ),
+                  child: IconButton(
+                    onPressed: () => themeProvider.toggleMode(),
+                    icon: Icon(
+                      themeProvider.currentTheme == AppTheme.dark.description
+                          ? Iconsax.sun_15
+                          : Iconsax.moon5,
+                      size: 28,
+                    ),
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
+              )
             ],
           ),
         ),

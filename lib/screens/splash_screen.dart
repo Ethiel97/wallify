@@ -7,11 +7,10 @@ import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
+import 'package:mobile/utils/secure_storage.dart';
 import 'package:mobile/utils/startup.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:tinycolor2/tinycolor2.dart';
-
-import '../utils/secure_storage.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

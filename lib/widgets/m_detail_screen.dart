@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/widgets/w_color_tag.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../utils/text_styles.dart';
 
@@ -22,6 +25,8 @@ mixin DetailsMixin<T> {
   late DraggableScrollableController scrollableController;
 
   String get imgUrl => value.toString();
+
+  String get cacheKey => value.toString();
 
   String get photographer => value.toString();
 
@@ -73,12 +78,13 @@ mixin DetailsMixin<T> {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     colorFilter: ColorFilter.mode(
-                      AppColors.darkColor.withOpacity(.2),
+                      Theme.of(Get.context!).backgroundColor.withOpacity(.2),
                       BlendMode.srcOver,
                     ),
                     fit: BoxFit.cover,
                     image: CachedNetworkImageProvider(
                       imgUrl,
+                      cacheKey: cacheKey,
                     ),
                   ),
                 ),
@@ -148,7 +154,7 @@ mixin DetailsMixin<T> {
                               size: 30,
                               color: AppColors.textColor,
                             ),
-                            onPressed: () => Get.back(),
+                            onPressed: applyWallPaper,
                           ),
                         ),
                       ),
@@ -389,6 +395,27 @@ mixin DetailsMixin<T> {
                 : Icons.expand_less_outlined,
             size: 30,
             color: AppColors.textColor,
+          ),
+        ),
+      );
+
+  Widget get loader => Shimmer(
+        color: Provider.of<ThemeProvider>(Get.context!, listen: false)
+                    .currentTheme ==
+                AppTheme.light.description
+            ? Theme.of(Get.context!).colorScheme.secondary
+            : Theme.of(Get.context!).primaryColor,
+        child: Container(
+          height: Get.height,
+          width: double.infinity,
+          margin: const EdgeInsets.symmetric(
+            vertical: 20,
+            horizontal: 8,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(
+              Constants.kBorderRadius,
+            ),
           ),
         ),
       );

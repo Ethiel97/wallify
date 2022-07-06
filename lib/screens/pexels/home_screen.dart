@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen>
                 child: SizedBox(
                   height: Get.height * .71,
                   child: PageView.builder(
-                    controller: wallpaperViewModel.pageController,
+                    // controller: wallpaperViewModel.pageController,
                     physics: const ClampingScrollPhysics(),
                     itemCount: wallpaperViewModel.wallpapers.length,
                     itemBuilder: (context, index) {

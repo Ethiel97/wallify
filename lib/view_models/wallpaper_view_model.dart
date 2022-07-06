@@ -62,7 +62,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
   void defSelectedWallpaper(T wallpaper, WallPaperProvider wallPaperProvider) {
     _selectedWallpaper = wallpaper;
-    reloadState();
+    // reloadState();
 
     String route = wallPaperProvider.description.capitalizeFirst!;
 
@@ -88,7 +88,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
       messageText: Text(
         message,
         style: TextStyles.textStyle.apply(
-          color: AppColors.textColor,
+          color: Theme.of(Get.context!).backgroundColor,
           fontSizeDelta: -4.2,
           fontWeightDelta: 1,
         ),
@@ -101,6 +101,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
         vertical: 12,
         horizontal: 20,
       ),
+      backgroundColor: Theme.of(Get.context!).textTheme.bodyText1!.color,
       duration: const Duration(milliseconds: Constants.kDuration * 42),
       mainButton: TextButton(
         /*icon: Icon(

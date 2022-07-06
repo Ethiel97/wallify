@@ -25,7 +25,9 @@ import 'utils/app_router.dart';
 typedef CreatorCallback<T> = T Function(Map<String, dynamic>);
 
 void main() async {
+
   await Startup().init();
+
   runApp(
     MultiProvider(
       providers: [
@@ -56,6 +58,7 @@ void main() async {
       child: const MyApp(),
     ),
   );
+
 }
 
 class MyApp extends StatefulWidget {

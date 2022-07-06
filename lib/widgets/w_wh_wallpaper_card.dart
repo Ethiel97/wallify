@@ -14,7 +14,7 @@ class WhWallpaperCard extends StatelessWidget with WallpaperCard<WallPaper> {
   }) : super(key: key);
 
   @override
-  String get imgUrl => wallPaper.thumbs!.small;
+  String get imgUrl => wallPaper.path!;
 
   @override
   String get cacheKey => wallPaper.id.toString();
@@ -26,10 +26,10 @@ class WhWallpaperCard extends StatelessWidget with WallpaperCard<WallPaper> {
             viewModel.defSelectedWallpaper(
                 wallPaper, WallPaperProvider.wallhaven);
           },
-          onTap: () {
-            viewModel.defSelectedWallpaper(
-                wallPaper, WallPaperProvider.wallhaven);
-          },
+          onTap: () => viewModel.defSelectedWallpaper(
+            wallPaper,
+            WallPaperProvider.wallhaven,
+          ),
           child: buildCard(context),
         ),
       );
