@@ -11,6 +11,7 @@ import 'package:tinycolor2/tinycolor2.dart';
 mixin FavScreenMixin<T> {
   Widget setWallPaperCard(int index);
 
+
   Widget buildScreen(
           BuildContext context, WallpaperViewModel<T> wallpaperViewModel) =>
       Scaffold(
@@ -38,9 +39,10 @@ mixin FavScreenMixin<T> {
               Text(
                 AppLocalizations.of(context)!.my_favorite,
                 style: TextStyles.textStyle.apply(
-                    color: Theme.of(context).textTheme.bodyText1!.color!,
-                    fontSizeDelta: 8,
-                    fontWeightDelta: 6),
+                  color: Theme.of(context).textTheme.bodyText1!.color!,
+                  fontSizeDelta: 4,
+                  fontWeightDelta: 6,
+                ),
                 textAlign: TextAlign.center,
               ),
               (wallpaperViewModel.savedWallpapers.isNotEmpty)

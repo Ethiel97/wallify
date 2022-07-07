@@ -137,6 +137,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
     );
   }
 
+  bool isWallPaperSaved(String id) => boxWallpapers.containsKey(id);
+
   @override
   FutureOr<void> init() async {
     //listening to pageview changes
@@ -359,10 +361,10 @@ class WallpaperViewModel<T> extends BaseViewModel {
     }
   }
 
-  void saveWallpaper(T wallpaper) {
-    if (!boxWallpapers.containsKey(wallpaper?.toString())) {
+  void saveWallpaper(T wallpaper, String id) {
+    if (!boxWallpapers.containsKey(id)) {
       // wallpaper = wallpaper?.copyWith(saved: true);
-      boxWallpapers.put(wallpaper.toString(), wallpaper);
+      boxWallpapers.put(id, wallpaper);
 
       Get.snackbar(
         AppLocalizations.of(Get.context!)!.notification,
@@ -392,15 +394,15 @@ class WallpaperViewModel<T> extends BaseViewModel {
         ),
       );
     } else {
-      removeWallpaper(wallpaper);
+      removeWallpaper(wallpaper, id);
     }
 
     reloadState();
   }
 
-  void removeWallpaper(T wallpaper) {
+  void removeWallpaper(T wallpaper, String id) {
     // quote = quote.copyWith(saved: false);
-    boxWallpapers.delete(wallpaper.toString());
+    boxWallpapers.delete(id);
     reloadState();
 
     Get.snackbar(

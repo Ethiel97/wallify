@@ -36,6 +36,8 @@ mixin DetailsMixin<T> {
 
   String get imgSize => value.toString();
 
+  T get selectedWallPaper => value;
+
   List<Widget> get colorsWidget => [
         ...colors
             .map((e) => ColorTag<T>(
@@ -183,7 +185,7 @@ mixin DetailsMixin<T> {
                   right: 12,
                   bottom: 0,
                 ),
-                child: buildBottomSheet(),
+                child: buildBottomSheet(wallpaperViewModel),
               ),
             ),
             // AnimatedCrossFade(firstChild: null,
@@ -191,7 +193,8 @@ mixin DetailsMixin<T> {
         ),
       );
 
-  Widget buildBottomSheet() => Consumer<NavigationProvider>(
+  Widget buildBottomSheet(WallpaperViewModel<T> wallpaperViewModel) => Consumer<
+          NavigationProvider>(
       builder: (context, navigationProvider, _) => DraggableScrollableSheet(
             // controller: scrollableController,
             expand: true,
@@ -309,11 +312,11 @@ mixin DetailsMixin<T> {
                                 AppLocalizations.of(Get.context!)!.apply,
                               ),
                             buildActionButton(
-                              navigationProvider.currentIndex == 2
+                              wallpaperViewModel.isWallPaperSaved(cacheKey)
                                   ? Iconsax.box_remove
                                   : Iconsax.like,
-                              save,
-                              navigationProvider.currentIndex == 2
+                              () => save(),
+                              wallpaperViewModel.isWallPaperSaved(cacheKey)
                                   ? AppLocalizations.of(Get.context!)!.remove
                                   : AppLocalizations.of(Get.context!)!.save,
                             ),

@@ -98,7 +98,24 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   @override
   void save() {
     // TODO: implement save
+    var viewModel =
+        Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
 
+    bool isFavorite = viewModel.isWallPaperSaved(cacheKey);
+
+    //check if user is on the favorite screen
+    viewModel.confirmAction(
+      message: isFavorite
+          ? AppLocalizations.of(Get.context!)!.wallpaper_remove_confirmation
+          : AppLocalizations.of(Get.context!)!.wallpaper_save_confirmation,
+      action: () {
+        viewModel.saveWallpaper(viewModel.selectedWallpaper,
+            viewModel.selectedWallpaper.id.toString());
+      },
+      actionText: isFavorite
+          ? AppLocalizations.of(Get.context!)!.remove
+          : AppLocalizations.of(Get.context!)!.save,
+    );
   }
 
   @override

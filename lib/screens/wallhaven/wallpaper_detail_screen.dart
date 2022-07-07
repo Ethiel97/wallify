@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
-import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
 import 'package:mobile/widgets/m_detail_screen.dart';
@@ -36,18 +35,20 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   }
 
   @override
-  String get imgUrl => Provider.of<WallpaperViewModel<WallPaper>>(context)
-      .selectedWallpaper
-      .path!;
+  String get imgUrl =>
+      Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+          .selectedWallpaper
+          .path!;
 
   @override
   String get photographer => "N/A";
 
   @override
-  String get cacheKey => Provider.of<WallpaperViewModel<WallPaper>>(context)
-      .selectedWallpaper
-      .id
-      .toString();
+  String get cacheKey =>
+      Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+          .selectedWallpaper
+          .id
+          .toString();
 
   @override
   String get imgSize =>
@@ -113,16 +114,18 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
     var viewModel =
         Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
 
-    var navigationProvider =
-        Provider.of<NavigationProvider>(context, listen: false);
+    bool isFavorite = viewModel.isWallPaperSaved(cacheKey);
 
     //check if user is on the favorite screen
     viewModel.confirmAction(
-      message: AppLocalizations.of(Get.context!)!.wallpaper_save_confirmation,
+      message: isFavorite
+          ? AppLocalizations.of(Get.context!)!.wallpaper_remove_confirmation
+          : AppLocalizations.of(Get.context!)!.wallpaper_save_confirmation,
       action: () {
-        viewModel.saveWallpaper(viewModel.selectedWallpaper);
+        viewModel.saveWallpaper(
+            viewModel.selectedWallpaper, viewModel.selectedWallpaper.id!);
       },
-      actionText: navigationProvider.currentIndex == 2
+      actionText: isFavorite
           ? AppLocalizations.of(Get.context!)!.remove
           : AppLocalizations.of(Get.context!)!.save,
     );

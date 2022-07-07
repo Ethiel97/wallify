@@ -13,15 +13,11 @@ import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:provider/provider.dart';
-import 'package:tinycolor2/tinycolor2.dart';
-
-import 'colors.dart';
 
 Future<void> myBackgroundMessageHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 
   LogUtils.log("messaging background...");
-  // Or do other work.
 }
 
 class Startup {
@@ -51,24 +47,22 @@ class Startup {
   }
 
   void setTransparentStatusBar({int delay = 0}) {
-    Future.delayed(
-        Duration(seconds: delay),
-        () => {
-              SystemChrome.setSystemUIOverlayStyle(
-                SystemUiOverlayStyle(
-                  systemNavigationBarColor:
-                      Provider.of<ThemeProvider>(Get.context!, listen: false)
-                                  .currentTheme ==
-                              AppTheme.dark.description
-                          ? AppColors.screenBackgroundColor
-                          : AppColors.whiteBackgroundColor
-                              .toTinyColor()
-                              .darken(4)
-                              .color,
-                  statusBarColor: Colors.transparent,
-                ),
-              )
-            });
+    Future.delayed(Duration(seconds: delay), () {
+      bool isDarkMode = Provider.of<ThemeProvider>(Get.context!, listen: false)
+              .currentTheme ==
+          AppTheme.dark.description;
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          /*systemNavigationBarColor: isDarkMode
+              ? AppColors.whiteBackgroundColor
+              : AppColors.darkBackgroundColor.toTinyColor().darken(4).color,*/
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness:
+              isDarkMode ? Brightness.light : Brightness.dark,
+          statusBarBrightness: isDarkMode ? Brightness.light : Brightness.dark,
+        ),
+      );
+    });
     // }
   }
 }

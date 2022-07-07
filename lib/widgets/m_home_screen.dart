@@ -22,155 +22,155 @@ mixin HomeScreenMixin<T> {
   Widget buildScreen(
     BuildContext context,
     WallpaperViewModel<T> wallpaperViewModel,
-  ) {
-    return Stack(
-      children: [
-        ImageFiltered(
-          imageFilter: ImageFilter.blur(
-            sigmaY: 18,
-            sigmaX: 18,
-          ),
-          child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: Constants.kDuration),
-            child: Container(
-              key: UniqueKey(),
-              height: Get.height,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                    Theme.of(context).backgroundColor.withOpacity(.25),
-                    BlendMode.srcOver,
-                  ),
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.cover,
-                  image: CachedNetworkImageProvider(
-                    selectedWallPaperImgUrl,
-                    cacheKey: selectedWallPaperImgUrl,
+  ) =>
+      Stack(
+        children: [
+          ImageFiltered(
+            imageFilter: ImageFilter.blur(
+              sigmaY: 18,
+              sigmaX: 18,
+            ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: Constants.kDuration),
+              child: Container(
+                key: UniqueKey(),
+                height: Get.height,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    colorFilter: ColorFilter.mode(
+                      Theme.of(context).backgroundColor.withOpacity(.25),
+                      BlendMode.srcOver,
+                    ),
+                    filterQuality: FilterQuality.high,
+                    fit: BoxFit.cover,
+                    image: CachedNetworkImageProvider(
+                      selectedWallPaperImgUrl,
+                      cacheKey: selectedWallPaperImgUrl,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              AnimatedSwitcher(
-                duration: const Duration(
-                  milliseconds: Constants.kDuration,
-                ),
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      Constants.appName.toLowerCase(),
-                      style: TextStyles.textStyle.apply(
-                          fontSizeDelta: 12,
-                          fontWeightDelta: 20,
-                          color: Theme.of(context).textTheme.bodyText1?.color),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      /*wallpaperViewModel
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AnimatedSwitcher(
+                  duration: const Duration(
+                    milliseconds: Constants.kDuration,
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Text(
+                        Constants.appName.toLowerCase(),
+                        style: TextStyles.textStyle.apply(
+                            fontSizeDelta: 12,
+                            fontWeightDelta: 20,
+                            color:
+                                Theme.of(context).textTheme.bodyText1?.color),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        /*wallpaperViewModel
                           .wallpapers[selectedWallpaperIndex].category!,*/
-                      AppLocalizations.of(context)!.browse_awesome_wallpapers,
-                      style: TextStyles.textStyle.apply(
-                        fontSizeDelta: -4,
-                        fontWeightDelta: 4,
-                        color: TinyColor(
-                                Theme.of(context).textTheme.bodyText1!.color!)
-                            .shade()
-                            .color,
+                        AppLocalizations.of(context)!.browse_awesome_wallpapers,
+                        style: TextStyles.textStyle.apply(
+                          fontSizeDelta: -4,
+                          fontWeightDelta: 4,
+                          color: TinyColor(
+                                  Theme.of(context).textTheme.bodyText1!.color!)
+                              .shade()
+                              .color,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                SizedBox(
+                  height: Get.height / 20,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12.0),
+                    child: ListView.builder(
+                      itemCount: Constants.tags.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => WWallPaperTag(
+                        viewModel: wallpaperViewModel,
+                        tag: Constants.tags[index],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              SizedBox(
-                height: Get.height / 20,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
-                  child: ListView.builder(
-                    itemCount: Constants.tags.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => WWallPaperTag(
-                      viewModel: wallpaperViewModel,
-                      tag: Constants.tags[index],
+                const SizedBox(
+                  height: 24,
+                ),
+                Flexible(
+                  child: SizedBox(
+                    height: Get.height * .7,
+                    child: PageView.builder(
+                      controller: wallpaperViewModel.pageController,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: wallpaperViewModel.wallpapers.length,
+                      itemBuilder: (context, index) {
+                        // final wallpaper = wallpaperViewModel.wallpapers[index];
+                        final isTheSelectedWallpaper =
+                            wallpaperViewModel.homeScreenCurrentPage >
+                                    index - 0.5 &&
+                                wallpaperViewModel.homeScreenCurrentPage <
+                                    index + 0.5;
+
+                        if (isTheSelectedWallpaper) {
+                          selectedWallpaperIndex = index;
+                        }
+
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            AnimatedPositioned(
+                              duration: const Duration(
+                                milliseconds: Constants.kDuration,
+                              ),
+                              top: isTheSelectedWallpaper ? -15 : 0,
+                              left: 0,
+                              right: 0,
+                              child: AnimatedScale(
+                                curve: Curves.elasticInOut,
+                                scale: isTheSelectedWallpaper ? 1.005 : .95,
+                                duration: const Duration(
+                                    milliseconds: Constants.kDuration),
+                                child: AnimatedAlign(
+                                  curve: Curves.elasticInOut,
+                                  duration: const Duration(
+                                    microseconds: Constants.kDuration,
+                                  ),
+                                  alignment: isTheSelectedWallpaper
+                                      ? Alignment.bottomCenter
+                                      : const Alignment(0, -1.5),
+                                  child: setWallPaperCard(index),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Flexible(
-                child: SizedBox(
-                  height: Get.height * .7,
-                  child: PageView.builder(
-                    controller: wallpaperViewModel.pageController,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: wallpaperViewModel.wallpapers.length,
-                    itemBuilder: (context, index) {
-                      // final wallpaper = wallpaperViewModel.wallpapers[index];
-                      final isTheSelectedWallpaper =
-                          wallpaperViewModel.homeScreenCurrentPage >
-                                  index - 0.5 &&
-                              wallpaperViewModel.homeScreenCurrentPage <
-                                  index + 0.5;
-
-                      if (isTheSelectedWallpaper) {
-                        selectedWallpaperIndex = index;
-                      }
-
-                      return Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          AnimatedPositioned(
-                            duration: const Duration(
-                              milliseconds: Constants.kDuration,
-                            ),
-                            top: isTheSelectedWallpaper ? -15 : 0,
-                            left: 0,
-                            right: 0,
-                            child: AnimatedScale(
-                              curve: Curves.elasticInOut,
-                              scale: isTheSelectedWallpaper ? 1.005 : .95,
-                              duration: const Duration(
-                                  milliseconds: Constants.kDuration),
-                              child: AnimatedAlign(
-                                curve: Curves.elasticInOut,
-                                duration: const Duration(
-                                  microseconds: Constants.kDuration,
-                                ),
-                                alignment: isTheSelectedWallpaper
-                                    ? Alignment.bottomCenter
-                                    : const Alignment(0, -1.5),
-                                child: setWallPaperCard(index),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 }

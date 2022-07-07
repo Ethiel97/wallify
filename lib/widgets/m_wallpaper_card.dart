@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
@@ -14,50 +15,52 @@ mixin WallpaperCard<T> {
 
   String get cacheKey => value.toString();
 
-  Widget buildCard(BuildContext context) => Hero(
-        tag: imgUrl,
-        transitionOnUserGestures: true,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(Constants.kBorderRadius),
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: imgUrl,
-            cacheKey: cacheKey,
-            errorWidget: (context, error, dynamic) => loader,
-            imageBuilder: (context, imageProvider) => Container(
-              height: Get.height * .7,
-              width: Get.width,
-              margin: const EdgeInsets.symmetric(
-                vertical: 20,
-                horizontal: 8,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  Constants.kBorderRadius,
+  Widget buildCard(BuildContext context) => Consumer<NavigationProvider>(
+        builder: (context, navigationProvider, _) => Hero(
+          tag: imgUrl,
+          transitionOnUserGestures: true,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(Constants.kBorderRadius),
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              imageUrl: imgUrl,
+              cacheKey: cacheKey,
+              errorWidget: (context, error, dynamic) => loader,
+              imageBuilder: (context, imageProvider) => Container(
+                height: Get.height * .7,
+                width: Get.width,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 8,
                 ),
-                image: DecorationImage(
-                  alignment: Alignment.center,
-                  filterQuality: FilterQuality.high,
-                  colorFilter: ColorFilter.mode(
-                    AppColors.darkColor.withOpacity(.3),
-                    BlendMode.overlay,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    Constants.kBorderRadius,
                   ),
-                  image: CachedNetworkImageProvider(
-                    // wallpaper.src.large,
-                    imgUrl,
+                  image: DecorationImage(
+                    alignment: Alignment.center,
+                    filterQuality: FilterQuality.high,
+                    colorFilter: ColorFilter.mode(
+                      AppColors.darkColor.withOpacity(.3),
+                      BlendMode.overlay,
+                    ),
+                    image: CachedNetworkImageProvider(
+                      // wallpaper.src.large,
+                      imgUrl,
+                    ),
+                    fit: BoxFit.cover,
                   ),
-                  fit: BoxFit.cover,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, 10),
+                      blurRadius: 20,
+                      color: Theme.of(context).backgroundColor.withOpacity(.03),
+                    ),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 10),
-                    blurRadius: 20,
-                    color: Theme.of(context).backgroundColor.withOpacity(.03),
-                  ),
-                ],
               ),
+              placeholder: (context, string) => loader,
             ),
-            placeholder: (context, string) => loader,
           ),
         ),
       );
