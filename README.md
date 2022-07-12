@@ -1,6 +1,6 @@
 # wallinice
 
-###An image searching app
+### An image search mobile app
 
 * Browse thousands of high quality images
 * Search exclusive wallpapers
