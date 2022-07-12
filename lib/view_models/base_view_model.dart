@@ -68,7 +68,7 @@ abstract class BaseViewModel<T extends Object> with ChangeNotifier {
 
   set error(bool error) {
     _hasError = error;
-    notifyListeners();
+    reloadState();
   }
 
   set canRefresh(bool val) {

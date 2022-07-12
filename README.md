@@ -1,16 +1,12 @@
-# mobile
+# wallinice
 
-A new Flutter project.
+###An image searching app
 
-## Getting Started
+* Browse thousands of high quality images
+* Search exclusive wallpapers
+* Filter images by tags, colors
+* Switch from dark to light mode
 
-This project is a starting point for a Flutter application.
+[Playstore link](https://play.google.com/store/apps/details?id=com.deventhusiast.wallinice)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![playstore screenshot](assets/images/wallinice_screenshots.png)

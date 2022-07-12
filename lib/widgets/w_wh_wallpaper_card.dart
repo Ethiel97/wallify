@@ -14,7 +14,7 @@ class WhWallpaperCard extends StatelessWidget with WallpaperCard<WallPaper> {
   }) : super(key: key);
 
   @override
-  String get imgUrl => wallPaper.path!;
+  String get imgUrl => wallPaper.thumbs!.large;
 
   @override
   String get cacheKey => wallPaper.id.toString();

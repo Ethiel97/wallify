@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async_wallpaper/async_wallpaper.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -143,67 +144,81 @@ class WallpaperViewModel<T> extends BaseViewModel {
   FutureOr<void> init() async {
     //listening to pageview changes
 
-    boxWallpapers = Hive.box(T is px.WallPaper
-        ? Constants.savedPxWallpapersBox
-        : Constants.savedWhWallpapersBox);
+    try {
+      boxWallpapers = Hive.box(T is px.WallPaper
+              ? Constants.savedPxWallpapersBox
+              : Constants.savedWhWallpapersBox);
 
-    await fetchTopWallPapers();
+      await fetchTopWallPapers();
 
-    // Get.bottomSheet(bottomsheet)
-    pageController.addListener(() async {
-      //notifyListeners
+      // Get.bottomSheet(bottomsheet)
+      pageController.addListener(() async {
+            //notifyListeners
 
-      homeScreenCurrentPage = pageController.page!.floor();
-      reloadState();
+            homeScreenCurrentPage = pageController.page!.floor();
+            reloadState();
 
-      // reloadState();
-      if (pageController.hasClients) {
-        //if the user reaches the last item, we search for the
-        // next page results using pagination method
-        if (pageController.page?.floor() ==
-            (Constants.perPageResults * currentPaginationPageHome) - 1) {
-          // print("END OF SCROLLING");
-          loadMore();
-        }
-      }
-    });
+            // reloadState();
+            if (pageController.hasClients) {
+              //if the user reaches the last item, we search for the
+              // next page results using pagination method
+              if (pageController.page?.floor() ==
+                  (Constants.perPageResults * currentPaginationPageHome) - 1) {
+                // print("END OF SCROLLING");
+                loadMore();
+              }
+            }
+          });
 
-    tagsListScrollController.addListener(() {
-      if (tagsListScrollController.hasClients) {
-        // LogUtils.log("SCROLLING tags: ${tagsListScrollController.offset}");
-      }
-    });
+      tagsListScrollController.addListener(() {
+            if (tagsListScrollController.hasClients) {
+              // LogUtils.log("SCROLLING tags: ${tagsListScrollController.offset}");
+            }
+          });
 
-    colorsListScrollController.addListener(() {
-      if (colorsListScrollController.hasClients) {
-        // LogUtils.log("SCROLLING tags: ${colorsListScrollController.offset}");
-      }
-    });
+      colorsListScrollController.addListener(() {
+            if (colorsListScrollController.hasClients) {
+              // LogUtils.log("SCROLLING tags: ${colorsListScrollController.offset}");
+            }
+          });
 
-    searchPageScrollController.addListener(() {
-      if (searchPageScrollController.hasClients) {
-        LogUtils.log(
-            "SEARCH PAGE SCROLLING: ${searchPageScrollController.offset}");
-        LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
+      searchPageScrollController.addListener(() {
+            if (searchPageScrollController.hasClients) {
+              LogUtils.log(
+                  "SEARCH PAGE SCROLLING: ${searchPageScrollController.offset}");
+              LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
 
-        /*if (searchPageScrollController.position.pixels ==
-            searchPageMaxScrollExtent) {
-          loadMore();
-        }*/
-      }
-    });
+              /*if (searchPageScrollController.position.pixels ==
+                  searchPageMaxScrollExtent) {
+                loadMore();
+              }*/
+            }
+          });
 
-    wallpapersByColorPageScrollController.addListener(() {
-      if (wallpapersByColorPageScrollController.hasClients) {
-        // LogUtils.log("SEARCH PAGE SCROLLING: ${searchPageScrollController.position.pixels}");
-        // LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
+      wallpapersByColorPageScrollController.addListener(() {
+            if (wallpapersByColorPageScrollController.hasClients) {
+              // LogUtils.log("SEARCH PAGE SCROLLING: ${searchPageScrollController.position.pixels}");
+              // LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
 
-        if (wallpapersByColorPageScrollController.position.pixels ==
-            wallpapersBycolorMaxScrollExtent) {
-          loadMore();
-        }
-      }
-    });
+              if (wallpapersByColorPageScrollController.position.pixels ==
+                  wallpapersBycolorMaxScrollExtent) {
+                loadMore();
+              }
+            }
+          });
+    } catch (error, stackTrace) {
+
+      this.error = true;
+
+      print(error);
+
+      await FirebaseCrashlytics.instance.recordError(
+          error,
+          stackTrace,
+          reason: 'wallpaper view model initialization error'
+      );
+
+    }
   }
 
   fetchTopWallPapers({Map<String, dynamic> query = const {'q': 'Cars'}}) async {

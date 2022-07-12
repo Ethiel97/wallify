@@ -34,7 +34,7 @@ mixin DetailsMixin<T> {
 
   List<Color> get colors => [];
 
-  String get imgSize => value.toString();
+  String get imgSize => "";
 
   T get selectedWallPaper => value;
 
@@ -72,23 +72,27 @@ mixin DetailsMixin<T> {
         color: Theme.of(context).backgroundColor,
         child: Stack(
           children: [
-            Hero(
-              tag: imgUrl,
-              transitionOnUserGestures: true,
-              child: Container(
-                key: UniqueKey(),
-                width: double.infinity,
-                height: Get.height,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                      Theme.of(Get.context!).backgroundColor.withOpacity(.2),
-                      BlendMode.srcOver,
-                    ),
-                    fit: BoxFit.cover,
-                    image: CachedNetworkImageProvider(
-                      imgUrl,
-                      cacheKey: cacheKey,
+            CachedNetworkImage(
+              imageUrl: imgUrl,
+              placeholder: (context, string) => loader,
+              imageBuilder: (context, imageProvider) => Hero(
+                tag: imgUrl,
+                transitionOnUserGestures: true,
+                child: Container(
+                  key: UniqueKey(),
+                  width: double.infinity,
+                  height: Get.height,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      colorFilter: ColorFilter.mode(
+                        Theme.of(Get.context!).backgroundColor.withOpacity(.2),
+                        BlendMode.srcOver,
+                      ),
+                      fit: BoxFit.cover,
+                      image: CachedNetworkImageProvider(
+                        imgUrl,
+                        cacheKey: imgUrl,
+                      ),
                     ),
                   ),
                 ),
@@ -278,20 +282,22 @@ mixin DetailsMixin<T> {
                                   .color!,*/
                               color: AppColors.textColor,
                             ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              imgSize,
-                              style: TextStyles.textStyle.apply(
-                                /*color: Theme.of(Get.context!)
+                            if (imgSize.isNotEmpty) ...[
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                imgSize,
+                                style: TextStyles.textStyle.apply(
+                                  /*color: Theme.of(Get.context!)
                                     .textTheme
                                     .bodyText1!
                                     .color!,*/
-                                color: AppColors.textColor,
-                                fontSizeDelta: -2,
+                                  color: AppColors.textColor,
+                                  fontSizeDelta: -2,
+                                ),
                               ),
-                            ),
+                            ],
                           ],
                         ),
                         const SizedBox(

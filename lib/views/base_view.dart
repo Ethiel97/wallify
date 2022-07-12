@@ -5,7 +5,6 @@ import 'package:mobile/utils/startup.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/base_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 class BaseView<T extends BaseViewModel> extends StatefulWidget {
   final T Function(BuildContext) vmBuilder;
@@ -21,29 +20,31 @@ class BaseView<T extends BaseViewModel> extends StatefulWidget {
   BaseViewState createState() => BaseViewState<T>();
 }
 
-class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> with AutomaticKeepAliveClientMixin{
-
+class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    Startup().setTransparentStatusBar();
-
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    Startup().setTransparentStatusBar();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ChangeNotifierProvider<T>.value(
-
+    return Consumer<ThemeProvider>(builder: (context, themeProvider, _) {
+      Startup().setTransparentStatusBar(themeProvider: themeProvider);
+      return ChangeNotifierProvider<T>.value(
         value: widget.vmBuilder(context),
         child: Consumer<T>(
           builder: _buildScreenContent,
         ),
       );
+    });
   }
 
   Widget _buildScreenContent(
@@ -86,8 +87,8 @@ class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> with Aut
                                 children: [
                                   Image.asset(
                                     "assets/img/404-${themeProvider.currentTheme}.png",
-                                    height: 40.h,
-                                    width: 100.w,
+                                    height: Get.height * .4,
+                                    width: Get.width,
                                     fit: BoxFit.contain,
                                   ),
                                   Text(

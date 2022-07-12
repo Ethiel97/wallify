@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mobile/models/pexels/wallpaper.dart' as px;
+import 'package:mobile/models/wallhaven/wallpaper.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
@@ -36,6 +37,11 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen> {
       dragRatio = scrollableController.size / 0.33;
     });
     super.initState();
+
+    Future.delayed(Duration.zero, () {
+      Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+          .canRefresh = true;
+    });
   }
 
   @override

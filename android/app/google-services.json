@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "91871510880-p0fjh3vikc3lilhepe3an38h79796u98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deventhusiast.wallinice",
+            "certificate_hash": "4124e247ef1ea9bf577a93d62530ef25adef5875"
+          }
+        },
+        {
           "client_id": "91871510880-ek2j934n163538m3jrqa1gdn5fgg48hd.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -37,6 +45,13 @@
             {
               "client_id": "91871510880-ek2j934n163538m3jrqa1gdn5fgg48hd.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "91871510880-6ctq49dmqto2sai7v77tpicu8pmaj27s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.deventhusiast.nicewall.mobile"
+              }
             }
           ]
         }

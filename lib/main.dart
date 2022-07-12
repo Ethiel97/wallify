@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,7 +14,6 @@ import 'package:mobile/utils/startup.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 import 'models/pexels/wallpaper.dart' as px;
 import 'models/wallhaven/wallpaper.dart' as wh;
@@ -24,40 +25,49 @@ import 'utils/app_router.dart';
 
 typedef CreatorCallback<T> = T Function(Map<String, dynamic>);
 
+
+// TODO implement authentication in the app - Save favorite data on a remote server
 void main() async {
   await Startup().init();
 
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<NavigationProvider>(
-          create: (_) => NavigationProvider(),
-        ),
-        ChangeNotifierProvider<ThemeProvider>(
-          create: (_) => ThemeProvider(),
-        ),
-        ChangeNotifierProvider<WallpaperViewModel<wh.WallPaper>>(
-          create: (_) => WallpaperViewModel<wh.WallPaper>(
-            wallpaperRepository: WallPaperRepository<wh.WallPaper>(
-              wallPaperProvider: WallPaperProvider.wallhaven,
-              creatorCallback: wh.WallPaper.fromJson,
-              baseApiUrl: Constants.wallhavenApiHost!,
+  runZonedGuarded(() {
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<NavigationProvider>(
+            create: (_) => NavigationProvider(),
+          ),
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (_) => ThemeProvider(),
+          ),
+          ChangeNotifierProvider<WallpaperViewModel<wh.WallPaper>>(
+            create: (_) => WallpaperViewModel<wh.WallPaper>(
+              wallpaperRepository: WallPaperRepository<wh.WallPaper>(
+                wallPaperProvider: WallPaperProvider.wallhaven,
+                creatorCallback: wh.WallPaper.fromJson,
+                baseApiUrl: Constants.wallhavenApiHost!,
+              ),
             ),
           ),
-        ),
-        ChangeNotifierProvider<WallpaperViewModel<px.WallPaper>>(
-          create: (_) => WallpaperViewModel<px.WallPaper>(
-            wallpaperRepository: WallPaperRepository<px.WallPaper>(
-              creatorCallback: px.WallPaper.fromJson,
-              baseApiUrl: Constants.pexelsApiHost!,
+          ChangeNotifierProvider<WallpaperViewModel<px.WallPaper>>(
+            create: (_) => WallpaperViewModel<px.WallPaper>(
+              wallpaperRepository: WallPaperRepository<px.WallPaper>(
+                creatorCallback: px.WallPaper.fromJson,
+                baseApiUrl: Constants.pexelsApiHost!,
+              ),
             ),
           ),
-        ),
-      ],
-      child: const MyApp(),
-    ),
-  );
-
+        ],
+        child: const MyApp(),
+      ),
+    );
+  }, (error, stack) {
+    FirebaseCrashlytics.instance.recordError(
+      error,
+      stack,
+      fatal: true,
+    );
+  });
 }
 
 class MyApp extends StatefulWidget {
@@ -104,50 +114,48 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) => Consumer<ThemeProvider>(
-        builder: (context, themeProvider, _) => Sizer(
-          builder: (context, orientation, deviceType) => OverlaySupport(
-            child: GetMaterialApp(
-              builder: (context, widget) {
-                Widget error = const Text('...rendering error...');
-                // if (widget is Scaffold || widget is Navigator || widget is Material) {
-                error = SizedBox(
-                  height: Get.height / 2,
-                  child: Opacity(
-                      opacity: 1, child: Scaffold(body: Center(child: error))),
-                );
-                // }
+        builder: (context, themeProvider, _) => OverlaySupport(
+          child: GetMaterialApp(
+            builder: (context, widget) {
+              Widget error = const Text('...rendering error...');
+              // if (widget is Scaffold || widget is Navigator || widget is Material) {
+              error = SizedBox(
+                height: Get.height / 2,
+                child: Opacity(
+                    opacity: 1, child: Scaffold(body: Center(child: error))),
+              );
+              // }
 
-                if (Get.currentRoute == wallpaperDetailWh ||
-                    Get.currentRoute == wallpaperByColorWh) {
-                  ErrorWidget.builder =
-                      (FlutterErrorDetails errorDetails) => const Material(
-                            type: MaterialType.transparency,
-                            child: Opacity(
-                              opacity: 1,
-                              child: Center(
-                                child: Text(""),
-                              ),
+              if (Get.currentRoute == wallpaperDetailWh ||
+                  Get.currentRoute == wallpaperByColorWh) {
+                ErrorWidget.builder =
+                    (FlutterErrorDetails errorDetails) => const Material(
+                          type: MaterialType.transparency,
+                          child: Opacity(
+                            opacity: 1,
+                            child: Center(
+                              child: Text(""),
                             ),
-                          );
-                }
+                          ),
+                        );
+              }
 
-                if (widget != null) return widget;
-                throw ('widget is null');
-              },
-              title: Constants.appName.toLowerCase(),
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-              ],
-              supportedLocales: AppLocalizations.supportedLocales,
-              debugShowCheckedModeBanner: false,
-              theme: themeProvider.theme,
-              routes: appRoutes,
-              home: const SplashScreen(
-                key: ValueKey("spash"),
-              ),
+              if (widget != null) return widget;
+              throw ('widget is null');
+            },
+            title: Constants.appName.toLowerCase(),
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            debugShowCheckedModeBanner: false,
+            theme: themeProvider.theme,
+            routes: appRoutes,
+            home: const SplashScreen(
+              key: ValueKey("spash"),
             ),
           ),
         ),

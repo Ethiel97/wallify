@@ -120,6 +120,18 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
 
   @override
   void share() {
-    // TODO: implement share
+    var viewModel =
+        Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
+
+    viewModel.shareWallPaper(viewModel.selectedWallpaper.src.large);
+
+    /*viewModel.confirmAction(
+      message:
+      AppLocalizations.of(Get.context!)!.wallpaper_download_confirmation,
+      action: () {
+        viewModel.downloadWallPaper(viewModel.selectedWallpaper.path!);
+      },
+      actionText: AppLocalizations.of(Get.context!)!.yes_download,
+    );*/
   }
 }

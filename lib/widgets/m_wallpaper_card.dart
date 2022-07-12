@@ -47,8 +47,10 @@ mixin WallpaperCard<T> {
                     image: CachedNetworkImageProvider(
                       // wallpaper.src.large,
                       imgUrl,
+                      cacheKey: cacheKey,
                     ),
                     fit: BoxFit.cover,
+
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -92,7 +94,7 @@ mixin WallpaperCard<T> {
                   blurRadius: 32,
                   spreadRadius: 64,
                   color:
-                      Theme.of(Get.context!).backgroundColor.withOpacity(.08),
+                      Theme.of(Get.context!).backgroundColor.withOpacity(.04),
                 ),
               ],
             ),

@@ -40,7 +40,17 @@ class _HomeScreenState extends State<HomeScreen>
     );*/
 
     animationController.forward();
+
+    Future.delayed(Duration.zero, () {
+      Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+          .canRefresh = true;
+    });
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
@@ -52,9 +62,13 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   String get selectedWallPaperImgUrl =>
       Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
-          .wallpapers[selectedWallpaperIndex + 1]
-          .thumbs!
-          .large;
+              .wallpapers
+              .isNotEmpty
+          ? Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+              .wallpapers[selectedWallpaperIndex + 1]
+              .thumbs!
+              .large
+          : super.selectedWallPaperImgUrl;
 
   @override
   Widget build(BuildContext context) => BaseView<WallpaperViewModel<WallPaper>>(

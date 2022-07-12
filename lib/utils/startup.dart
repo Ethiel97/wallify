@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +26,9 @@ class Startup {
     WidgetsFlutterBinding.ensureInitialized();
     await dotenv.load(fileName: '.env');
     await Firebase.initializeApp();
+
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
     FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -46,23 +50,30 @@ class Startup {
     await Hive.openBox<wh.WallPaper>(Constants.savedPxWallpapersBox);
   }
 
-  void setTransparentStatusBar({int delay = 0}) {
-    Future.delayed(Duration(seconds: delay), () {
-      bool isDarkMode = Provider.of<ThemeProvider>(Get.context!, listen: false)
-              .currentTheme ==
-          AppTheme.dark.description;
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          /*systemNavigationBarColor: isDarkMode
-              ? AppColors.whiteBackgroundColor
-              : AppColors.darkBackgroundColor.toTinyColor().darken(4).color,*/
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness:
-              isDarkMode ? Brightness.light : Brightness.dark,
-          statusBarBrightness: isDarkMode ? Brightness.light : Brightness.dark,
-        ),
-      );
-    });
+  void setTransparentStatusBar({int delay = 0, ThemeProvider? themeProvider}) {
+    try {
+      ThemeProvider localThemeProvider = themeProvider ??
+          Provider.of<ThemeProvider>(Get.context!, listen: false);
+
+      Future.delayed(Duration(seconds: delay), () {
+        bool isDarkMode =
+            localThemeProvider.currentTheme == AppTheme.dark.description;
+        SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(
+            /*systemNavigationBarColor: isDarkMode
+                    ? AppColors.whiteBackgroundColor
+                    : AppColors.darkBackgroundColor.toTinyColor().darken(4).color,*/
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness:
+                isDarkMode ? Brightness.light : Brightness.dark,
+            statusBarBrightness:
+                isDarkMode ? Brightness.light : Brightness.dark,
+          ),
+        );
+      });
+    } catch (e) {
+      print(e);
+    }
     // }
   }
 }

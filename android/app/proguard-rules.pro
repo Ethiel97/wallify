@@ -6,4 +6,10 @@
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
 -keep class androidx.lifecycle.** { *; }
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+-dontwarn org.xmlpull.v1.**
+-dontnote org.xmlpull.v1.**
+-keep class org.xmlpull.** { *; }
+-keepclassmembers class org.xmlpull.** { *; }
 -dontwarn io.flutter.embedding.**
