@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/screens/login_screen.dart';
 import 'package:mobile/screens/main_screen.dart';
 import 'package:mobile/screens/onboarding_screen.dart';
+
 // import 'package:mobile/screens/pexels/home_screen.dart';
 import 'package:mobile/screens/pexels/wallpaper_detail_screen.dart' as px;
+import 'package:mobile/screens/register_screen.dart';
 import 'package:mobile/screens/splash_screen.dart';
 import 'package:mobile/screens/wallhaven/wallpaper_by_color_screen.dart' as wh;
 import 'package:mobile/screens/wallhaven/wallpaper_detail_screen.dart' as wh;
@@ -28,13 +31,19 @@ Map<String, WidgetBuilder> appRoutes = {
   landing: (context) => const MainScreen(
         key: ValueKey("d"),
       ),
-  wallpaperByColorWh: (context) => const wh.WallpaperByColorScreen(
+  login: (context) => const LoginScreen(
         key: ValueKey("e"),
+      ),
+  register: (context) => const RegisterScreen(
+        key: ValueKey("f"),
+      ),
+  wallpaperByColorWh: (context) => const wh.WallpaperByColorScreen(
+        key: ValueKey("g"),
       ),
   wallpaperDetailPx: (context) => const px.WallpaperDetailScreen(
-        key: ValueKey("e"),
+        key: ValueKey("h"),
       ),
   wallpaperDetailWh: (context) => const wh.WallpaperDetailScreen(
-        key: ValueKey("f"),
+        key: ValueKey("i"),
       ),
 };

@@ -74,6 +74,24 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
               Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 38.0,
+                    left: 10,
+                  ),
+                  child: IconButton(
+                    onPressed: null,
+                    icon:  Icon(
+                      Iconsax.user_octagon,
+                      size: 28,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                    ),
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
+              ),
+              Align(
                 alignment: Alignment.topRight,
                 child: Padding(
                   padding: const EdgeInsets.only(

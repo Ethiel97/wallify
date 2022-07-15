@@ -53,7 +53,7 @@ mixin SearchMixin<T> {
               ),
               children: [
                 const SizedBox(
-                  height: 72,
+                  height: 100,
                 ),
                 /*Text(
                       Constants.appName.toLowerCase(),

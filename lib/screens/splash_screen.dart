@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
@@ -10,6 +11,7 @@ import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/secure_storage.dart';
 import 'package:mobile/utils/startup.dart';
 import 'package:mobile/utils/text_styles.dart';
+import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,6 +32,8 @@ class _SplashScreenState extends State<SplashScreen>
   late final AnimationController secondAnimationController;
 
   late Animation<AlignmentGeometry> alignmentAnimation;
+
+  late AuthProvider authProvider;
 
   // late Animation<double> gradien
 
@@ -96,6 +100,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    authProvider = Provider.of<AuthProvider>(context);
   }
 
   @override

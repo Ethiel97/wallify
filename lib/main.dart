@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/providers/api_provider.dart';
+import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
@@ -25,7 +27,6 @@ import 'utils/app_router.dart';
 
 typedef CreatorCallback<T> = T Function(Map<String, dynamic>);
 
-
 // TODO implement authentication in the app - Save favorite data on a remote server
 void main() async {
   await Startup().init();
@@ -34,8 +35,14 @@ void main() async {
     runApp(
       MultiProvider(
         providers: [
+          Provider<ApiProvider>(
+            create: (context) => ApiProvider(),
+          ),
           ChangeNotifierProvider<NavigationProvider>(
             create: (_) => NavigationProvider(),
+          ),
+          ChangeNotifierProvider<AuthProvider>(
+            create: (_) => AuthProvider(),
           ),
           ChangeNotifierProvider<ThemeProvider>(
             create: (_) => ThemeProvider(),

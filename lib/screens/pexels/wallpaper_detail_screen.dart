@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/providers/auth_provider.dart';
+import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
 import 'package:mobile/widgets/m_detail_screen.dart';
+import 'package:mobile/widgets/utilities.dart';
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
@@ -55,6 +58,13 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
       ];
 
   @override
+  String get cacheKey =>
+      Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+          .selectedWallpaper
+          .id
+          .toString();
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
 
@@ -70,7 +80,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   void applyWallPaper() {
     var viewModel = Provider.of<WallpaperViewModel<WallPaper>>(context);
 
-    viewModel.confirmAction(
+    utilities.confirmAction(
       message:
           AppLocalizations.of(Get.context!)!.wallpaper_application_confirmation,
       action: () {
@@ -85,7 +95,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
     var viewModel =
         Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
 
-    viewModel.confirmAction(
+    utilities.confirmAction(
       message:
           AppLocalizations.of(Get.context!)!.wallpaper_download_confirmation,
       action: () {
@@ -98,24 +108,30 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   @override
   void save() {
     // TODO: implement save
-    var viewModel =
-        Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
 
-    bool isFavorite = viewModel.isWallPaperSaved(cacheKey);
+    if (Provider.of<AuthProvider>(context, listen: false).status ==
+        Status.authenticated) {
+      var viewModel =
+          Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
 
-    //check if user is on the favorite screen
-    viewModel.confirmAction(
-      message: isFavorite
-          ? AppLocalizations.of(Get.context!)!.wallpaper_remove_confirmation
-          : AppLocalizations.of(Get.context!)!.wallpaper_save_confirmation,
-      action: () {
-        viewModel.saveWallpaper(viewModel.selectedWallpaper,
-            viewModel.selectedWallpaper.id.toString());
-      },
-      actionText: isFavorite
-          ? AppLocalizations.of(Get.context!)!.remove
-          : AppLocalizations.of(Get.context!)!.save,
-    );
+      bool isFavorite = viewModel.isWallPaperSaved(cacheKey);
+
+      //check if user is on the favorite screen
+      utilities.confirmAction(
+        message: isFavorite
+            ? AppLocalizations.of(Get.context!)!.wallpaper_remove_confirmation
+            : AppLocalizations.of(Get.context!)!.wallpaper_save_confirmation,
+        action: () {
+          viewModel.saveWallpaper(viewModel.selectedWallpaper,
+              viewModel.selectedWallpaper.id.toString());
+        },
+        actionText: isFavorite
+            ? AppLocalizations.of(Get.context!)!.remove
+            : AppLocalizations.of(Get.context!)!.save,
+      );
+    } else {
+      Get.toNamed(login);
+    }
   }
 
   @override

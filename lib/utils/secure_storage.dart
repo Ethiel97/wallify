@@ -7,6 +7,7 @@ const firstLaunch = 'FIRST_LAUNCH';
 class SecureStorageService {
   static Future<void> saveItem({required String key, required String data}) async {
     await storage.write(key: key, value: data);
+
   }
 
   static Future<String> readItem<T>({required String key}) async {

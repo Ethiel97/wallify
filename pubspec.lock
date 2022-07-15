@@ -812,6 +812,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.4"
+  shape_of_view_null_safe:
+    dependency: "direct main"
+    description:
+      name: shape_of_view_null_safe
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   share_plus:
     dependency: "direct main"
     description:
@@ -1034,6 +1041,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.0+2"
+  tap_builder:
+    dependency: "direct main"
+    description:
+      name: tap_builder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.5"
   term_glyph:
     dependency: transitive
     description:

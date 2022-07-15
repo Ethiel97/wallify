@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/colors.dart';
@@ -18,9 +19,10 @@ class NavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Consumer2<NavigationProvider, ThemeProvider>(
-        builder: (context, navigationProvider, themeProvider, _) =>
-            AnimatedScale(
+      Consumer3<NavigationProvider, ThemeProvider, AuthProvider>(
+        builder:
+            (context, navigationProvider, themeProvider, authProvider, _) =>
+                AnimatedScale(
           curve: Curves.fastLinearToSlowEaseIn,
           duration: const Duration(
             milliseconds: Constants.kDuration,
@@ -51,14 +53,15 @@ class NavItem extends StatelessWidget {
             duration: const Duration(milliseconds: 300),
             child: navigationProvider.currentIndex == index
                 ? RadiantGradientMask(
-                    child: buildIconButton(navigationProvider),
+                    child: buildIconButton(navigationProvider, authProvider),
                   )
-                : buildIconButton(navigationProvider),
+                : buildIconButton(navigationProvider, authProvider),
           ),
         ),
       );
 
-  IconButton buildIconButton(NavigationProvider navigationProvider) =>
+  IconButton buildIconButton(
+          NavigationProvider navigationProvider, AuthProvider authProvider) =>
       IconButton(
         icon: Icon(
           size: navigationProvider.currentIndex == index ? 32 : 24,

@@ -19,6 +19,18 @@
   "wallpaper_application_confirmation": "Voulez-vous vraiment l'utiliser comme fond d'écran?",
   "wallpaper_save_confirmation": "Voulez-vous vraiment l'ajouter à vos favoris?",
   "wallpaper_remove_confirmation": "Voulez-vous vraiment le supprimer à vos favoris?",
+  "logout_confirmation": "Voulez-vous vraiment vous déconnecter ?",
+  "logout": "Se Déconnecter",
+  "login": "Se connecter",
+  "already_registered": "Déjà enrégistré?",
+  "register": "S'enrégistrer",
+  "email": "Email",
+  "pseudo": "Pseudo",
+  "validate": "Valider",
+  "password": "Password",
+  "create_account": "Créer un compte",
+  "no_account": "Pas de compte ?",
+  "yes_logout": "Oui, me déconnecter",
   "wallpaper_download_confirmation": "Voulez-vous vraiment télécharger ce fond d'écran?",
   "beautiful_wallpaper_wallinice": "J'ai trouvé ce magnifique fond d'écran sur wallinice que je partage avec toi",
   "saved": "Favoris",
@@ -28,6 +40,9 @@
   "my_favorite": "Coup de cœur",
   "wallpaper_saved_successfully": "Enrégistré avec succès",
   "wallpaper_removed_successfully": "Supprimé avec succès",
-  "view_saved_wallpapers": "Voir"
-
+  "view_saved_wallpapers": "Voir",
+  "error_occured": "Une erreur est survenue. Veuillez réessayer plus tard svp!",
+  "check_credentials": "Vérifiez vos identifiants svp!",
+  "successful_operation": "Operation réussie",
+  "email_or_username_taken": "Email ou nom d'utilisateur déjà pris"
 }
