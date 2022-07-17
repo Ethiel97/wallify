@@ -19,4 +19,7 @@ mixin AppColors {
 
   static Color get accentColor => const Color(0xffc471ed);
 // static Color get accentColor => const Color(0xffE2282A);
+
+
+
 }

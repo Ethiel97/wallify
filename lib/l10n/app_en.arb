@@ -35,6 +35,7 @@
   "wallpaper_remove_confirmation": "Are you sure you want to remove this wallpaper from your favorite?",
   "wallpaper_download_confirmation": "Are you sure you want to download this wallpaper?",
   "beautiful_wallpaper_wallinice": "I found this beautiful wallpaper on wallinice that I'm sharing with you",
+  "image_could_not_be_loaded": "Sorry! We could not load this image. Try other pics! :)",
   "color_tone": "The color tone",
   "colors": "Colors",
   "my_favorite": "Favorite",
@@ -42,6 +43,7 @@
   "wallpaper_removed_successfully": "wallpaper removed successfully",
   "view_saved_wallpapers": "View",
   "error_occured": "An error occured. Please try again later",
+  "browse_awesome_exclusive_images": "browse awesome exclusive images",
   "check_credentials": "Please check your credentials!",
   "successful_operation": "Successful operation",
   "email_or_username_taken": "This email or username is already taken"

@@ -14,7 +14,7 @@ class PxWallPaperCard extends StatelessWidget with WallpaperCard<WallPaper> {
   }) : super(key: key);
 
   @override
-  String get imgUrl => wallPaper.src.large2x;
+  String get imgUrl => wallPaper.src.large;
 
   @override
   String get cacheKey => wallPaper.id.toString();
@@ -22,13 +22,17 @@ class PxWallPaperCard extends StatelessWidget with WallpaperCard<WallPaper> {
   @override
   Widget build(BuildContext context) => Consumer<WallpaperViewModel<WallPaper>>(
         builder: (context, viewModel, _) => GestureDetector(
-          onLongPress: () {
-            viewModel.defSelectedWallpaper(wallPaper, WallPaperProvider.pexels);
-          },
-          onTap: () {
-            viewModel.defSelectedWallpaper(wallPaper, WallPaperProvider.pexels);
-          },
+          onLongPress: () => viewDetail(viewModel),
+          onTap: () => viewDetail(viewModel),
           child: buildCard(context),
         ),
       );
+
+  void viewDetail(WallpaperViewModel<WallPaper> viewModel) {
+    viewModel.defSelectedWallpaper(
+      wallPaper,
+      WallPaperProvider.wallhaven,
+      errorWhenLoadingImage: errorWhenLoadingImage,
+    );
+  }
 }

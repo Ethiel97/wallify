@@ -7,9 +7,12 @@ import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
 mixin WallpaperCard<T> {
   late final T value;
+
+  bool errorWhenLoadingImage = false;
 
   String get imgUrl => value.toString();
 
@@ -25,6 +28,8 @@ mixin WallpaperCard<T> {
               fit: BoxFit.cover,
               imageUrl: imgUrl,
               cacheKey: cacheKey,
+              memCacheHeight: (Get.height * .5).toInt(),
+              memCacheWidth: (Get.width * .9).toInt(),
               errorWidget: (context, error, dynamic) => loader,
               imageBuilder: (context, imageProvider) => Container(
                 height: Get.height * .7,
@@ -39,7 +44,8 @@ mixin WallpaperCard<T> {
                   ),
                   image: DecorationImage(
                     alignment: Alignment.center,
-                    filterQuality: FilterQuality.high,
+                    filterQuality: FilterQuality.low,
+                    // filterQuality: FilterQuality.high,
                     colorFilter: ColorFilter.mode(
                       AppColors.darkColor.withOpacity(.3),
                       BlendMode.overlay,
@@ -48,15 +54,32 @@ mixin WallpaperCard<T> {
                       // wallpaper.src.large,
                       imgUrl,
                       cacheKey: cacheKey,
+                      errorListener: () {
+                        errorWhenLoadingImage = true;
+                      },
+                      maxHeight: (Get.height * .7).toInt(),
+                      maxWidth: Get.width.toInt(),
+                      scale: .2,
+                      // maxHeight: 200,
+                      // maxWidth: 100
                     ),
                     fit: BoxFit.cover,
-
+                    onError: (object, stackTrace) => {
+                      errorWhenLoadingImage = true,
+                    },
+                    scale: .2,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      offset: const Offset(0, 10),
-                      blurRadius: 20,
-                      color: Theme.of(context).backgroundColor.withOpacity(.03),
+                      offset: const Offset(0, 8),
+                      blurRadius: 16,
+                      spreadRadius: 8,
+                      color: Theme.of(context)
+                          .backgroundColor
+                          .toTinyColor()
+                          .lighten()
+                          .color
+                          .withOpacity(.003),
                     ),
                   ],
                 ),

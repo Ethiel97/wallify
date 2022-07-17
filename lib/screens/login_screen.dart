@@ -50,7 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
       };
 
       await _authProvider.login(data);
-
       /*if (_authProvider.status == Status.authenticated) {
         _formKey.currentState?.reset();
 

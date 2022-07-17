@@ -74,7 +74,10 @@ mixin DetailsMixin<T> {
           children: [
             CachedNetworkImage(
               imageUrl: imgUrl,
+              memCacheHeight: Get.height.toInt(),
+              memCacheWidth: Get.width.toInt(),
               placeholder: (context, string) => loader,
+              errorWidget: (context, error, dynamic) => loader,
               imageBuilder: (context, imageProvider) => Hero(
                 tag: imgUrl,
                 transitionOnUserGestures: true,
@@ -100,7 +103,11 @@ mixin DetailsMixin<T> {
             ),
 
             Padding(
-              padding: const EdgeInsets.only(top: 50.0, left: 12, right: 12),
+              padding: const EdgeInsets.only(
+                top: 50.0,
+                left: 12,
+                right: 12,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

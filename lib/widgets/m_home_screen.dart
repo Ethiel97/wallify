@@ -13,7 +13,7 @@ import 'package:tinycolor2/tinycolor2.dart';
 mixin HomeScreenMixin<T> {
   int selectedWallpaperIndex = 0;
 
-  String get selectedWallPaperImgUrl => "";
+  String get selectedWallPaperImgUrl => "https://images.pexels.com/photos/3585088/pexels-photo-3585088.jpeg";
 
   Widget setWallPaperCard(int index);
 
@@ -82,13 +82,13 @@ mixin HomeScreenMixin<T> {
                       Text(
                         /*wallpaperViewModel
                           .wallpapers[selectedWallpaperIndex].category!,*/
-                        AppLocalizations.of(context)!.browse_awesome_wallpapers,
+                        AppLocalizations.of(context)!.browse_awesome_exclusive_images,
                         style: TextStyles.textStyle.apply(
                           fontSizeDelta: -4,
-                          fontWeightDelta: 4,
+                          fontWeightDelta: 6,
                           color: TinyColor(
                                   Theme.of(context).textTheme.bodyText1!.color!)
-                              .shade()
+                              .shade().lighten()
                               .color,
                         ),
                       ),

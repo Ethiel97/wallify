@@ -77,18 +77,23 @@ class ThemeProvider with ChangeNotifier {
 
   ThemeProvider() {
     SecureStorageService.readItem(key: _themeMode).then((value) {
-      switch (value.toString()) {
-        case 'light':
-          setLightMode();
-          break;
-        case 'dark':
-          setDarkMode();
-          break;
-        default:
-          setDarkMode();
-          break;
+      if (value != null) {
+        switch (value.toString()) {
+          case 'light':
+            setLightMode();
+            break;
+          case 'dark':
+            setDarkMode();
+            break;
+          default:
+            setDarkMode();
+            break;
+        }
+        notifyListeners();
+      } else {
+        setDarkMode();
+        Startup().setTransparentStatusBar();
       }
-      notifyListeners();
 
       Startup().setTransparentStatusBar();
     }).catchError((e) {

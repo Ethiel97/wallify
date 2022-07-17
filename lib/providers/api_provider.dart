@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' as Get;
 import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class ApiProvider {
   static var dio = Dio();
@@ -11,9 +13,20 @@ class ApiProvider {
       InterceptorsWrapper(onRequest: (options, handler) async {
         try {
           options.headers = {
-            'Authorization':
-                'Bearer ${(await SecureStorageService.readItem(key: authTokenKey))}'
+            'content-type': 'application/json',
           };
+
+          /*if (await SecureStorageService.readItem(key: authTokenKey) != null) {
+            options.headers['Authorization'] =
+                'Bearer ${(await SecureStorageService.readItem(key: authTokenKey))}';
+          }*/
+
+          if (Provider.of<AuthProvider>(Get.Get.context!, listen: false)
+                  .status ==
+              Status.authenticated) {
+            options.headers['Authorization'] =
+                'Bearer ${(await SecureStorageService.readItem(key: authTokenKey))}';
+          }
         } catch (e) {
           print(e);
         }
@@ -63,12 +76,12 @@ class ApiProvider {
     return response.data;
   }
 
-  fetchSavedWallpapers() async {
+  Future<List> fetchSavedWallpapers() async {
     Response response =
         await dio.get("${Constants.customApiUrl!}saved-wallpapers");
 
     // LogUtils.log("SAVED WALLPAPERS: ${response.data['data']}");
-    
+
     return response.data['data'];
   }
 

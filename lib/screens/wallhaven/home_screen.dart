@@ -65,9 +65,9 @@ class _HomeScreenState extends State<HomeScreen>
               .wallpapers
               .isNotEmpty
           ? Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
-              .wallpapers[selectedWallpaperIndex + 1]
+              .wallpapers[selectedWallpaperIndex]
               .thumbs!
-              .large
+              .original
           : super.selectedWallPaperImgUrl;
 
   @override

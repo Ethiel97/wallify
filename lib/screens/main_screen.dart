@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/screens/wallhaven/fav_screen.dart';
 import 'package:mobile/screens/wallhaven/home_screen.dart';
+import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/widgets/w_nav_item.dart';
 import 'package:provider/provider.dart';
 
@@ -26,8 +29,10 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) =>
-      Consumer2<NavigationProvider, ThemeProvider>(
-        builder: (context, navigationProvider, themeProvider, _) => Scaffold(
+      Consumer3<NavigationProvider, ThemeProvider, AuthProvider>(
+        builder:
+            (context, navigationProvider, themeProvider, authProvider, _) =>
+                Scaffold(
           backgroundColor: Theme.of(context).backgroundColor,
           extendBodyBehindAppBar: true,
           extendBody: true,
@@ -81,8 +86,14 @@ class MainScreen extends StatelessWidget {
                     left: 10,
                   ),
                   child: IconButton(
-                    onPressed: null,
-                    icon:  Icon(
+                    onPressed: () {
+                      if (authProvider.status == Status.authenticated) {
+                        authProvider.confirmLogout();
+                      } else {
+                        Get.toNamed(login);
+                      }
+                    },
+                    icon: Icon(
                       Iconsax.user_octagon,
                       size: 28,
                       color: Theme.of(context).textTheme.bodyText1!.color,

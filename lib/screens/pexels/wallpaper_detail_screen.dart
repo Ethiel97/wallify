@@ -61,7 +61,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   String get cacheKey =>
       Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
           .selectedWallpaper
-          .id
+          .src.large2x
           .toString();
 
   @override

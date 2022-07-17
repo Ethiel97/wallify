@@ -8,10 +8,10 @@ import 'package:mobile/models/user.dart';
 import 'package:mobile/utils/app_router.dart' as routes;
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/colors.dart';
+import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/secure_storage.dart';
 import 'package:mobile/widgets/utilities.dart';
 import 'package:tinycolor2/tinycolor2.dart';
-
 
 import 'api_provider.dart';
 
@@ -47,6 +47,8 @@ class AuthProvider with ChangeNotifier {
 
   User? authUser;
 
+  String get jwtToken => token;
+
   set status(val) {
     _status = val;
 
@@ -54,22 +56,32 @@ class AuthProvider with ChangeNotifier {
   }
 
   AuthProvider() {
-    checkAuthStatus().then((authToken) {
-      token = authToken;
-      _status =
-          token.trim().isEmpty ? Status.unauthenticated : Status.authenticated;
+    try {
+      checkAuthStatus().then((authToken) {
+        if (authToken != null) {
+          token = authToken;
+          _status = token.trim().isEmpty
+              ? Status.unauthenticated
+              : Status.authenticated;
 
-      if (_status == Status.authenticated) {
-        fetchUser();
-      } else {
-        Get.toNamed(routes.login);
-      }
-    });
+          if (_status == Status.authenticated) {
+            fetchUser();
+          } else {
+            Get.toNamed(routes.login);
+          }
+        } else {
+          Get.toNamed(routes.login);
+        }
+      });
+    } catch (e, stack) {
+      LogUtils.log("Error: $e, Stack:$stack");
+    }
   }
 
   set user(User user) {
     authUser = user;
-    SecureStorageService.saveItem(key: userKey, data: jsonEncode(user.toJson()));
+    SecureStorageService.saveItem(
+        key: userKey, data: jsonEncode(user.toJson()));
     notifyListeners();
   }
 
@@ -85,10 +97,10 @@ class AuthProvider with ChangeNotifier {
   }*/
 
   fetchUser() async {
-    String data = await SecureStorageService.readItem(key: userKey);
+    String? data = await SecureStorageService.readItem(key: userKey);
 
-    user = User.fromJson(jsonDecode(data));
-    
+    user = User.fromJson(jsonDecode(data!));
+
     print("USER: ${User.fromJson(jsonDecode(data))}");
   }
 
@@ -97,7 +109,7 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> checkAuthStatus() async {
+  Future<String?> checkAuthStatus() async {
     var token = await SecureStorageService.readItem(key: authTokenKey);
     return token;
   }
@@ -136,6 +148,7 @@ class AuthProvider with ChangeNotifier {
 */
 
   Future<void> login(Map data) async {
+
     var message = "";
     try {
       status = Status.authenticating;
@@ -145,6 +158,9 @@ class AuthProvider with ChangeNotifier {
 
       Map<String, dynamic> response = await ApiProvider().login(data);
       if (response.containsKey('jwt')) {
+
+        LogUtils.log("USER: ${response['user']}");
+
         user = User.fromJson(response['user']);
 
         SecureStorageService.saveItem(key: authTokenKey, data: response['jwt']);

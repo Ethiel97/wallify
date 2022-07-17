@@ -163,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 controller: usernameTEC,
                                 validator: usernameValidator,
                                 style: TextStyles.textStyle
-                                    .apply(fontSizeDelta: -4),
+                                    .apply(fontSizeDelta: -2),
                               ),
                               SizedBox(
                                 height: getProportionateScreenWidth(4),
@@ -177,7 +177,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 controller: emailTEC,
                                 validator: emailValidator,
                                 style: TextStyles.textStyle
-                                    .apply(fontSizeDelta: -4),
+                                    .apply(fontSizeDelta: -2),
                               ),
                               SizedBox(
                                 height: getProportionateScreenWidth(4),
@@ -189,7 +189,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   contentPadding: 12.0,
                                 ),
                                 style: TextStyles.textStyle
-                                    .apply(fontSizeDelta: -4),
+                                    .apply(fontSizeDelta: -2),
                                 controller: passwordTEC,
                                 validator: passwordValidator,
                                 keyboardType: TextInputType.visiblePassword,

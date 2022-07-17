@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobile/models/pexels/wallpaper.dart' as px;
 import 'package:mobile/providers/api_provider.dart';
+import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/app_router.dart';
@@ -69,7 +70,16 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
   late Box<T> boxWallpapers;
 
-  void defSelectedWallpaper(T wallpaper, WallPaperProvider wallPaperProvider) {
+  void defSelectedWallpaper(T wallpaper, WallPaperProvider wallPaperProvider,
+      {bool errorWhenLoadingImage = false}) {
+    if (errorWhenLoadingImage) {
+      Get.snackbar(
+        AppLocalizations.of(Get.context!)!.notification,
+        AppLocalizations.of(Get.context!)!.image_could_not_be_loaded,
+        colorText: Colors.white,
+      );
+      return;
+    }
     _selectedWallpaper = wallpaper;
     // reloadState();
 
@@ -100,7 +110,10 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
       await fetchTopWallPapers();
 
-      fetchSavedWallpapers();
+      if (Provider.of<AuthProvider>(Get.context!, listen: false).status ==
+          Status.authenticated) {
+        fetchSavedWallpapers();
+      }
 
       // Get.bottomSheet(bottomsheet)
       pageController.addListener(() async {
@@ -482,23 +495,27 @@ class WallpaperViewModel<T> extends BaseViewModel {
   }
 
   fetchSavedWallpapers() async {
-    List results = await ApiProvider().fetchSavedWallpapers();
+    try {
+      List results = await ApiProvider().fetchSavedWallpapers();
 
-    // LogUtils.log("strapi saved : ${results}");
-    savedWallpapers.clear();
+      // LogUtils.log("strapi saved : ${results}");
+      savedWallpapers.clear();
 
-    for (var res in results) {
-      LogUtils.log(res['attributes']['uid']);
+      for (var res in results) {
+        LogUtils.log(res['attributes']['uid']);
 
-      List<T> response = await wallpaperRepository
-          .searchItems(query: {"q": "like:${res['attributes']['uid']}"});
+        List<T> response = await wallpaperRepository
+            .searchItems(query: {"q": "like:${res['attributes']['uid']}"});
 
-      LogUtils.log("SAVED WALLPAPERS: ${response[0].toString()}");
-      savedWallpapers = [...savedWallpapers, response[0]];
+        LogUtils.log("SAVED WALLPAPERS: ${response[0].toString()}");
+        savedWallpapers = [...savedWallpapers, response[0]];
 
-      LogUtils.log(
-          "local saved wallpapers: ${boxWallpapers.values.toList()[0].toString()}");
-      reloadState();
+        LogUtils.log(
+            "local saved wallpapers: ${boxWallpapers.values.toList()[0].toString()}");
+        reloadState();
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

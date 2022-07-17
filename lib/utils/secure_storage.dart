@@ -10,10 +10,11 @@ class SecureStorageService {
 
   }
 
-  static Future<String> readItem<T>({required String key}) async {
+  static Future<String?> readItem<T>({required String key}) async {
     final item = await storage.read(key: key);
     if (item == null) {
-      throw "Unable to find item with the key : $key";
+      return null;
+      // throw "Unable to find item with the key : $key";
     }
     return item;
   }
