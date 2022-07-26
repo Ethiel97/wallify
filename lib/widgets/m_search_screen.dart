@@ -8,6 +8,7 @@ import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/widgets/w_color_tag.dart';
+import 'package:mobile/widgets/w_empty_placeholder.dart';
 import 'package:mobile/widgets/w_wallpaper_tag.dart';
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
@@ -134,9 +135,9 @@ mixin SearchMixin<T> {
                           child: setWallPaperCard(i),
                         ),
                       )
-                    : Image.asset(
-                        'assets/images/empty-${themeProvider.currentTheme}.png',
-                        fit: BoxFit.contain,
+                    : EmptyPlaceholder(
+                        text: AppLocalizations.of(context)!
+                            .no_results_for_your_search,
                       ),
               ],
             ),

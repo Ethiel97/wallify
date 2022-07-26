@@ -46,5 +46,7 @@
   "error_occured": "Une erreur est survenue. Veuillez réessayer plus tard svp!",
   "check_credentials": "Vérifiez vos identifiants svp!",
   "successful_operation": "Operation réussie",
-  "email_or_username_taken": "Email ou nom d'utilisateur déjà pris"
+  "email_or_username_taken": "Email ou nom d'utilisateur déjà pris",
+  "no_results_for_your_search": "Aucun résultat pour votre recherche",
+  "no_saved_image": "Aucune image sauvegardée"
 }

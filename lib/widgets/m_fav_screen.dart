@@ -5,12 +5,12 @@ import 'package:get/get.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
+import 'package:mobile/widgets/w_empty_placeholder.dart';
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 mixin FavScreenMixin<T> {
   Widget setWallPaperCard(int index);
-
 
   Widget buildScreen(
           BuildContext context, WallpaperViewModel<T> wallpaperViewModel) =>
@@ -58,10 +58,9 @@ mixin FavScreenMixin<T> {
                         child: setWallPaperCard(i),
                       ),
                     )
-                  : Image.asset(
-                      'assets/images/empty-${themeProvider.currentTheme}.png',
-                      fit: BoxFit.contain,
-                    ),
+                  : EmptyPlaceholder(
+                      text: AppLocalizations.of(context)!.no_saved_image,
+                    )
             ],
           ),
         ),

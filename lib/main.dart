@@ -168,3 +168,8 @@ class _MyAppState extends State<MyApp> {
         ),
       );
 }
+
+
+// #keytool -genkeypair -keystore E:/app_keys/wallinice/app.jks -keyalg RSA -keysize 2048 -validity 9125 -alias upload
+
+// #keytool -export -rfc -alias upload -file E:/app_keys/wallinice/wallinice_upload.pem -keystore E:/app_keys/wallinice/app.jks

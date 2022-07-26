@@ -46,5 +46,7 @@
   "browse_awesome_exclusive_images": "browse awesome exclusive images",
   "check_credentials": "Please check your credentials!",
   "successful_operation": "Successful operation",
-  "email_or_username_taken": "This email or username is already taken"
+  "email_or_username_taken": "This email or username is already taken",
+  "no_results_for_your_search": "No results for your search",
+  "no_saved_image": "No saved image"
 }
