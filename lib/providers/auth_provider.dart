@@ -67,10 +67,10 @@ class AuthProvider with ChangeNotifier {
           if (_status == Status.authenticated) {
             fetchUser();
           } else {
-            Get.toNamed(routes.login);
+            // Get.toNamed(routes.login);
           }
         } else {
-          Get.toNamed(routes.login);
+          // Get.toNamed(routes.login);
         }
       });
     } catch (e, stack) {
@@ -101,7 +101,7 @@ class AuthProvider with ChangeNotifier {
 
     user = User.fromJson(jsonDecode(data!));
 
-    print("USER: ${User.fromJson(jsonDecode(data))}");
+    debugPrint("USER: ${User.fromJson(jsonDecode(data))}");
   }
 
   setAppStatus(val) {
@@ -148,7 +148,6 @@ class AuthProvider with ChangeNotifier {
 */
 
   Future<void> login(Map data) async {
-
     var message = "";
     try {
       status = Status.authenticating;
@@ -158,7 +157,6 @@ class AuthProvider with ChangeNotifier {
 
       Map<String, dynamic> response = await ApiProvider().login(data);
       if (response.containsKey('jwt')) {
-
         LogUtils.log("USER: ${response['user']}");
 
         user = User.fromJson(response['user']);

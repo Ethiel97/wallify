@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mobile/firebase_options.dart';
 import 'package:mobile/models/pexels/wallpaper.dart' as px;
 import 'package:mobile/models/pexels/wallpaper_src.dart';
 import 'package:mobile/models/wallhaven/wallpaper.dart' as wh;
@@ -25,7 +26,9 @@ class Startup {
   init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await dotenv.load(fileName: '.env');
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 

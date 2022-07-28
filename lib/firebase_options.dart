@@ -49,12 +49,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAV_tIzh6Q--izR1nyZrF43GU5W34ntsyg',
-    appId: '1:91871510880:ios:e6670a603e179aa5b11e05',
+    appId: '1:91871510880:ios:49c7390abb6f96cab11e05',
     messagingSenderId: '91871510880',
     projectId: 'wallinice',
     storageBucket: 'wallinice.appspot.com',
     androidClientId: '91871510880-ctdij3u5g76us7p18c3g5goc7rjiu0sb.apps.googleusercontent.com',
-    iosClientId: '91871510880-6ctq49dmqto2sai7v77tpicu8pmaj27s.apps.googleusercontent.com',
-    iosBundleId: 'com.deventhusiast.nicewall.mobile',
+    iosClientId: '91871510880-54rh8q1oog2db7i5o25l7oqsor2gb5kf.apps.googleusercontent.com',
+    iosBundleId: 'com.deventhusiast.wallinice',
   );
 }
