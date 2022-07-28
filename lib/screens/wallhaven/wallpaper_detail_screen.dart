@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/models/wallhaven/wallpaper.dart';
 import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
@@ -9,8 +10,6 @@ import 'package:mobile/widgets/m_detail_screen.dart';
 import 'package:mobile/widgets/utilities.dart';
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
-
-import '../../models/wallhaven/wallpaper.dart';
 
 class WallpaperDetailScreen extends StatefulWidget {
   const WallpaperDetailScreen({Key? key}) : super(key: key);
@@ -35,6 +34,17 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
       dragRatio = scrollableController.size / sheetMaxSize;
     });
     super.initState();
+
+    Future.delayed(Duration.zero, () {
+      Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+          .canRefresh = false;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override

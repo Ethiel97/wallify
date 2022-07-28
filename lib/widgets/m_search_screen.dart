@@ -92,12 +92,10 @@ mixin SearchMixin<T> {
                     itemCount: Constants.colors.length,
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) => FittedBox(
-                      child: ColorTag<T>(
-                        radius: Constants.kBorderRadius / 2,
-                        size: 50,
-                        color: Constants.colors[index],
-                      ),
+                    itemBuilder: (context, index) => ColorTag<T>(
+                      radius: Constants.kBorderRadius / 2,
+                      size: 50,
+                      color: Constants.colors[index],
                     ),
                   ),
                 ),

@@ -22,42 +22,44 @@ class ColorTag<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Consumer<WallpaperViewModel<T>>(
-        builder: (context, wallpaperViewModel, _) => GestureDetector(
-          onTap: () async {
-            try {
-              voidCallback!();
-            } catch (e) {
-              LogUtils.error(e);
-            }
+        builder: (context, wallpaperViewModel, _) => FittedBox(
+          child: GestureDetector(
+            onTap: () async {
+              try {
+                voidCallback!();
+              } catch (e) {
+                LogUtils.error(e);
+              }
 
-            wallpaperViewModel.searchWallpapers(
-              '',
-              delay: 300,
-              details: {
-                'colors': TinyColor(color).toHex8().substring(2),
-                'color': color,
-              },
-            );
-          },
-          child: Container(
-            height: size,
-            width: size,
-            margin: const EdgeInsets.only(
-              right: 12,
-            ),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(0, 6),
-                  blurRadius: 12,
-                  color: Theme.of(context).backgroundColor.withOpacity(.08),
-                ),
-              ],
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(
-                radius,
+              wallpaperViewModel.searchWallpapers(
+                '',
+                delay: 300,
+                details: {
+                  'colors': TinyColor(color).toHex8().substring(2),
+                  'color': color,
+                },
+              );
+            },
+            child: Container(
+              height: size,
+              width: size,
+              margin: const EdgeInsets.only(
+                right: 12,
               ),
-              color: color,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(0, 6),
+                    blurRadius: 12,
+                    color: Theme.of(context).backgroundColor.withOpacity(.08),
+                  ),
+                ],
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(
+                  radius,
+                ),
+                color: color,
+              ),
             ),
           ),
         ),
