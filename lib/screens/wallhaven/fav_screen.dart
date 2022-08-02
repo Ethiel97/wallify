@@ -15,6 +15,16 @@ class FavScreen extends StatefulWidget {
 
 class _FavScreenState extends State<FavScreen> with FavScreenMixin {
   @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero, () {
+      Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+          .canRefresh = true;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) => BaseView<WallpaperViewModel<WallPaper>>(
         key: UniqueKey(),
         vmBuilder: (context) =>

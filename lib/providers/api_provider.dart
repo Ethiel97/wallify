@@ -70,6 +70,15 @@ class ApiProvider {
     return response.data;
   }
 
+  //delete user account
+  Future<Map<String, dynamic>> deleteAccount(String id) async {
+    Response response = await dio.delete(
+      "${Constants.customApiUrl!}users/$id",
+    );
+
+    return response.data;
+  }
+
   Future<Map<String, dynamic>> fetchMe() async {
     Response response = await dio.get("${Constants.customApiUrl!}users/me");
 
@@ -85,6 +94,18 @@ class ApiProvider {
     return response.data['data'];
   }
 
+  Future<List> fetchUserSavedWallpapers() async {
+    Response response =
+        await dio.get("${Constants.customApiUrl!}saved-wallpapers/user");
+
+    // LogUtils.log("SAVED WALLPAPERS: ${response.data['data']}");
+
+    LogUtils.log("RESPONSE USER SAVED WALLPAPERS: ${response.data}");
+
+
+    return response.data['data'];
+  }
+
   saveWallPaper(String wallpaperId) async {
     Response response =
         await dio.post("${Constants.customApiUrl!}saved-wallpapers", data: {
@@ -95,6 +116,12 @@ class ApiProvider {
   deleteSavedWallPaper(String wallpaperId) async {
     Response response = await dio.delete(
       "${Constants.customApiUrl!}saved-wallpapers/remove/$wallpaperId",
+    );
+  }
+
+  deleteUserSavedWallPapers() async {
+    Response response = await dio.delete(
+      "${Constants.customApiUrl!}saved-wallpapers/remove",
     );
   }
 }

@@ -127,7 +127,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         controller: usernameTEC,
                         validator: usernameValidator,
-                        style: TextStyles.textStyle,
+                        style: TextStyles.textStyle.apply(
+                          color: AppColors.darkColor,
+                          fontSizeDelta: -2,
+                        ),
                       ),
                       SizedBox(
                         height: getProportionateScreenWidth(15),
@@ -141,7 +144,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.visiblePassword,
                         validator: passwordValidator,
                         obscureText: true,
-                        style: TextStyles.textStyle,
+                        style: TextStyles.textStyle.apply(
+                          color: AppColors.darkColor,
+                          fontSizeDelta: -2,
+                        ),
                       ),
                       signInButtons(theme),
                       SizedBox(
@@ -155,6 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             AppLocalizations.of(Get.context!)!.no_account,
                             style: TextStyles.textStyle.apply(
                               fontSizeDelta: -2,
+                              color: AppColors.darkColor
                             ),
                             textAlign: TextAlign.center,
                           ),

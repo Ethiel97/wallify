@@ -162,8 +162,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                                 controller: usernameTEC,
                                 validator: usernameValidator,
-                                style: TextStyles.textStyle
-                                    .apply(fontSizeDelta: -2),
+                                style: TextStyles.textStyle.apply(
+                                  fontSizeDelta: -2,
+                                  color: AppColors.darkColor,
+                                ),
                               ),
                               SizedBox(
                                 height: getProportionateScreenWidth(4),
@@ -176,8 +178,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                                 controller: emailTEC,
                                 validator: emailValidator,
-                                style: TextStyles.textStyle
-                                    .apply(fontSizeDelta: -2),
+                                style: TextStyles.textStyle.apply(
+                                  fontSizeDelta: -2,
+                                  color: AppColors.darkColor,
+                                ),
                               ),
                               SizedBox(
                                 height: getProportionateScreenWidth(4),
@@ -188,8 +192,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   theme,
                                   contentPadding: 12.0,
                                 ),
-                                style: TextStyles.textStyle
-                                    .apply(fontSizeDelta: -2),
+                                style: TextStyles.textStyle.apply(
+                                  fontSizeDelta: -2,
+                                  color: AppColors.darkColor,
+                                ),
                                 controller: passwordTEC,
                                 validator: passwordValidator,
                                 keyboardType: TextInputType.visiblePassword,
@@ -219,7 +225,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         style: TextStyles.textStyle.apply(
                           fontSizeDelta: -2,
                           color: AppColors.darkColor,
-
                         ),
                       ),
                       InkWell(
@@ -274,7 +279,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: CustomButton(
-
               text: AppLocalizations.of(Get.context!)!.register.toUpperCase(),
               color: AppColors.accentColor,
               processing: _authProvider.appStatus == AppStatus.processing,

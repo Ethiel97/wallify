@@ -13,25 +13,27 @@ class EmptyPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Consumer<ThemeProvider>(
-      builder: (context, themeProvider, _) => Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/empty-${themeProvider.currentTheme}.png',
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              Text(
-                text,
-                style: TextStyles.textStyle.apply(
-                  color: Theme.of(context).textTheme.bodyText1?.color,
-                  fontSizeDelta: -5,
-                  fontWeightDelta: 1,
+      builder: (context, themeProvider, _) => Center(
+        child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/images/empty-${themeProvider.currentTheme}.png',
+                  fit: BoxFit.contain,
                 ),
-              )
-            ],
-          ));
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  text,
+                  style: TextStyles.textStyle.apply(
+                    color: Theme.of(context).textTheme.bodyText1?.color,
+                    fontSizeDelta: -3,
+                    fontWeightDelta: 1,
+                  ),
+                )
+              ],
+            ),
+      ));
 }

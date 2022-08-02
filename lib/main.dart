@@ -21,13 +21,13 @@ import 'models/pexels/wallpaper.dart' as px;
 import 'models/wallhaven/wallpaper.dart' as wh;
 import 'providers/navigation_provider.dart';
 import 'providers/theme_provider.dart';
+import 'screens/login_screen.dart';
 import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
 import 'utils/app_router.dart';
 
 typedef CreatorCallback<T> = T Function(Map<String, dynamic>);
 
-// TODO implement authentication in the app - Save favorite data on a remote server
 void main() async {
   await Startup().init();
 
@@ -120,49 +120,52 @@ class _MyAppState extends State<MyApp> {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) => Consumer<ThemeProvider>(
-        builder: (context, themeProvider, _) => OverlaySupport(
-          child: GetMaterialApp(
-            builder: (context, widget) {
-              Widget error = const Text('...rendering error...');
-              // if (widget is Scaffold || widget is Navigator || widget is Material) {
-              error = SizedBox(
-                height: Get.height / 2,
-                child: Opacity(
-                    opacity: 1, child: Scaffold(body: Center(child: error))),
-              );
-              // }
+  Widget build(BuildContext context) => Consumer2<ThemeProvider, AuthProvider>(
+        builder: (context, themeProvider, authProvider, _) => IgnorePointer(
+          ignoring: authProvider.appStatus == AppStatus.processing,
+          child: OverlaySupport(
+            child: GetMaterialApp(
+              builder: (context, widget) {
+                Widget error = const Text('...rendering error...');
+                // if (widget is Scaffold || widget is Navigator || widget is Material) {
+                error = SizedBox(
+                  height: Get.height / 2,
+                  child: Opacity(
+                      opacity: 1, child: Scaffold(body: Center(child: error))),
+                );
+                // }
 
-              if (Get.currentRoute == wallpaperDetailWh ||
-                  Get.currentRoute == wallpaperByColorWh) {
-                ErrorWidget.builder =
-                    (FlutterErrorDetails errorDetails) => const Material(
-                          type: MaterialType.transparency,
-                          child: Opacity(
-                            opacity: 1,
-                            child: Center(
-                              child: Text(""),
+                if (Get.currentRoute == wallpaperDetailWh ||
+                    Get.currentRoute == wallpaperByColorWh) {
+                  ErrorWidget.builder =
+                      (FlutterErrorDetails errorDetails) => const Material(
+                            type: MaterialType.transparency,
+                            child: Opacity(
+                              opacity: 1,
+                              child: Center(
+                                child: Text(""),
+                              ),
                             ),
-                          ),
-                        );
-              }
+                          );
+                }
 
-              if (widget != null) return widget;
-              throw ('widget is null');
-            },
-            title: Constants.appName.toLowerCase(),
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: AppLocalizations.supportedLocales,
-            debugShowCheckedModeBanner: false,
-            theme: themeProvider.theme,
-            routes: appRoutes,
-            home: const SplashScreen(
-              key: ValueKey("spash"),
+                if (widget != null) return widget;
+                throw ('widget is null');
+              },
+              title: Constants.appName.toLowerCase(),
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+              debugShowCheckedModeBanner: false,
+              theme: themeProvider.theme,
+              routes: appRoutes,
+              home: const SplashScreen(
+                key: ValueKey("spash"),
+              ),
             ),
           ),
         ),

@@ -9,6 +9,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:tinycolor2/tinycolor2.dart';
+
 import 'package:mobile/models/pexels/wallpaper.dart' as px;
 import 'package:mobile/providers/api_provider.dart';
 import 'package:mobile/providers/auth_provider.dart';
@@ -19,9 +23,6 @@ import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/base_view_model.dart';
-import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:tinycolor2/tinycolor2.dart';
 
 typedef WallPaperCallBack = Future<dynamic> Function(String url);
 
@@ -496,26 +497,28 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
   fetchSavedWallpapers() async {
     try {
-      List results = await ApiProvider().fetchSavedWallpapers();
+      List results = await ApiProvider().fetchUserSavedWallpapers();
 
-      // LogUtils.log("strapi saved : ${results}");
       savedWallpapers.clear();
 
       for (var res in results) {
-        LogUtils.log(res['attributes']['uid']);
+        //extract uid from res['attributes']['uid'] before the first dot
+        String id = res['attributes']['uid'].split(':')[0];
 
-        List<T> response = await wallpaperRepository
-            .searchItems(query: {"q": "like:${res['attributes']['uid']}"});
+        // String id = res['attributes']['uid']
+        //     .substring(0, res['attributes']['uid'].indexOf(':'));
+
+        LogUtils.log("id: $id");
+
+        List<T> response =
+            await wallpaperRepository.searchItems(query: {"q": "like:$id"});
 
         LogUtils.log("SAVED WALLPAPERS: ${response[0].toString()}");
         savedWallpapers = [...savedWallpapers, response[0]];
-
-        LogUtils.log(
-            "local saved wallpapers: ${boxWallpapers.values.toList()[0].toString()}");
-        reloadState();
       }
+      reloadState();
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 }

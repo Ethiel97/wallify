@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/route_manager.dart';
+import 'package:tinycolor2/tinycolor2.dart';
+
 import 'package:mobile/models/user.dart';
 import 'package:mobile/utils/app_router.dart' as routes;
 import 'package:mobile/utils/app_router.dart';
@@ -11,7 +13,6 @@ import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/secure_storage.dart';
 import 'package:mobile/widgets/utilities.dart';
-import 'package:tinycolor2/tinycolor2.dart';
 
 import 'api_provider.dart';
 
@@ -183,8 +184,8 @@ class AuthProvider with ChangeNotifier {
 
       notifyListeners();
     } catch (e, stacktrace) {
-      print(e);
-      print(stacktrace);
+      debugPrint(e.toString());
+      debugPrint(stacktrace.toString());
       _appStatus = AppStatus.finished;
       notifyListeners();
       _status = Status.unauthenticated;
@@ -192,7 +193,7 @@ class AuthProvider with ChangeNotifier {
       message = AppLocalizations.of(Get.context!)!.error_occured;
     } finally {
       Get.snackbar(
-        'Notification',
+        AppLocalizations.of(Get.context!)!.notification,
         message,
         duration: const Duration(seconds: 7),
         backgroundColor: status == Status.authenticated
@@ -235,13 +236,13 @@ class AuthProvider with ChangeNotifier {
         message = AppLocalizations.of(Get.context!)!.email_or_username_taken;
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       _appStatus = AppStatus.finished;
       notifyListeners();
       message = AppLocalizations.of(Get.context!)!.error_occured;
     } finally {
       Get.snackbar(
-        'Notification',
+        AppLocalizations.of(Get.context!)!.notification,
         message,
         duration: const Duration(seconds: 7),
         backgroundColor: status == Status.authenticated
@@ -252,11 +253,61 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<void> deleteAccount() async {
+    String message = "";
+
+    try {
+      _appStatus = AppStatus.processing;
+      notifyListeners();
+
+      await ApiProvider().deleteUserSavedWallPapers();
+      await ApiProvider().deleteAccount(authUser!.id!);
+
+      message = AppLocalizations.of(Get.context!)!.account_delete_success;
+
+      _appStatus = AppStatus.finished;
+      notifyListeners();
+
+      Get.snackbar(
+        AppLocalizations.of(Get.context!)!.notification,
+        message,
+        duration: const Duration(seconds: 7),
+        backgroundColor: status == Status.authenticated
+            ? TinyColor(AppColors.accentColor).darken().color
+            : AppColors.darkColor,
+        colorText: Colors.white,
+      );
+
+      logout();
+    } catch (e) {
+      debugPrint(e.toString());
+      _appStatus = AppStatus.finished;
+      message = AppLocalizations.of(Get.context!)!.error_occured;
+      notifyListeners();
+
+      Get.snackbar(
+        AppLocalizations.of(Get.context!)!.notification,
+        message,
+        duration: const Duration(seconds: 5),
+        backgroundColor: AppColors.darkColor,
+        colorText: Colors.white,
+      );
+    }
+  }
+
   confirmLogout() {
     utilities.confirmAction(
       message: AppLocalizations.of(Get.context!)!.logout_confirmation,
       action: () => logout(),
       actionText: AppLocalizations.of(Get.context!)!.logout,
+    );
+  }
+
+  confirmAccountDeletion() {
+    utilities.confirmAction(
+      message: AppLocalizations.of(Get.context!)!.account_delete_confirmation,
+      action: () => deleteAccount(),
+      actionText: AppLocalizations.of(Get.context!)!.delete,
     );
   }
 

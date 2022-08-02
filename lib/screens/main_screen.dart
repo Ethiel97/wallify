@@ -7,6 +7,11 @@ import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/screens/wallhaven/fav_screen.dart';
 import 'package:mobile/screens/wallhaven/home_screen.dart';
 import 'package:mobile/utils/app_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mobile/utils/colors.dart';
+import 'package:mobile/utils/constants.dart';
+import 'package:mobile/utils/text_styles.dart';
+import 'package:mobile/widgets/custom_button.dart';
 import 'package:mobile/widgets/w_nav_item.dart';
 import 'package:provider/provider.dart';
 
@@ -88,7 +93,7 @@ class MainScreen extends StatelessWidget {
                   child: IconButton(
                     onPressed: () {
                       if (authProvider.status == Status.authenticated) {
-                        authProvider.confirmLogout();
+                        showAccountModalBottomSheet(context, authProvider);
                       } else {
                         Get.toNamed(login);
                       }
@@ -125,4 +130,125 @@ class MainScreen extends StatelessWidget {
           ),
         ),
       );
+
+  void showAccountModalBottomSheet(
+      BuildContext context, AuthProvider authProvider) {
+    Get.bottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(Constants.kBorderRadius),
+          topRight: Radius.circular(Constants.kBorderRadius),
+        ),
+      ),
+      Container(
+        padding: const EdgeInsets.all(30),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              radius: 50,
+              child: Text(
+                authProvider.authUser!.username!.toUpperCase().substring(0, 1),
+                style: TextStyles.textStyle.apply(
+                    fontWeightDelta: 5,
+                    fontSizeDelta: 20,
+                    color: Theme.of(context).backgroundColor),
+              ),
+            ),
+            const SizedBox(
+              height: 18,
+            ),
+            Text(
+              authProvider.authUser!.username!,
+              textAlign: TextAlign.center,
+              style: TextStyles.textStyle.apply(
+                fontWeightDelta: 5,
+                fontSizeDelta: 4,
+                color: Theme.of(context).textTheme.bodyText1!.color,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Iconsax.user,
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Flexible(
+                  child: Text(
+                    authProvider.authUser!.email!,
+                    style: TextStyles.textStyle.apply(
+                      fontSizeDelta: 2,
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+            OutlinedButton(
+              onPressed: () {
+                Get.back();
+                authProvider.confirmLogout();
+              },
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    Constants.kBorderRadius,
+                  ),
+                ),
+                fixedSize: Size(Get.width, 50),
+              ),
+              child: Text(
+                'Logout',
+                style: TextStyles.textStyle.apply(
+                  color: Theme.of(context).textTheme.bodyText1!.color,
+                  fontSizeDelta: 2,
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back();
+                authProvider.confirmAccountDeletion();
+              },
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    Constants.kBorderRadius,
+                  ),
+                ),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                fixedSize: Size(Get.width, 50),
+              ),
+              child: Text(
+                AppLocalizations.of(context)!.delete_account,
+                style: TextStyles.textStyle.apply(
+                  color: Theme.of(context).backgroundColor,
+                  fontSizeDelta: 2,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
