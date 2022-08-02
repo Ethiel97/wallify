@@ -21,7 +21,6 @@ import 'models/pexels/wallpaper.dart' as px;
 import 'models/wallhaven/wallpaper.dart' as wh;
 import 'providers/navigation_provider.dart';
 import 'providers/theme_provider.dart';
-import 'screens/login_screen.dart';
 import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
 import 'utils/app_router.dart';
@@ -171,7 +170,6 @@ class _MyAppState extends State<MyApp> {
         ),
       );
 }
-
 
 // #keytool -genkeypair -keystore E:/app_keys/wallinice/app.jks -keyalg RSA -keysize 2048 -validity 9125 -alias upload
 
