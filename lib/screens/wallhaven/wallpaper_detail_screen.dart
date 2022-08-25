@@ -92,26 +92,11 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   }
 
   @override
-  void applyWallPaper() {
-    var viewModel =
-        Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
-
-    utilities.confirmAction(
-      message:
-          AppLocalizations.of(Get.context!)!.wallpaper_application_confirmation,
-      action: () {
-        viewModel.applyWallPaper(viewModel.selectedWallpaper.path!);
-      },
-      actionText: AppLocalizations.of(Get.context!)!.yes_apply,
-    );
-  }
-
-  @override
   void download() {
     var viewModel =
         Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false);
 
-    utilities.confirmAction(
+    utilities.confirmActionSnack(
       message:
           AppLocalizations.of(Get.context!)!.wallpaper_download_confirmation,
       action: () {
@@ -131,7 +116,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
       bool isFavorite = viewModel.isWallPaperSaved(cacheKey);
 
       //check if user is on the favorite screen
-      utilities.confirmAction(
+      utilities.confirmActionSnack(
         message: isFavorite
             ? AppLocalizations.of(Get.context!)!.wallpaper_remove_confirmation
             : AppLocalizations.of(Get.context!)!.wallpaper_save_confirmation,

@@ -52,5 +52,9 @@
   "successful_operation": "Successful operation",
   "email_or_username_taken": "This email or username is already taken",
   "no_results_for_your_search": "No results for your search",
-  "no_saved_image": "No saved image"
+  "no_saved_image": "No saved image",
+  "set_image_as": "Set Image as",
+  "image_as_home_screen": "Home Screen",
+  "image_as_lock_screen": "Lock Screen",
+  "image_as_lock_and_home_screen": "Both"
 }

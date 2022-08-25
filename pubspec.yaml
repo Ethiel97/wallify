@@ -2,7 +2,7 @@ name: mobile
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferrekd for private packages.
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.0+12
+version: 1.1.1+13
 
 environment:
   sdk: ">=2.17.1 <3.0.0"
@@ -55,18 +55,18 @@ dependencies:
   get:
   tinycolor2:
   intl:
-  firebase_messaging: ^12.0.1
+  firebase_messaging: ^12.0.3
   hive_flutter:
   hive:
   hive_generator:
-  firebase_core: ^1.20.0
+  firebase_core: ^1.21.0
   google_fonts:
   json_annotation:
   shimmer_animation:
   tap_builder:
   shape_of_view_null_safe:
   overlay_support:
-  firebase_crashlytics: ^2.8.6
+  firebase_crashlytics: ^2.8.8
 
 dev_dependencies:
   flutter_test:

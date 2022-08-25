@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mobile/providers/auth_provider.dart';
@@ -7,12 +8,10 @@ import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/screens/wallhaven/fav_screen.dart';
 import 'package:mobile/screens/wallhaven/home_screen.dart';
 import 'package:mobile/utils/app_router.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
-import 'package:mobile/widgets/custom_button.dart';
 import 'package:mobile/widgets/w_nav_item.dart';
+import 'package:mobile/widgets/w_text_button.dart';
 import 'package:provider/provider.dart';
 
 import 'wallhaven/search_screen.dart';
@@ -145,7 +144,7 @@ class MainScreen extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Theme.of(context).backgroundColor,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(Constants.kBorderRadius),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -224,27 +223,12 @@ class MainScreen extends StatelessWidget {
             const SizedBox(
               height: 12,
             ),
-            TextButton(
-              onPressed: () {
+            WTextButton(
+              onPress: () {
                 Get.back();
                 authProvider.confirmAccountDeletion();
               },
-              style: TextButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                    Constants.kBorderRadius,
-                  ),
-                ),
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                fixedSize: Size(Get.width, 50),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.delete_account,
-                style: TextStyles.textStyle.apply(
-                  color: Theme.of(context).backgroundColor,
-                  fontSizeDelta: 2,
-                ),
-              ),
+              text: AppLocalizations.of(context)!.delete_account,
             ),
           ],
         ),

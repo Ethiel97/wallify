@@ -296,7 +296,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   confirmLogout() {
-    utilities.confirmAction(
+    utilities.confirmActionSnack(
       message: AppLocalizations.of(Get.context!)!.logout_confirmation,
       action: () => logout(),
       actionText: AppLocalizations.of(Get.context!)!.logout,
@@ -304,7 +304,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   confirmAccountDeletion() {
-    utilities.confirmAction(
+    utilities.confirmActionSnack(
       message: AppLocalizations.of(Get.context!)!.account_delete_confirmation,
       action: () => deleteAccount(),
       actionText: AppLocalizations.of(Get.context!)!.delete,

@@ -11,7 +11,9 @@ import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
+import 'package:mobile/widgets/utilities.dart';
 import 'package:mobile/widgets/w_color_tag.dart';
+import 'package:mobile/widgets/w_text_button.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
@@ -57,7 +59,95 @@ mixin DetailsMixin<T> {
 
   void download();
 
-  void applyWallPaper();
+  void applyWallPaper() {
+    var viewModel =
+        Provider.of<WallpaperViewModel<T>>(Get.context!, listen: false);
+
+    Get.bottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(Constants.kBorderRadius),
+            topRight: Radius.circular(Constants.kBorderRadius),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(30),
+          alignment: Alignment.bottomCenter,
+          decoration: BoxDecoration(
+            color: Theme.of(Get.context!).backgroundColor,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(Constants.kBorderRadius),
+              topRight: Radius.circular(Constants.kBorderRadius),
+            ),
+          ),
+          child: Column(
+            children: [
+              Text(
+                AppLocalizations.of(Get.context!)!.set_image_as,
+                style: TextStyles.textStyle.apply(
+                  fontWeightDelta: 1,
+                  fontSizeDelta: 10,
+                  color: Theme.of(Get.context!).textTheme.bodyText1!.color,
+                ),
+              ),
+              const Spacer(),
+              WTextButton(
+                text: AppLocalizations.of(Get.context!)!.image_as_home_screen,
+                onPress: () {
+                  Get.back();
+
+                  utilities.confirmActionSnack(
+                    message: AppLocalizations.of(Get.context!)!
+                        .wallpaper_application_confirmation,
+                    action: () {
+                      viewModel.applyWallPaper(imgUrl);
+                    },
+                    actionText: AppLocalizations.of(Get.context!)!.yes_apply,
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              WTextButton(
+                text: AppLocalizations.of(Get.context!)!.image_as_lock_screen,
+                onPress: () {
+                  Get.back();
+
+                  utilities.confirmActionSnack(
+                    message: AppLocalizations.of(Get.context!)!
+                        .wallpaper_application_confirmation,
+                    action: () {
+                      viewModel.applyWallPaper(imgUrl, asyncWallpaper: 2);
+                    },
+                    actionText: AppLocalizations.of(Get.context!)!.yes_apply,
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              WTextButton(
+                text: AppLocalizations.of(Get.context!)!
+                    .image_as_lock_and_home_screen,
+                onPress: () {
+                  Get.back();
+
+                  utilities.confirmActionSnack(
+                    message: AppLocalizations.of(Get.context!)!
+                        .wallpaper_application_confirmation,
+                    action: () {
+                      viewModel.applyWallPaper(imgUrl, asyncWallpaper: 3);
+                    },
+                    actionText: AppLocalizations.of(Get.context!)!.yes_apply,
+                  );
+                },
+              ),
+              const Spacer(),
+            ],
+          ),
+        ));
+  }
 
   void save();
 

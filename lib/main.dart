@@ -163,7 +163,7 @@ class _MyAppState extends State<MyApp> {
               theme: themeProvider.theme,
               routes: appRoutes,
               home: const SplashScreen(
-                key: ValueKey("spash"),
+                key: ValueKey("splash"),
               ),
             ),
           ),

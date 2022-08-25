@@ -25,7 +25,7 @@
   "logout": "Se Déconnecter",
   "login": "Se connecter",
   "account_delete_success": "Compte supprimé avec succès",
-  "delete":"Supprimer",
+  "delete": "Supprimer",
   "image_could_not_be_loaded": "Désolé! Nous n'avons pas pu charger cette image. Essayez d'autres images :)",
   "already_registered": "Déjà enrégistré?",
   "register": "S'enrégistrer",
@@ -52,5 +52,9 @@
   "successful_operation": "Operation réussie",
   "email_or_username_taken": "Email ou nom d'utilisateur déjà pris",
   "no_results_for_your_search": "Aucun résultat pour votre recherche",
-  "no_saved_image": "Aucune image sauvegardée"
+  "no_saved_image": "Aucune image sauvegardée",
+  "set_image_as": "Définir l'image comme",
+  "image_as_home_screen": "Fond d'écran d'accueil",
+  "image_as_lock_screen": "Fond d'écran de verrouillage",
+  "image_as_lock_and_home_screen": "Les deux"
 }

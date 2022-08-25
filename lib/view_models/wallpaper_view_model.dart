@@ -9,10 +9,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:tinycolor2/tinycolor2.dart';
-
 import 'package:mobile/models/pexels/wallpaper.dart' as px;
 import 'package:mobile/providers/api_provider.dart';
 import 'package:mobile/providers/auth_provider.dart';
@@ -23,6 +19,9 @@ import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/text_styles.dart';
 import 'package:mobile/view_models/base_view_model.dart';
+import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
 typedef WallPaperCallBack = Future<dynamic> Function(String url);
 
@@ -471,14 +470,15 @@ class WallpaperViewModel<T> extends BaseViewModel {
     }
   }
 
-  void applyWallPaper(String url) async {
+  void applyWallPaper(String url,
+      {int asyncWallpaper = AsyncWallpaper.HOME_SCREEN}) async {
     String result;
     var file = await DefaultCacheManager().getSingleFile(url);
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       result = await AsyncWallpaper.setWallpaperFromFile(
         file.path,
-        AsyncWallpaper.HOME_SCREEN,
+        asyncWallpaper,
       );
 
       LogUtils.log("WALLPAPER RESULT: $result");

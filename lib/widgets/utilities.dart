@@ -5,7 +5,7 @@ import 'package:mobile/utils/text_styles.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 mixin utilities {
- static void confirmAction({
+  static void confirmActionSnack({
     String confirmText = "Confirmation",
     required String message,
     required VoidCallback action,
