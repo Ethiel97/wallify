@@ -2,28 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/pexels/wallpaper_px.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
-import 'package:mobile/widgets/m_wallpapers_by_colors.dart';
+import 'package:mobile/widgets/m_search_screen.dart';
 import 'package:mobile/widgets/w_px_wallpaper_card.dart';
 import 'package:provider/provider.dart';
 
-class WallpaperByColorScreen extends StatefulWidget {
-  const WallpaperByColorScreen({
-    required Key key,
-  }) : super(key: key);
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
-  WallpaperByColorScreenState createState() => WallpaperByColorScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class WallpaperByColorScreenState extends State<WallpaperByColorScreen>
-    with WallpapersByColorsMixin, AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Color get selectedColor =>
-      Provider.of<WallpaperViewModel<WallPaper>>(context).selectedColor;
-
+class _SearchScreenState extends State<SearchScreen>
+    with SearchMixin<WallPaper>, AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -36,9 +27,15 @@ class WallpaperByColorScreenState extends State<WallpaperByColorScreen>
   }
 
   @override
+  bool get canSearchByColor => false;
+
+  @override
   Widget setWallPaperCard(int index) => PxWallPaperCard(
         wallPaper:
             Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
-                .filteredWallpapersByColor[index],
+                .filteredWallpapers[index],
       );
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -59,7 +59,7 @@ class MockWallPaperRepository<T> extends _i1.Mock
       Invocation.method(#interceptorsWrapper, []),
       returnValue: _FakeInterceptorsWrapper_1()) as _i2.InterceptorsWrapper);
   @override
-  _i6.FutureOr<T> getItem(String? id,
+  _i6.FutureOr<T> getItem(int? id,
           {Map<String, dynamic>? query = const {}}) =>
       (super.noSuchMethod(Invocation.method(#getItem, [id], {#query: query}),
           returnValue: Future<T>.value(null)) as _i6.FutureOr<T>);

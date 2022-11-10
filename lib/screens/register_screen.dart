@@ -237,7 +237,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         onTap: () {
-                          Get.toNamed(login);
+                          Get.toNamed(RouteName.login);
                         },
                       ),
                     ],

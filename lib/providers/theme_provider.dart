@@ -37,9 +37,10 @@ class ThemeProvider with ChangeNotifier {
       color: Colors.white,
     ),
     colorScheme: ColorScheme.fromSwatch(
-      primarySwatch: Colors.grey,
-      brightness: Brightness.dark,
-    ).copyWith(
+            primarySwatch: Colors.grey,
+            brightness: Brightness.dark,
+            accentColor: Colors.redAccent)
+        .copyWith(
       secondary: AppColors.accentColor,
     ),
   );
@@ -62,9 +63,10 @@ class ThemeProvider with ChangeNotifier {
       ),
     ),
     colorScheme: ColorScheme.fromSwatch(
-      primarySwatch: Colors.grey,
-      brightness: Brightness.light,
-    ).copyWith(
+            primarySwatch: Colors.grey,
+            brightness: Brightness.light,
+            accentColor: Colors.redAccent)
+        .copyWith(
       secondary: AppColors.accentColor,
     ),
   );

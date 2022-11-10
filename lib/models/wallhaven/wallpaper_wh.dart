@@ -4,7 +4,7 @@ import 'package:mobile/models/wallhaven/tag.dart';
 
 import 'wallpaper_thumbs.dart';
 
-part 'wallpaper.g.dart';
+part 'wallpaper_wh.g.dart';
 
 @HiveType(typeId: 1)
 @JsonSerializable()

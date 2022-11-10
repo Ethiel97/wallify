@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'wallpaper.dart';
+part of 'wallpaper_wh.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

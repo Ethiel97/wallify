@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/infrastructure/observable.dart';
 import 'package:mobile/providers/api_provider.dart';
 import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
@@ -17,10 +18,11 @@ import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:provider/provider.dart';
 
-import 'models/pexels/wallpaper.dart' as px;
-import 'models/wallhaven/wallpaper.dart' as wh;
+import 'models/pexels/wallpaper_px.dart' as px;
+import 'models/wallhaven/wallpaper_wh.dart' as wh;
 import 'providers/navigation_provider.dart';
 import 'providers/theme_provider.dart';
+import 'providers/wallpaper_provider.dart';
 import 'screens/splash_screen.dart';
 import 'services/notification_service.dart';
 import 'utils/app_router.dart';
@@ -45,6 +47,12 @@ void main() async {
           ),
           ChangeNotifierProvider<ThemeProvider>(
             create: (_) => ThemeProvider(),
+          ),
+          ChangeNotifierProvider<Observable>(
+            create: (_) => Observable<WallpaperViewModel>(),
+          ),
+          ChangeNotifierProvider<WallpaperProviderObserver>(
+            create: (_) => WallpaperProviderObserver(),
           ),
           ChangeNotifierProvider<WallpaperViewModel<wh.WallPaper>>(
             create: (_) => WallpaperViewModel<wh.WallPaper>(
@@ -87,13 +95,25 @@ class _MyAppState extends State<MyApp> {
   late FirebaseMessaging _firebaseMessaging;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    Future.delayed(Duration.zero, () {
+      if (mounted) {
+        Provider.of<Observable>(context, listen: false).subscribe(
+            Provider.of<WallpaperProviderObserver>(context, listen: false));
+      }
+    });
+  }
+
+  @override
   void initState() {
     super.initState();
 
     _firebaseMessaging = FirebaseMessaging.instance;
 
     _firebaseMessaging.subscribeToTopic(Constants.randomWallpaperTopic);
-    // _firebaseMessaging.subscribeToTopic(testTopic);
+    // _firebaseMessaging.subscribeToTopic(Constants.testTopic);
 
     FirebaseMessaging.onMessage.listen((event) {
       NotificationService(event, context: Get.context!).showToast();
@@ -134,8 +154,8 @@ class _MyAppState extends State<MyApp> {
                 );
                 // }
 
-                if (Get.currentRoute == wallpaperDetailWh ||
-                    Get.currentRoute == wallpaperByColorWh) {
+                if (Get.currentRoute == RouteName.wallpaperDetailWh ||
+                    Get.currentRoute == RouteName.wallpaperByColorWh) {
                   ErrorWidget.builder =
                       (FlutterErrorDetails errorDetails) => const Material(
                             type: MaterialType.transparency,
@@ -161,7 +181,7 @@ class _MyAppState extends State<MyApp> {
               supportedLocales: AppLocalizations.supportedLocales,
               debugShowCheckedModeBanner: false,
               theme: themeProvider.theme,
-              routes: appRoutes,
+              routes: RouteName.calculateRoutes,
               home: const SplashScreen(
                 key: ValueKey("splash"),
               ),

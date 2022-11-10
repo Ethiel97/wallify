@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobile/models/wallhaven/wallpaper.dart';
+import 'package:mobile/models/wallhaven/wallpaper_wh.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

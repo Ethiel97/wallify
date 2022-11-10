@@ -91,9 +91,9 @@ class _SplashScreenState extends State<SplashScreen>
         data: false.toString(),
       );
 
-      Get.offAndToNamed(landing);
+      Get.offAndToNamed(RouteName.landing);
     } else {
-      Get.offAndToNamed(landing);
+      Get.offAndToNamed(RouteName.landing);
     }
   }
 
@@ -112,7 +112,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<bool> checkFirstTime() async {
     try {
-      return (await SecureStorageService.readItem(key: firstLaunch))!.isNotEmpty;
+      return (await SecureStorageService.readItem(key: firstLaunch))!
+          .isNotEmpty;
     } catch (e) {
       LogUtils.log(e);
       return true;

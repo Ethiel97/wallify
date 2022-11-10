@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/models/wallhaven/wallpaper.dart';
+import 'package:mobile/models/wallhaven/wallpaper_wh.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
 import 'package:mobile/widgets/m_wallpapers_by_colors.dart';

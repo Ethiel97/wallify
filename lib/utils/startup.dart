@@ -7,9 +7,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobile/firebase_options.dart';
-import 'package:mobile/models/pexels/wallpaper.dart' as px;
+import 'package:mobile/models/pexels/wallpaper_px.dart' as px;
 import 'package:mobile/models/pexels/wallpaper_src.dart';
-import 'package:mobile/models/wallhaven/wallpaper.dart' as wh;
+import 'package:mobile/models/wallhaven/wallpaper_wh.dart' as wh;
 import 'package:mobile/models/wallhaven/wallpaper_thumbs.dart';
 import 'package:mobile/providers/theme_provider.dart';
 import 'package:mobile/utils/constants.dart';
@@ -49,8 +49,8 @@ class Startup {
     Hive.registerAdapter(WallPaperThumbsAdapter());
     Hive.registerAdapter(WallPaperSrcAdapter());
     Hive.registerAdapter(px.WallPaperAdapter());
-    await Hive.openBox<wh.WallPaper>(Constants.savedWhWallpapersBox);
-    await Hive.openBox<wh.WallPaper>(Constants.savedPxWallpapersBox);
+    // await Hive.openBox<wh.WallPaper>(Constants.savedWhWallpapersBox);
+    // await Hive.openBox<wh.WallPaper>(Constants.savedPxWallpapersBox);
   }
 
   void setTransparentStatusBar({int delay = 0, ThemeProvider? themeProvider}) {

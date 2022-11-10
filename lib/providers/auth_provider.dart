@@ -4,15 +4,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/route_manager.dart';
-import 'package:tinycolor2/tinycolor2.dart';
-
 import 'package:mobile/models/user.dart';
-import 'package:mobile/utils/app_router.dart' as routes;
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/secure_storage.dart';
 import 'package:mobile/widgets/utilities.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
 import 'api_provider.dart';
 
@@ -58,6 +56,15 @@ class AuthProvider with ChangeNotifier {
 
   AuthProvider() {
     try {
+      /*fetchMe().then((res) {
+
+        LogUtils.log("fetch me response: ${res}");
+        if ((res as Map).containsKey('error') &&
+            res['error']['status'] == 403) {
+          LogUtils.log("unauthenticated");
+          _status = Status.unauthenticated;
+          SecureStorageService.remove(key: authTokenKey);
+        } else {*/
       checkAuthStatus().then((authToken) {
         if (authToken != null) {
           token = authToken;
@@ -66,7 +73,7 @@ class AuthProvider with ChangeNotifier {
               : Status.authenticated;
 
           if (_status == Status.authenticated) {
-            fetchUser();
+            fetchLocalUser();
           } else {
             // Get.toNamed(routes.login);
           }
@@ -74,6 +81,8 @@ class AuthProvider with ChangeNotifier {
           // Get.toNamed(routes.login);
         }
       });
+      /*  }
+      });*/
     } catch (e, stack) {
       LogUtils.log("Error: $e, Stack:$stack");
     }
@@ -97,7 +106,12 @@ class AuthProvider with ChangeNotifier {
     }
   }*/
 
-  fetchUser() async {
+  fetchMe() async {
+    var response = await ApiProvider().fetchMe();
+    return response;
+  }
+
+  fetchLocalUser() async {
     String? data = await SecureStorageService.readItem(key: userKey);
 
     user = User.fromJson(jsonDecode(data!));
@@ -171,7 +185,7 @@ class AuthProvider with ChangeNotifier {
         _appStatus = AppStatus.finished;
         notifyListeners();
 
-        Get.offAllNamed(landing);
+        Get.offAllNamed(RouteName.landing);
       } else {
         status = Status.unauthenticated;
         notifyListeners();
@@ -226,7 +240,7 @@ class AuthProvider with ChangeNotifier {
 
         _appStatus = AppStatus.finished;
         notifyListeners();
-        Get.offAllNamed(landing);
+        Get.offAllNamed(RouteName.landing);
       } else {
         status = Status.unauthenticated;
         notifyListeners();
@@ -319,6 +333,6 @@ class AuthProvider with ChangeNotifier {
     await SecureStorageService.remove(key: authTokenKey);
     await SecureStorageService.remove(key: userKey);
     await Future.delayed(const Duration(milliseconds: 400));
-    Get.offAllNamed(routes.splash);
+    Get.offAllNamed(RouteName.splash);
   }
 }

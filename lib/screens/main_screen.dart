@@ -5,8 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
-import 'package:mobile/screens/wallhaven/fav_screen.dart';
-import 'package:mobile/screens/wallhaven/home_screen.dart';
+import 'package:mobile/providers/wallpaper_provider.dart';
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/text_styles.dart';
@@ -14,16 +13,8 @@ import 'package:mobile/widgets/w_nav_item.dart';
 import 'package:mobile/widgets/w_text_button.dart';
 import 'package:provider/provider.dart';
 
-import 'wallhaven/search_screen.dart';
-
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
-
-  List<Widget> get screens => [
-        const SearchScreen(),
-        const HomeScreen(),
-        const FavScreen(),
-      ];
 
   List<IconData> get icons => [
         Iconsax.search_normal,
@@ -32,11 +23,11 @@ class MainScreen extends StatelessWidget {
       ];
 
   @override
-  Widget build(BuildContext context) =>
-      Consumer3<NavigationProvider, ThemeProvider, AuthProvider>(
-        builder:
-            (context, navigationProvider, themeProvider, authProvider, _) =>
-                Scaffold(
+  Widget build(BuildContext context) => Consumer4<NavigationProvider,
+          ThemeProvider, AuthProvider, WallpaperProviderObserver>(
+        builder: (context, navigationProvider, themeProvider, authProvider,
+                wallpaperProviderObserver, _) =>
+            Scaffold(
           backgroundColor: Theme.of(context).backgroundColor,
           extendBodyBehindAppBar: true,
           extendBody: true,
@@ -53,7 +44,8 @@ class MainScreen extends StatelessWidget {
                 key: UniqueKey(),
                 alignment: Alignment.center,
                 children: [
-                  screens[navigationProvider.currentIndex],
+                  wallpaperProviderObserver
+                      .screens[navigationProvider.currentIndex],
                 ],
               ),
               Align(
@@ -94,7 +86,7 @@ class MainScreen extends StatelessWidget {
                       if (authProvider.status == Status.authenticated) {
                         showAccountModalBottomSheet(context, authProvider);
                       } else {
-                        Get.toNamed(login);
+                        Get.toNamed(RouteName.login);
                       }
                     },
                     icon: Icon(
@@ -213,7 +205,7 @@ class MainScreen extends StatelessWidget {
                 fixedSize: Size(Get.width, 50),
               ),
               child: Text(
-                'Logout',
+                AppLocalizations.of(context)!.logout,
                 style: TextStyles.textStyle.apply(
                   color: Theme.of(context).textTheme.bodyText1!.color,
                   fontSizeDelta: 2,

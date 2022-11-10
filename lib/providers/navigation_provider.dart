@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/providers/auth_provider.dart';
+import 'package:mobile/utils/app_router.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/app_router.dart';
 
 class NavigationProvider with ChangeNotifier {
   int _currentIndex = 1;
@@ -20,7 +20,7 @@ class NavigationProvider with ChangeNotifier {
       _currentIndex = index;
       notifyListeners();
     } else {
-      Get.toNamed(login);
+      Get.toNamed(RouteName.login);
     }
   }
 }

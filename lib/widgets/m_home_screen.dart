@@ -13,7 +13,8 @@ import 'package:tinycolor2/tinycolor2.dart';
 mixin HomeScreenMixin<T> {
   int selectedWallpaperIndex = 0;
 
-  String get selectedWallPaperImgUrl => "https://images.pexels.com/photos/3585088/pexels-photo-3585088.jpeg";
+  String get selectedWallPaperImgUrl =>
+      "https://images.pexels.com/photos/3585088/pexels-photo-3585088.jpeg";
 
   Widget setWallPaperCard(int index);
 
@@ -31,6 +32,8 @@ mixin HomeScreenMixin<T> {
               sigmaX: 18,
             ),
             child: AnimatedSwitcher(
+              transitionBuilder: (Widget child, Animation<double> animation) =>
+                  FadeTransition(opacity: animation, child: child),
               duration: const Duration(milliseconds: Constants.kDuration),
               child: Container(
                 key: UniqueKey(),
@@ -60,6 +63,9 @@ mixin HomeScreenMixin<T> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 AnimatedSwitcher(
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) =>
+                          FadeTransition(opacity: animation, child: child),
                   duration: const Duration(
                     milliseconds: Constants.kDuration,
                   ),
@@ -82,13 +88,15 @@ mixin HomeScreenMixin<T> {
                       Text(
                         /*wallpaperViewModel
                           .wallpapers[selectedWallpaperIndex].category!,*/
-                        AppLocalizations.of(context)!.browse_awesome_exclusive_images,
+                        AppLocalizations.of(context)!
+                            .browse_awesome_exclusive_images,
                         style: TextStyles.textStyle.apply(
                           fontSizeDelta: -4,
                           fontWeightDelta: 6,
                           color: TinyColor(
                                   Theme.of(context).textTheme.bodyText1!.color!)
-                              .shade().lighten()
+                              .shade()
+                              .lighten()
                               .color,
                         ),
                       ),

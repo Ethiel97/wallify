@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
-import 'package:mobile/models/wallhaven/wallpaper.dart';
+import 'package:mobile/models/wallhaven/wallpaper_wh.dart';
 import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
@@ -128,7 +128,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
             : AppLocalizations.of(Get.context!)!.save,
       );
     } else {
-      Get.toNamed(login);
+      Get.toNamed(RouteName.login);
     }
   }
 

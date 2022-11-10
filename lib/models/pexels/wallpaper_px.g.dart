@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'wallpaper.dart';
+part of 'wallpaper_px.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -26,7 +26,7 @@ class WallPaperAdapter extends TypeAdapter<WallPaper> {
       photographerUrl: fields[5] as String,
       photographerId: fields[6] as int,
       avgColor: fields[7] as String,
-      saved: fields[9] as bool,
+      saved: fields[9] as bool?,
     );
   }
 
@@ -81,7 +81,7 @@ WallPaper _$WallPaperFromJson(Map<String, dynamic> json) => WallPaper(
       photographerUrl: json['photographer_url'] as String,
       photographerId: json['photographer_id'] as int,
       avgColor: json['avg_color'] as String,
-      saved: json['saved'] as bool,
+      saved: json['saved'] as bool?,
     );
 
 Map<String, dynamic> _$WallPaperToJson(WallPaper instance) => <String, dynamic>{

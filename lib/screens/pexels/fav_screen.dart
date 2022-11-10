@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/models/pexels/wallpaper.dart';
+import 'package:mobile/models/pexels/wallpaper_px.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/views/base_view.dart';
 import 'package:mobile/widgets/m_fav_screen.dart';

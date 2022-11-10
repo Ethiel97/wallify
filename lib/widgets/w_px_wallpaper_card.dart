@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/models/pexels/wallpaper.dart';
+import 'package:mobile/models/pexels/wallpaper_px.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:mobile/widgets/m_wallpaper_card.dart';
@@ -31,7 +31,7 @@ class PxWallPaperCard extends StatelessWidget with WallpaperCard<WallPaper> {
   void viewDetail(WallpaperViewModel<WallPaper> viewModel) {
     viewModel.defSelectedWallpaper(
       wallPaper,
-      WallPaperProvider.wallhaven,
+      WallPaperProvider.pexels,
       errorWhenLoadingImage: errorWhenLoadingImage,
     );
   }

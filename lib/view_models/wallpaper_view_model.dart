@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:async_wallpaper/async_wallpaper.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -9,10 +8,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:mobile/models/pexels/wallpaper.dart' as px;
 import 'package:mobile/providers/api_provider.dart';
 import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/providers/navigation_provider.dart';
+import 'package:mobile/providers/wallpaper_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/utils/constants.dart';
@@ -24,6 +23,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
 typedef WallPaperCallBack = Future<dynamic> Function(String url);
+
+typedef WallPaperCreator<T> = T Function();
 
 class WallpaperViewModel<T> extends BaseViewModel {
   List<T> wallpapers = [];
@@ -50,7 +51,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
   ScrollController colorsListScrollController = ScrollController();
 
   double searchPageMaxScrollExtent = 0.0;
-  double wallpapersBycolorMaxScrollExtent = 0.0;
+  double wallpapersByColorMaxScrollExtent = 0.0;
 
   String searchQuery = "";
   late T _selectedWallpaper;
@@ -67,7 +68,6 @@ class WallpaperViewModel<T> extends BaseViewModel {
   List<T> savedWallpapers = [];
 
   List<T> filteredWallpapersByColor = [];
-
   late Box<T> boxWallpapers;
 
   void defSelectedWallpaper(T wallpaper, WallPaperProvider wallPaperProvider,
@@ -97,90 +97,118 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
   WallpaperViewModel({required this.wallpaperRepository});
 
-  bool isWallPaperSaved(String id) => boxWallpapers.containsKey(id);
+  isWallPaperSaved(String id) {
+    try {
+      return boxWallpapers.containsKey(id);
+    } catch (e) {
+      LogUtils.error("Wallpaper saved error: ${e}");
+      return false;
+    }
+  }
+
+  openBox() async {
+    LogUtils.log(Get.context!.read<WallpaperProviderObserver>().provider.name);
+
+    try {
+      boxWallpapers = await Hive.openBox(
+          Get.context!.read<WallpaperProviderObserver>().provider.name ==
+                  WallPaperProvider.pexels.name
+              ? Constants.savedPxWallpapersBox
+              : Constants.savedWhWallpapersBox);
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   FutureOr<void> init() async {
-    //listening to pageview changes
-
     try {
-      boxWallpapers = Hive.box(T is px.WallPaper
-          ? Constants.savedPxWallpapersBox
-          : Constants.savedWhWallpapersBox);
+      await Future.delayed(Duration.zero, () async {
+        // }
+        await openBox();
 
-      await fetchTopWallPapers();
+        await fetchTopWallPapers();
 
-      if (Provider.of<AuthProvider>(Get.context!, listen: false).status ==
-          Status.authenticated) {
-        fetchSavedWallpapers();
-      }
-
-      // Get.bottomSheet(bottomsheet)
-      pageController.addListener(() async {
-        //notifyListeners
-
-        homeScreenCurrentPage = pageController.page!.floor();
-        reloadState();
-
-        // reloadState();
-        if (pageController.hasClients) {
-          //if the user reaches the last item, we search for the
-          // next page results using pagination method
-          if (pageController.page?.floor() ==
-              (Constants.perPageResults * currentPaginationPageHome) - 1) {
-            // print("END OF SCROLLING");
-            loadMore();
-          }
+        if (Provider.of<AuthProvider>(Get.context!, listen: false).status ==
+            Status.authenticated) {
+          fetchSavedWallpapers();
         }
-      });
 
-      tagsListScrollController.addListener(() {
-        if (tagsListScrollController.hasClients) {
-          // LogUtils.log("SCROLLING tags: ${tagsListScrollController.offset}");
-        }
-      });
-
-      colorsListScrollController.addListener(() {
-        if (colorsListScrollController.hasClients) {
-          // LogUtils.log("SCROLLING tags: ${colorsListScrollController.offset}");
-        }
-      });
-
-      searchPageScrollController.addListener(() {
-        if (searchPageScrollController.hasClients) {
-          LogUtils.log(
-              "SEARCH PAGE SCROLLING: ${searchPageScrollController.offset}");
-          LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
-
-          /*if (searchPageScrollController.position.pixels ==
-                  searchPageMaxScrollExtent) {
-                loadMore();
-              }*/
-        }
-      });
-
-      wallpapersByColorPageScrollController.addListener(() {
-        if (wallpapersByColorPageScrollController.hasClients) {
-          // LogUtils.log("SEARCH PAGE SCROLLING: ${searchPageScrollController.position.pixels}");
-          // LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
-
-          if (wallpapersByColorPageScrollController.position.pixels ==
-              wallpapersBycolorMaxScrollExtent) {
-            loadMore();
-          }
-        }
+        prepareScrollControllers();
       });
     } catch (error, stackTrace) {
       this.error = true;
 
       print(error);
 
-      await FirebaseCrashlytics.instance.recordError(error, stackTrace,
-          reason: 'wallpaper view model initialization error');
+      /*await FirebaseCrashlytics.instance.recordError(error, stackTrace,
+          reason: 'wallpaper view model initialization error');*/
     }
   }
 
-  fetchTopWallPapers({Map<String, dynamic> query = const {'q': 'Cars'}}) async {
+  prepareScrollControllers() {
+    // Get.bottomSheet(bottomsheet)
+    pageController.addListener(() async {
+      //notifyListeners
+      homeScreenCurrentPage = pageController.page!.floor();
+      reloadState();
+
+      // reloadState();
+      if (pageController.hasClients) {
+        //if the user reaches the last item, we search for the
+        // next page results using pagination method
+        if (pageController.page?.floor() ==
+            (Constants.perPageResults * currentPaginationPageHome) - 1) {
+          // print("END OF SCROLLING");
+          loadMore();
+        }
+      }
+    });
+
+    tagsListScrollController.addListener(() {
+      if (tagsListScrollController.hasClients) {
+        // LogUtils.log("SCROLLING tags: ${tagsListScrollController.offset}");
+      }
+    });
+
+    colorsListScrollController.addListener(() {
+      if (colorsListScrollController.hasClients) {
+        // LogUtils.log("SCROLLING tags: ${colorsListScrollController.offset}");
+      }
+    });
+
+    searchPageScrollController.addListener(() {
+      if (searchPageScrollController.hasClients) {
+        LogUtils.log(
+            "SEARCH PAGE SCROLLING: ${searchPageScrollController.offset}");
+        LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
+
+        /*if (searchPageScrollController.position.pixels ==
+                  searchPageMaxScrollExtent) {
+                loadMore();
+              }*/
+      }
+    });
+
+    wallpapersByColorPageScrollController.addListener(() {
+      if (wallpapersByColorPageScrollController.hasClients) {
+        // LogUtils.log("SEARCH PAGE SCROLLING: ${searchPageScrollController.position.pixels}");
+        // LogUtils.log("SEARCH PAGE MAX EXTENT: $searchPageMaxScrollExtent");
+
+        if (wallpapersByColorPageScrollController.position.pixels ==
+            wallpapersByColorMaxScrollExtent) {
+          loadMore();
+        }
+      }
+    });
+  }
+
+  fetchTopWallPapers(
+      {Map<String, dynamic> query = const {
+        'q': 'Cars',
+        'query': 'Cars'
+      }}) async {
     try {
       // isLoading = true;
 
@@ -256,6 +284,8 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
             var requestQuery = {'query': query, 'q': query};
 
+            print("query: $requestQuery");
+
             List<T> results = await wallpaperRepository
                 .searchItems(query: {...requestQuery, ...details});
             if (details.isNotEmpty && details.containsKey('colors')) {
@@ -265,7 +295,12 @@ class WallpaperViewModel<T> extends BaseViewModel {
               // reloadState();
               finishLoading();
 
-              Get.toNamed(wallpaperByColorWh);
+              Get.toNamed(Provider.of<WallpaperProviderObserver>(Get.context!,
+                              listen: false)
+                          .provider ==
+                      WallPaperProvider.pexels
+                  ? RouteName.wallpaperByColorPx
+                  : RouteName.wallpaperByColorWh);
 
               return;
             }
@@ -442,7 +477,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
   }
 
   void goToFavScreen() {
-    Get.offNamedUntil(landing, (route) => false);
+    Get.offNamedUntil(RouteName.landing, (route) => false);
     Provider.of<NavigationProvider>(
       Get.context!,
       listen: false,
@@ -509,16 +544,24 @@ class WallpaperViewModel<T> extends BaseViewModel {
         //     .substring(0, res['attributes']['uid'].indexOf(':'));
 
         LogUtils.log("id: $id");
+        if (Get.context!.read<WallpaperProviderObserver>().provider ==
+            WallPaperProvider.pexels) {
+          var T = await wallpaperRepository.getItem(int.parse(id));
 
-        List<T> response =
-            await wallpaperRepository.searchItems(query: {"q": "like:$id"});
+          savedWallpapers = [...savedWallpapers, T];
+        } else {
+          List<T> response =
+              await wallpaperRepository.searchItems(query: {"q": "like:$id"});
 
-        LogUtils.log("SAVED WALLPAPERS: ${response[0].toString()}");
-        savedWallpapers = [...savedWallpapers, response[0]];
+          if (response.isNotEmpty) {
+            LogUtils.log("SAVED WALLPAPERS: ${response[0].toString()}");
+            savedWallpapers = [...savedWallpapers, response[0]];
+          }
+        }
       }
       reloadState();
-    } catch (e) {
-      debugPrint(e.toString());
+    } catch (e, stack) {
+      debugPrint("e: $e, stack: $stack");
     }
   }
 }

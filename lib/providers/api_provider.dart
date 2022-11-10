@@ -42,6 +42,13 @@ class ApiProvider {
         return handler.resolve(response);
       }, onError: (DioError e, handler) {
         LogUtils.log("dio error ${e.response?.data}");
+
+         if(e.response?.data!=null){
+
+           if(e.response?.data['error']['status'] == 401){
+
+           }
+         }
         // Do something with response error
         return handler.resolve(e.response!); //continue
       });
@@ -97,11 +104,7 @@ class ApiProvider {
   Future<List> fetchUserSavedWallpapers() async {
     Response response =
         await dio.get("${Constants.customApiUrl!}saved-wallpapers/user");
-
-    // LogUtils.log("SAVED WALLPAPERS: ${response.data['data']}");
-
-    LogUtils.log("RESPONSE USER SAVED WALLPAPERS: ${response.data}");
-
+    // LogUtils.log("RESPONSE USER SAVED WALLPAPERS: ${response.data}");
 
     return response.data['data'];
   }

@@ -160,9 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text(
                             AppLocalizations.of(Get.context!)!.no_account,
                             style: TextStyles.textStyle.apply(
-                              fontSizeDelta: -2,
-                              color: AppColors.darkColor
-                            ),
+                                fontSizeDelta: -2, color: AppColors.darkColor),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(
@@ -181,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               onTap: () {
-                                Get.toNamed(register);
+                                Get.toNamed(RouteName.register);
                               },
                             ),
                           ),

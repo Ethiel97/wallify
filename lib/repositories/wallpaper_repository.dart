@@ -25,8 +25,10 @@ class WallPaperRepository<T> extends IRepository<T> {
 
   InterceptorsWrapper interceptorsWrapper() =>
       InterceptorsWrapper(onRequest: (options, handler) {
-        options.headers = {'Authorization': Constants.pexelsApiKey};
-        options.headers = {'X-Api-Key': Constants.wallhavenApiKey};
+        options.headers = {
+          'X-Api-Key': Constants.wallhavenApiKey,
+          'Authorization': Constants.pexelsApiKey,
+        };
 
         options.path += "&";
         String lastKey = "";
@@ -48,10 +50,17 @@ class WallPaperRepository<T> extends IRepository<T> {
         // you can reject a `DioError` object eg: `handler.reject(dioError)`
       }, onResponse: (response, handler) {
         // LogUtils.log("uri: ${response.realUri.path.toString()}");
-        Response responseModified = response
-          ..data = wallPaperProvider == WallPaperProvider.pexels
-              ? response.data['photos']
-              : response.data['data'];
+        Response responseModified = response;
+
+        Map responseData = response.data;
+
+        if (responseData.containsKey('photos') ||
+            responseData.containsKey('data')) {
+          responseModified = response
+            ..data = wallPaperProvider == WallPaperProvider.pexels
+                ? response.data['photos']
+                : response.data['data'];
+        }
 
         // Do something with response data
         return handler.next(responseModified); // continue
@@ -66,8 +75,7 @@ class WallPaperRepository<T> extends IRepository<T> {
       });
 
   @override
-  FutureOr<T> getItem(String id,
-      {Map<String, dynamic> query = const {}}) async {
+  FutureOr<T> getItem(int id, {Map<String, dynamic> query = const {}}) async {
     String url = "${baseApiUrl}photos/$id?";
 
     String lastKey = "";
@@ -83,7 +91,6 @@ class WallPaperRepository<T> extends IRepository<T> {
       });
     }
     Response response = await dio.get(url);
-
     return creatorCallback(response.data);
   }
 
@@ -141,7 +148,6 @@ class WallPaperRepository<T> extends IRepository<T> {
         }
       });
     }
-
     Response response = await dio.get(url);
 
     return List<T>.from(

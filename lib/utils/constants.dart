@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
+import 'package:mobile/models/pexels/wallpaper_px.dart' as px;
+import 'package:mobile/models/wallhaven/wallpaper_wh.dart' as wh;
+import 'package:mobile/view_models/wallpaper_view_model.dart';
+import 'package:provider/provider.dart';
 // import 'package:tinycolor2/tinycolor2.dart';
 
 class Constants {
@@ -13,7 +18,10 @@ class Constants {
   static String? wallhavenApiKey = dotenv.env['WALLHAVEN_API_KEY'];
   static String? wallhavenApiHost = dotenv.env['WALLHAVEN_API_HOST'];
   static const String randomWallpaperTopic = "RANDOM_WALLPAPER";
+  static const String testTopic = "TEST";
+  static const String wallpaperProviderKey = "wallpaperProviderKey";
 
+  static const String providerChangedEvent = 'providerChangedEvent';
   static String? customApiUrl = dotenv.env['CUSTOM_API_URL'];
 
   static const String savedWhWallpapersBox = 'whWallpapers';
@@ -90,5 +98,13 @@ enum WallPaperProvider {
   pexels,
   wallhaven;
 
-  String get description => name;
+  String get description => name.capitalize!;
+
+  List<String> get providers => values.map((e) => e.description).toList();
+
+  WallpaperViewModel get providerClass => description == 'Pexels'
+      ? Provider.of<WallpaperViewModel<px.WallPaper>>(Get.context!,
+          listen: false)
+      : Provider.of<WallpaperViewModel<wh.WallPaper>>(Get.context!,
+          listen: false);
 }

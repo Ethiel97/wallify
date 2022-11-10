@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:mobile/models/pexels/wallpaper_px.dart';
 import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/utils/app_router.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
@@ -9,8 +10,6 @@ import 'package:mobile/widgets/m_detail_screen.dart';
 import 'package:mobile/widgets/utilities.dart';
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
-
-import '../../models/pexels/wallpaper.dart';
 
 class WallpaperDetailScreen extends StatefulWidget {
   const WallpaperDetailScreen({Key? key}) : super(key: key);
@@ -39,15 +38,17 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   bool get wantKeepAlive => true;
 
   @override
-  String get imgUrl => Provider.of<WallpaperViewModel<WallPaper>>(context)
-      .selectedWallpaper
-      .src
-      .large2x;
+  String get imgUrl =>
+      Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+          .selectedWallpaper
+          .src
+          .large2x;
 
   @override
-  String get photographer => Provider.of<WallpaperViewModel<WallPaper>>(context)
-      .selectedWallpaper
-      .photographer;
+  String get photographer =>
+      Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
+          .selectedWallpaper
+          .photographer;
 
   @override
   List<Color> get colors => [
@@ -61,8 +62,7 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
   String get cacheKey =>
       Provider.of<WallpaperViewModel<WallPaper>>(context, listen: false)
           .selectedWallpaper
-          .src
-          .large2x
+          .id
           .toString();
 
   @override
@@ -109,15 +109,14 @@ class _WallpaperDetailScreenState extends State<WallpaperDetailScreen>
             ? AppLocalizations.of(Get.context!)!.wallpaper_remove_confirmation
             : AppLocalizations.of(Get.context!)!.wallpaper_save_confirmation,
         action: () {
-          viewModel.saveWallpaper(viewModel.selectedWallpaper,
-              viewModel.selectedWallpaper.id.toString());
+          viewModel.saveWallpaper(viewModel.selectedWallpaper, cacheKey);
         },
         actionText: isFavorite
             ? AppLocalizations.of(Get.context!)!.remove
             : AppLocalizations.of(Get.context!)!.save,
       );
     } else {
-      Get.toNamed(login);
+      Get.toNamed(RouteName.login);
     }
   }
 

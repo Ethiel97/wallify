@@ -32,7 +32,7 @@ class ColorTag<T> extends StatelessWidget {
               }
 
               wallpaperViewModel.searchWallpapers(
-                '',
+                wallpaperViewModel.selectedTag!,
                 delay: 300,
                 details: {
                   'colors': TinyColor(color).toHex8().substring(2),

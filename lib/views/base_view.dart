@@ -83,10 +83,10 @@ class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>>
                           ? Center(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                // mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Image.asset(
-                                    "assets/img/404-${themeProvider.currentTheme}.png",
+                                    "assets/images/404-${themeProvider.currentTheme}.png",
                                     height: Get.height * .4,
                                     width: Get.width,
                                     fit: BoxFit.contain,

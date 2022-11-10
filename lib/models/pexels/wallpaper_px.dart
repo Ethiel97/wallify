@@ -1,8 +1,9 @@
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:mobile/models/pexels/wallpaper_src.dart';
 
-part 'wallpaper.g.dart';
+import 'wallpaper_src.dart';
+
+part 'wallpaper_px.g.dart';
 
 @HiveType(typeId: 3)
 @JsonSerializable()
@@ -38,7 +39,7 @@ class WallPaper {
   final WallPaperSrc src;
 
   @HiveField(9)
-  final bool saved;
+  final bool? saved;
 
   WallPaper({
     required this.id,
@@ -53,18 +54,17 @@ class WallPaper {
     required this.saved,
   });
 
-  WallPaper copyWith({
-    int? id,
-    int? width,
-    int? height,
-    String? url,
-    String? photographer,
-    String? photographerUrl,
-    WallPaperSrc? wallpaperSrc,
-    int? photographerId,
-    String? avgColor,
-    bool? saved
-  }) =>
+  WallPaper copyWith(
+          {int? id,
+          int? width,
+          int? height,
+          String? url,
+          String? photographer,
+          String? photographerUrl,
+          WallPaperSrc? wallpaperSrc,
+          int? photographerId,
+          String? avgColor,
+          bool? saved}) =>
       WallPaper(
         id: id ?? this.id,
         width: width ?? this.width,

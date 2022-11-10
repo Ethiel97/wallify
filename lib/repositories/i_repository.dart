@@ -14,5 +14,5 @@ abstract class IRepository<T> {
 
   FutureOr<List<T>> searchItems({Map<String, dynamic> query = const {}});
 
-  FutureOr<T> getItem(String id, {Map<String, dynamic> query = const {}});
+  FutureOr<T> getItem(int id, {Map<String, dynamic> query = const {}});
 }

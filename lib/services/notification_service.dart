@@ -16,7 +16,7 @@ class NotificationService {
     LogUtils.log("REMOTEMESSAGE ${remoteMessage.toString()}");
 
     var title = remoteMessage.notification?.title;
-    var body = remoteMessage.notification?.body;
+    var body = remoteMessage.notification?.body ?? "Notification";
     // var data = remoteMessage.data;
 
     //TODO - display a dialog for the random quote
@@ -45,7 +45,7 @@ class NotificationService {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   image: AssetImage(
-                    'assets/img/ico.png',
+                    'assets/images/ico.png',
                   ),
                 ),
               ),
@@ -69,7 +69,7 @@ class NotificationService {
                     height: 8,
                   ),
                   Text(
-                    body!,
+                    body,
                     style: TextStyles.textStyle.apply(
                       fontSizeDelta: -4,
                       fontWeightDelta: 1,

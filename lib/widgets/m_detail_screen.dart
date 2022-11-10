@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:mobile/providers/navigation_provider.dart';
 import 'package:mobile/providers/theme_provider.dart';
+import 'package:mobile/providers/wallpaper_provider.dart';
 import 'package:mobile/utils/colors.dart';
 import 'package:mobile/utils/constants.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
@@ -294,152 +295,160 @@ mixin DetailsMixin<T> {
         ),
       );
 
-  Widget buildBottomSheet(WallpaperViewModel<T> wallpaperViewModel) => Consumer<
-          NavigationProvider>(
-      builder: (context, navigationProvider, _) => DraggableScrollableSheet(
-            // controller: scrollableController,
-            expand: true,
-            initialChildSize: .07,
-            maxChildSize: sheetMaxSize,
-            minChildSize: .07,
-            builder: (context, controller) => SingleChildScrollView(
-              controller: controller,
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(Constants.kBorderRadius * 2),
-                  topRight: const Radius.circular(Constants.kBorderRadius * 2),
-                  bottomLeft: Radius.circular(
-                      dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
-                  bottomRight: Radius.circular(
-                      dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
-                ),
-                child: AnimatedContainer(
-                  duration: const Duration(seconds: Constants.kDuration),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .backgroundColor
-                        .withOpacity(dragRatio),
+  Widget buildBottomSheet(WallpaperViewModel<T> wallpaperViewModel) =>
+      Consumer2<NavigationProvider, WallpaperProviderObserver>(
+          builder: (context, navigationProvider, wallpaperProvider, _) =>
+              DraggableScrollableSheet(
+                // controller: scrollableController,
+                expand: true,
+                initialChildSize: .07,
+                maxChildSize: sheetMaxSize,
+                minChildSize: .07,
+                builder: (context, controller) => SingleChildScrollView(
+                  controller: controller,
+                  child: ClipRRect(
                     borderRadius: BorderRadius.only(
                       topLeft:
                           const Radius.circular(Constants.kBorderRadius * 2),
                       topRight:
                           const Radius.circular(Constants.kBorderRadius * 2),
                       bottomLeft: Radius.circular(
-                        dragRatio == 1 ? Constants.kBorderRadius * 2 : 0,
-                      ),
+                          dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
                       bottomRight: Radius.circular(
                           dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
                     ),
-                  ),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                      sigmaY: dragRatio * 25,
-                      sigmaX: dragRatio * 25,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        buildDraggableControlButton(),
-                        const SizedBox(
-                          height: 4,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: colorsWidget,
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          overflow: TextOverflow.ellipsis,
-                          "${AppLocalizations.of(Get.context!)!.photograph}: $photographer",
-                          maxLines: 1,
-                          softWrap: true,
-                          style: TextStyles.textStyle.apply(
-                            fontSizeDelta: -3,
-                            fontWeightDelta: 4,
-                            // color: Theme.of(context).textTheme.bodyText1!.color!,
-                            color: AppColors.textColor,
+                    child: AnimatedContainer(
+                      duration: const Duration(seconds: Constants.kDuration),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .backgroundColor
+                            .withOpacity(dragRatio),
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(
+                              Constants.kBorderRadius * 2),
+                          topRight: const Radius.circular(
+                              Constants.kBorderRadius * 2),
+                          bottomLeft: Radius.circular(
+                            dragRatio == 1 ? Constants.kBorderRadius * 2 : 0,
                           ),
+                          bottomRight: Radius.circular(
+                              dragRatio == 1 ? Constants.kBorderRadius * 2 : 0),
                         ),
-                        const SizedBox(
-                          height: 24,
+                      ),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaY: dragRatio * 25,
+                          sigmaX: dragRatio * 25,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.save,
-                              size: 20,
-                              /*color: Theme.of(Get.context!)
+                            buildDraggableControlButton(),
+                            const SizedBox(
+                              height: 4,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: colorsWidget,
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              overflow: TextOverflow.ellipsis,
+                              "${AppLocalizations.of(Get.context!)!.photograph}: $photographer",
+                              maxLines: 1,
+                              softWrap: true,
+                              style: TextStyles.textStyle.apply(
+                                fontSizeDelta: -3,
+                                fontWeightDelta: 4,
+                                // color: Theme.of(context).textTheme.bodyText1!.color!,
+                                color: AppColors.textColor,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.save,
+                                  size: 20,
+                                  /*color: Theme.of(Get.context!)
                                   .textTheme
                                   .bodyText1!
                                   .color!,*/
-                              color: AppColors.textColor,
-                            ),
-                            if (imgSize.isNotEmpty) ...[
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                imgSize,
-                                style: TextStyles.textStyle.apply(
-                                  /*color: Theme.of(Get.context!)
+                                  color: AppColors.textColor,
+                                ),
+                                if (imgSize.isNotEmpty) ...[
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(
+                                    imgSize,
+                                    style: TextStyles.textStyle.apply(
+                                      /*color: Theme.of(Get.context!)
                                     .textTheme
                                     .bodyText1!
                                     .color!,*/
-                                  color: AppColors.textColor,
-                                  fontSizeDelta: -2,
+                                      color: AppColors.textColor,
+                                      fontSizeDelta: -2,
+                                    ),
+                                  ),
+                                ],
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                buildActionButton(
+                                  Iconsax.document_download,
+                                  download,
+                                  AppLocalizations.of(Get.context!)!.download,
                                 ),
-                              ),
-                            ],
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            buildActionButton(
-                              Iconsax.document_download,
-                              download,
-                              AppLocalizations.of(Get.context!)!.download,
+                                if (Platform.isAndroid)
+                                  buildActionButton(
+                                    Iconsax.paintbucket,
+                                    applyWallPaper,
+                                    AppLocalizations.of(Get.context!)!.apply,
+                                  ),
+                                buildActionButton(
+                                  wallpaperViewModel.isWallPaperSaved(
+                                    cacheKey,
+                                  )
+                                      ? Iconsax.box_remove
+                                      : Iconsax.like,
+                                  () => save(),
+                                  wallpaperViewModel.isWallPaperSaved(
+                                    cacheKey,
+                                  )
+                                      ? AppLocalizations.of(Get.context!)!
+                                          .remove
+                                      : AppLocalizations.of(Get.context!)!.save,
+                                ),
+                                buildActionButton(
+                                  Iconsax.share,
+                                  share,
+                                  AppLocalizations.of(Get.context!)!.share,
+                                ),
+                              ],
                             ),
-                            if (Platform.isAndroid)
-                              buildActionButton(
-                                Iconsax.paintbucket,
-                                applyWallPaper,
-                                AppLocalizations.of(Get.context!)!.apply,
-                              ),
-                            buildActionButton(
-                              wallpaperViewModel.isWallPaperSaved(cacheKey)
-                                  ? Iconsax.box_remove
-                                  : Iconsax.like,
-                              () => save(),
-                              wallpaperViewModel.isWallPaperSaved(cacheKey)
-                                  ? AppLocalizations.of(Get.context!)!.remove
-                                  : AppLocalizations.of(Get.context!)!.save,
-                            ),
-                            buildActionButton(
-                              Iconsax.share,
-                              share,
-                              AppLocalizations.of(Get.context!)!.share,
+                            const SizedBox(
+                              height: 24,
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 24,
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          ));
+              ));
 
   Widget buildActionButton(
     IconData iconData,
