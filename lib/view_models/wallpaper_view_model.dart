@@ -212,7 +212,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
     try {
       // isLoading = true;
 
-      List<T> results = await wallpaperRepository.getItems(query: query);
+      List results = await wallpaperRepository.getItems(query: query);
 
       wallpapers = [...wallpapers..shuffle(), ...results..shuffle()];
 
@@ -286,7 +286,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
             print("query: $requestQuery");
 
-            List<T> results = await wallpaperRepository
+            List results = await wallpaperRepository
                 .searchItems(query: {...requestQuery, ...details});
             if (details.isNotEmpty && details.containsKey('colors')) {
               filteredWallpapersByColor = [...results];
@@ -550,7 +550,7 @@ class WallpaperViewModel<T> extends BaseViewModel {
 
           savedWallpapers = [...savedWallpapers, T];
         } else {
-          List<T> response =
+          List response =
               await wallpaperRepository.searchItems(query: {"q": "like:$id"});
 
           if (response.isNotEmpty) {

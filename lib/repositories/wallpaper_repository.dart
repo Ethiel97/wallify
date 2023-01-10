@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mobile/main.dart';
 import 'package:mobile/repositories/i_repository.dart';
 import 'package:mobile/utils/constants.dart';
@@ -11,6 +12,8 @@ class WallPaperRepository<T> extends IRepository<T> {
 
   final CreatorCallback creatorCallback;
 
+  static late CreatorCallback creatorCallbackCopy;
+
   final WallPaperProvider wallPaperProvider;
 
   final String baseApiUrl;
@@ -20,6 +23,7 @@ class WallPaperRepository<T> extends IRepository<T> {
     required this.creatorCallback,
     required this.baseApiUrl,
   }) {
+    creatorCallbackCopy = creatorCallback;
     dio.interceptors.add(interceptorsWrapper());
   }
 
@@ -95,7 +99,7 @@ class WallPaperRepository<T> extends IRepository<T> {
   }
 
   @override
-  FutureOr<List<T>> getItems({Map<String, dynamic> query = const {}}) async {
+  FutureOr<List> getItems({Map<String, dynamic> query = const {}}) async {
     String url = "${baseApiUrl}search?";
 
     String lastKey = "";
@@ -123,16 +127,16 @@ class WallPaperRepository<T> extends IRepository<T> {
     Response response = await dio.get(
       url,
     );
+    response.extra['creatorCallback'] = creatorCallback;
 
     // LogUtils.log(response);
 
-    return List<T>.from(
-      response.data.map((x) => creatorCallback(x)),
-    );
+    var result = await compute(parseData, response);
+    return result;
   }
 
   @override
-  FutureOr<List<T>> searchItems({Map<String, dynamic> query = const {}}) async {
+  FutureOr<List> searchItems({Map<String, dynamic> query = const {}}) async {
     String url = "${baseApiUrl}search?";
 
     String lastKey = "";
@@ -149,9 +153,16 @@ class WallPaperRepository<T> extends IRepository<T> {
       });
     }
     Response response = await dio.get(url);
+    response.extra['creatorCallback'] = creatorCallback;
 
-    return List<T>.from(
-      response.data.map((x) => creatorCallback(x)),
+    var result = await compute(parseData, response);
+    return result;
+  }
+
+  static parseData(Response response) {
+    creatorCallbackCopy = response.extra['creatorCallback'];
+    return List.from(
+      response.data.map((x) => creatorCallbackCopy(x)),
     );
   }
 }

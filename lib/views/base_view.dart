@@ -60,7 +60,7 @@ class BaseViewState<T extends BaseViewModel> extends State<BaseView<T>>
             viewModel.canRefresh ? (_) => true : (_) => false,
         onRefresh: () async {
           debugPrint("REFRESHING...");
-          viewModel.init();
+          // viewModel.re.init();
         },
         child: Consumer<ThemeProvider>(
           builder: (context, themeProvider, _) => SizedBox(

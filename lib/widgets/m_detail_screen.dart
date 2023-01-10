@@ -301,9 +301,9 @@ mixin DetailsMixin<T> {
               DraggableScrollableSheet(
                 // controller: scrollableController,
                 expand: true,
-                initialChildSize: .07,
+                initialChildSize: .071,
                 maxChildSize: sheetMaxSize,
-                minChildSize: .07,
+                minChildSize: .071,
                 builder: (context, controller) => SingleChildScrollView(
                   controller: controller,
                   child: ClipRRect(
@@ -523,7 +523,7 @@ mixin DetailsMixin<T> {
             dragRatio == 1
                 ? Icons.expand_more_outlined
                 : Icons.expand_less_outlined,
-            size: 30,
+            size: 36,
             color: AppColors.textColor,
           ),
         ),

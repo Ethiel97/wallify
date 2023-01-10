@@ -1,6 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+getData() async {
+  await Future.delayed(Duration.zero);
+}
 
 abstract class BaseViewModel<T extends Object> with ChangeNotifier {
   bool _isLoading = false;

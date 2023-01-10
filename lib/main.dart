@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -12,7 +10,6 @@ import 'package:mobile/providers/api_provider.dart';
 import 'package:mobile/providers/auth_provider.dart';
 import 'package:mobile/repositories/wallpaper_repository.dart';
 import 'package:mobile/utils/constants.dart';
-import 'package:mobile/utils/log.dart';
 import 'package:mobile/utils/startup.dart';
 import 'package:mobile/view_models/wallpaper_view_model.dart';
 import 'package:overlay_support/overlay_support.dart';
@@ -92,8 +89,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late FirebaseMessaging _firebaseMessaging;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -110,31 +105,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    _firebaseMessaging = FirebaseMessaging.instance;
-
-    _firebaseMessaging.subscribeToTopic(Constants.randomWallpaperTopic);
-    // _firebaseMessaging.subscribeToTopic(Constants.testTopic);
-
-    FirebaseMessaging.onMessage.listen((event) {
-      NotificationService(event, context: Get.context!).showToast();
-    });
-
-    if (Platform.isIOS) {
-      _firebaseMessaging
-          .requestPermission(
-            alert: true,
-            announcement: false,
-            badge: true,
-            carPlay: false,
-            criticalAlert: false,
-            provisional: false,
-            sound: true,
-          )
-          .then((value) => null)
-          .catchError((error) {
-        LogUtils.error(error);
-      });
-    }
+    NotificationService.prepareService();
   }
 
   // This widget is the root of your application.

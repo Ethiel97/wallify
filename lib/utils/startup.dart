@@ -9,10 +9,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobile/firebase_options.dart';
 import 'package:mobile/models/pexels/wallpaper_px.dart' as px;
 import 'package:mobile/models/pexels/wallpaper_src.dart';
-import 'package:mobile/models/wallhaven/wallpaper_wh.dart' as wh;
 import 'package:mobile/models/wallhaven/wallpaper_thumbs.dart';
+import 'package:mobile/models/wallhaven/wallpaper_wh.dart' as wh;
 import 'package:mobile/providers/theme_provider.dart';
-import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:provider/provider.dart';
 

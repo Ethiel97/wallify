@@ -10,9 +10,9 @@ abstract class IRepository<T> {
     'order': 'desc'
   };
 
-  FutureOr<List<T>> getItems({Map<String, dynamic> query = const {}});
+  FutureOr<List> getItems({Map<String, dynamic> query = const {}});
 
-  FutureOr<List<T>> searchItems({Map<String, dynamic> query = const {}});
+  FutureOr<List> searchItems({Map<String, dynamic> query = const {}});
 
   FutureOr<T> getItem(int id, {Map<String, dynamic> query = const {}});
 }

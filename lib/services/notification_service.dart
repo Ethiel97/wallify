@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile/utils/constants.dart';
 import 'package:mobile/utils/log.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -11,6 +15,34 @@ class NotificationService {
   BuildContext context;
 
   NotificationService(this.remoteMessage, {required this.context});
+
+  static prepareService() {
+    FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+    _firebaseMessaging.subscribeToTopic(Constants.randomWallpaperTopic);
+    // _firebaseMessaging.subscribeToTopic(Constants.testTopic);
+
+    FirebaseMessaging.onMessage.listen((event) {
+      NotificationService(event, context: Get.context!).showToast();
+    });
+
+    if (Platform.isIOS) {
+      _firebaseMessaging
+          .requestPermission(
+            alert: true,
+            announcement: false,
+            badge: true,
+            carPlay: false,
+            criticalAlert: false,
+            provisional: false,
+            sound: true,
+          )
+          .then((value) => null)
+          .catchError((error) {
+        LogUtils.error(error);
+      });
+    }
+  }
 
   void showToast() {
     LogUtils.log("REMOTEMESSAGE ${remoteMessage.toString()}");
