@@ -75,9 +75,6 @@ dev_dependencies:
   hive_generator: ^2.0.1
   auto_route_generator: ^9.0.0
   flutter_launcher_icons: ^0.14.4
-
-
-  
   # Static Analysis
   very_good_analysis: ^6.0.0
 

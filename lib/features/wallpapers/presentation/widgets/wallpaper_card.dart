@@ -112,7 +112,7 @@ class WallpaperCard extends StatelessWidget {
                     children: [
                       Text(
                         'by ${wallpaper.photographer}',
-                        style: theme.textTheme.bodyMedium?.copyWith(
+                        style: theme.textTheme.bodySmall?.copyWith(
                           color: Colors.white,
                           shadows: [
                             const Shadow(

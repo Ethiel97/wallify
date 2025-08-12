@@ -105,7 +105,7 @@ WallhavenMetaModel _$WallhavenMetaModelFromJson(Map<String, dynamic> json) =>
     WallhavenMetaModel(
       currentPage: (json['current_page'] as num?)?.toInt(),
       lastPage: (json['last_page'] as num?)?.toInt(),
-      perPage: (json['per_page'] as num?)?.toInt(),
+      perPage: json['per_page'] as String?,
       total: (json['total'] as num?)?.toInt(),
     );
 

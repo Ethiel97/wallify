@@ -43,7 +43,9 @@ class WallpaperCubit extends Cubit<WallpaperState> {
           ? <Wallpaper>[]
           : (state.curatedWallpapers.value ?? <Wallpaper>[]);
 
-      final updatedWallpapers = [...currentWallpapers, ...wallpapers];
+      final updatedWallpapers = <dynamic>{...currentWallpapers, ...wallpapers}
+          .toList()
+          .cast<Wallpaper>();
 
       emit(
         state.copyWith(
@@ -110,7 +112,9 @@ class WallpaperCubit extends Cubit<WallpaperState> {
           ? <Wallpaper>[]
           : (state.searchResults.value ?? <Wallpaper>[]);
 
-      final updatedWallpapers = [...currentWallpapers, ...wallpapers];
+      final updatedWallpapers = <dynamic>{...currentWallpapers, ...wallpapers}
+          .toList()
+          .cast<Wallpaper>();
 
       emit(
         state.copyWith(

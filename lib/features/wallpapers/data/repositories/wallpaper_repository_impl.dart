@@ -95,7 +95,8 @@ class WallpaperRepositoryImpl implements WallpaperRepository {
       }
 
       return allWallpapers;
-    } catch (e) {
+    } catch (e, stack) {
+      print("Search error: $e\n $stack");
       throw ServerException(e.toString());
     }
   }

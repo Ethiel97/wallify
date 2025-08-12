@@ -5,17 +5,16 @@ import 'package:injectable/injectable.dart';
 abstract class NetworkModule {
   @lazySingleton
   Dio get dio {
-    final dio = Dio();
-
-    dio.options = BaseOptions(
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      sendTimeout: const Duration(seconds: 30),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    );
+    final dio = Dio()
+      ..options = BaseOptions(
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        sendTimeout: const Duration(seconds: 30),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
 
     dio.interceptors.addAll([
       LogInterceptor(

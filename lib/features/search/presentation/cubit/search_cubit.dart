@@ -26,7 +26,7 @@ class SearchCubit extends Cubit<SearchState> {
         state.copyWith(
           searchResults: state.searchResults.toLoading(),
           currentSearchQuery: searchQuery,
-          selectedColor: selectedColor,
+          // selectedColor: selectedColor,
           currentPage: 1,
           hasReachedMaxResults: false,
         ),
@@ -50,7 +50,7 @@ class SearchCubit extends Cubit<SearchState> {
         page: refresh || searchQuery != state.currentSearchQuery
             ? 1
             : state.currentPage,
-        color: selectedColor,
+        // color: selectedColor,
       );
 
       final existingWallpapers =
@@ -71,7 +71,7 @@ class SearchCubit extends Cubit<SearchState> {
               : state.currentPage + 1,
           hasReachedMaxResults: searchResultWallpapers.isEmpty,
           currentSearchQuery: searchQuery,
-          selectedColor: selectedColor,
+          // selectedColor: selectedColor,
         ),
       );
     } catch (error) {
@@ -92,7 +92,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(
       state.copyWith(
         searchResults: state.searchResults.toLoading(),
-        selectedColor: colorHex,
+        selectedColor: colorHex.substring(2),
         currentPage: 1,
         hasReachedMaxResults: false,
       ),
@@ -104,12 +104,12 @@ class SearchCubit extends Cubit<SearchState> {
       if (searchQuery != null && searchQuery.isNotEmpty) {
         colorFilteredWallpapers = await _wallpaperRepository.searchWallpapers(
           query: searchQuery,
-          color: colorHex,
+          color: colorHex.substring(2),
         );
       } else {
         colorFilteredWallpapers =
             await _wallpaperRepository.getWallpapersByColor(
-          color: colorHex,
+          color: colorHex.substring(2),
         );
       }
 

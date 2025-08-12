@@ -18,7 +18,7 @@ class MainWrapperPage extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => getIt<NavigationCubit>()),
         BlocProvider(create: (_) => getIt<AuthCubit>()),
-        // SettingsCubit is provided at the App level, no need to create here
+        BlocProvider(create: (_) => getIt<FavoritesCubit>()),
       ],
       child: const _MainWrapperView(),
     );

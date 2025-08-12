@@ -159,36 +159,6 @@ class HomePage extends StatelessWidget {
 }
 
 @RoutePage()
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key, this.query});
-
-  final String? query;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Search Page - Query: ${query ?? "None"}'),
-      ),
-    );
-  }
-}
-
-@RoutePage()
-class FavoritesPage extends StatelessWidget {
-  const FavoritesPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Favorites Page'),
-      ),
-    );
-  }
-}
-
-@RoutePage()
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
@@ -202,21 +172,6 @@ class ProfilePage extends StatelessWidget {
   }
 }
 
-@RoutePage()
-class WallpaperDetailPage extends StatelessWidget {
-  const WallpaperDetailPage({required this.id, super.key});
-
-  final String id;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Wallpaper Detail - ID: $id'),
-      ),
-    );
-  }
-}
 
 @RoutePage()
 class SettingsPage extends StatelessWidget {

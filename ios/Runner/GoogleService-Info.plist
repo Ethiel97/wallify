@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>91871510880-54rh8q1oog2db7i5o25l7oqsor2gb5kf.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.91871510880-54rh8q1oog2db7i5o25l7oqsor2gb5kf</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>91871510880-ctdij3u5g76us7p18c3g5goc7rjiu0sb.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAV_tIzh6Q--izR1nyZrF43GU5W34ntsyg</string>
 	<key>GCM_SENDER_ID</key>
@@ -9,11 +15,11 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.verygoodcore.nice-wall</string>
+	<string>com.deventhusiast.wallinice</string>
 	<key>PROJECT_ID</key>
 	<string>wallinice</string>
 	<key>STORAGE_BUCKET</key>
-	<string>wallinice.firebasestorage.app</string>
+	<string>wallinice.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:91871510880:ios:15b34b8fa6450f43b11e05</string>
+	<string>1:91871510880:ios:49c7390abb6f96cab11e05</string>
 </dict>
 </plist>

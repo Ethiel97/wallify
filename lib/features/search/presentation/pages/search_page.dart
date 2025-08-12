@@ -1,3 +1,5 @@
+import 'package:auto_route/annotations.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -7,7 +9,9 @@ import 'package:wallinice/core/di/di.dart';
 import 'package:wallinice/core/utils/utils.dart';
 import 'package:wallinice/features/search/search.dart';
 import 'package:wallinice/features/wallpapers/wallpapers.dart';
+import 'package:wallinice/shared/routing/app_router.gr.dart';
 
+@RoutePage()
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
 
@@ -39,17 +43,39 @@ class _SearchPageViewState extends State<_SearchPageView>
     'animals',
     'cars',
     'minimal',
+    'football',
   ];
 
-  static const List<Color> _popularColors = [
-    Color(0xFFFF6B6B), // Red
-    Color(0xFF4ECDC4), // Teal
-    Color(0xFF45B7D1), // Blue
-    Color(0xFF96CEB4), // Green
-    Color(0xFFFECA57), // Yellow
-    Color(0xFFFF9FF3), // Pink
-    Color(0xFFA55EEA), // Purple
-    Color(0xFF26DE81), // Mint
+  static final List<Color> _popularColors = [
+    const Color(0xff660000),
+    const Color(0xff990000),
+    const Color(0xffcc0000),
+    const Color(0xffcc3333),
+    const Color(0xffea4c88),
+    const Color(0xff993399),
+    const Color(0xff663399),
+    const Color(0xff333399),
+    const Color(0xff0066cc),
+    const Color(0xff0099cc),
+    const Color(0xff66cccc),
+    const Color(0xff77cc33),
+    const Color(0xff669900),
+    const Color(0xff336600),
+    const Color(0xff666600),
+    const Color(0xff999900),
+    const Color(0xffcccc33),
+    const Color(0xffffff00),
+    const Color(0xffffcc33),
+    const Color(0xffff9900),
+    const Color(0xffff6600),
+    const Color(0xffcc6633),
+    const Color(0xff996633),
+    const Color(0xff663300),
+    const Color(0xff000000),
+    const Color(0xff999999),
+    const Color(0xffcccccc),
+    const Color(0xffffffff),
+    const Color(0xff424153),
   ];
 
   @override
@@ -66,7 +92,7 @@ class _SearchPageViewState extends State<_SearchPageView>
             horizontal: 18,
           ),
           children: [
-            const SizedBox(height: 100),
+            const SizedBox(height: 50),
 
             // Search input field
             _SearchInputField(),
@@ -74,7 +100,7 @@ class _SearchPageViewState extends State<_SearchPageView>
             const SizedBox(height: 24),
 
             // Color filters section
-            const _ColorFiltersSection(colors: _popularColors),
+            _ColorFiltersSection(colors: _popularColors),
 
             const SizedBox(height: 36),
 
@@ -369,8 +395,8 @@ class _WallpaperMasonryGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return MasonryGridView.count(
       crossAxisCount: 3,
-      mainAxisSpacing: 4,
-      crossAxisSpacing: 4,
+      mainAxisSpacing: 3,
+      crossAxisSpacing: 3,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: wallpapers.length,
@@ -390,13 +416,8 @@ class _WallpaperMasonryGrid extends StatelessWidget {
   }
 
   void _handleWallpaperTap(BuildContext context, Wallpaper selectedWallpaper) {
-    // TODO: Navigate to wallpaper detail page
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content:
-            Text('Wallpaper ${selectedWallpaper.id} - Detail coming soon!'),
-        duration: const Duration(seconds: 2),
-      ),
+    context.router.navigate(
+      WallpaperDetailRoute(wallpaper: selectedWallpaper),
     );
   }
 }

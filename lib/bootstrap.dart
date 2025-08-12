@@ -34,10 +34,12 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
 
   await dotenv.load();
 
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // Initialize Firebase (only if not already initialized)
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
 
   // Initialize dependency injection
   configureDependencies();

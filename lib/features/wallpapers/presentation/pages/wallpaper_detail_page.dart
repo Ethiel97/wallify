@@ -175,7 +175,7 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
                   tag: selectedWallpaper.id,
                   transitionOnUserGestures: true,
                   child: CachedNetworkImage(
-                    imageUrl: selectedWallpaper.url,
+                    imageUrl: selectedWallpaper.src.original,
                     memCacheHeight: MediaQuery.sizeOf(context).height.toInt(),
                     memCacheWidth: MediaQuery.sizeOf(context).width.toInt(),
                     fit: BoxFit.cover,
@@ -210,7 +210,7 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
                     children: [
                       // Back button
                       _buildBlurredIconButton(
-                        Iconsax.arrow_left,
+                        Iconsax.arrow_circle_left,
                         () => context.router.back(),
                       ),
 
@@ -312,7 +312,7 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface.withValues(
-                alpha: _dragRatio,
+                alpha: 1 - _dragRatio,
               ),
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(32),

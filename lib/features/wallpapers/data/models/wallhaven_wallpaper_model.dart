@@ -51,7 +51,7 @@ class WallhavenWallpaperModel {
   Wallpaper toEntity() {
     return Wallpaper(
       id: id,
-      url: url,
+      url: path ?? url,
       photographer: 'Unknown',
       // Wallhaven doesn't have photographer concept
       photographerUrl: '',
@@ -155,7 +155,7 @@ class WallhavenMetaModel {
   @JsonKey(name: 'last_page')
   final int? lastPage;
   @JsonKey(name: 'per_page')
-  final int? perPage;
+  final String? perPage;
   final int? total;
 
   Map<String, dynamic> toJson() => _$WallhavenMetaModelToJson(this);

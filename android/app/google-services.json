@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "91871510880",
     "project_id": "wallinice",
-    "storage_bucket": "wallinice.firebasestorage.app"
+    "storage_bucket": "wallinice.appspot.com"
   },
   "client": [
     {
@@ -12,7 +12,28 @@
           "package_name": "com.deventhusiast.wallinice"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "91871510880-ctdij3u5g76us7p18c3g5goc7rjiu0sb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deventhusiast.wallinice",
+            "certificate_hash": "56e035901e25cb84497c44bdfb86210eeb9521e8"
+          }
+        },
+        {
+          "client_id": "91871510880-p0fjh3vikc3lilhepe3an38h79796u98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.deventhusiast.wallinice",
+            "certificate_hash": "4124e247ef1ea9bf577a93d62530ef25adef5875"
+          }
+        },
+        {
+          "client_id": "91871510880-ek2j934n163538m3jrqa1gdn5fgg48hd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBuC8142I15ztxyss3FNUb9R49fu3H3Iqw"
@@ -20,26 +41,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:91871510880:android:d68325cc4895a7d4b11e05",
-        "android_client_info": {
-          "package_name": "com.deventhusiast.wallinice"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBuC8142I15ztxyss3FNUb9R49fu3H3Iqw"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "91871510880-ek2j934n163538m3jrqa1gdn5fgg48hd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "91871510880-6ctq49dmqto2sai7v77tpicu8pmaj27s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.deventhusiast.nicewall.mobile"
+              }
+            }
+          ]
         }
       }
     }

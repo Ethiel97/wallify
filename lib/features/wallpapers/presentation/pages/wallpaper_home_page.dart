@@ -1,12 +1,15 @@
 import 'dart:ui';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:wallinice/core/di/di.dart';
 import 'package:wallinice/core/utils/utils.dart';
+import 'package:wallinice/features/search/presentation/cubit/search_cubit.dart';
 import 'package:wallinice/features/wallpapers/wallpapers.dart';
+import 'package:wallinice/shared/routing/app_router.gr.dart';
 
 class WallpaperHomePage extends StatelessWidget {
   const WallpaperHomePage({super.key});
@@ -17,6 +20,9 @@ class WallpaperHomePage extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => getIt<WallpaperCubit>()..loadCuratedWallpapers(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<SearchCubit>(),
         ),
       ],
       child: const _WallpaperHomeView(),
@@ -48,6 +54,7 @@ class _WallpaperHomeViewState extends State<_WallpaperHomeView>
     'animals',
     'cars',
     'minimal',
+    'football',
   ];
 
   @override
@@ -132,9 +139,16 @@ class _BackgroundWallpaper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WallpaperCubit, WallpaperState>(
-      builder: (context, state) {
-        final wallpaperList = state.curatedWallpapers.value ?? [];
+    return BlocSelector<WallpaperCubit, WallpaperState, 
+        ({List<Wallpaper> wallpapers, String searchQuery})>(
+      selector: (state) {
+        final wallpapers = state.searchQuery.isNotEmpty 
+            ? (state.searchResults.value ?? [])
+            : (state.curatedWallpapers.value ?? []);
+        return (wallpapers: wallpapers, searchQuery: state.searchQuery);
+      },
+      builder: (context, data) {
+        final wallpaperList = data.wallpapers;
         if (wallpaperList.isEmpty) {
           return Container(
             color: Theme.of(context).colorScheme.surface,
@@ -290,9 +304,17 @@ class _WallpaperCarouselSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: BlocSelector<WallpaperCubit, WallpaperState,
-          ValueWrapper<List<Wallpaper>>>(
-        selector: (state) => state.curatedWallpapers,
-        builder: (context, wallpaperDataWrapper) {
+          ({ValueWrapper<List<Wallpaper>> wallpapers, String searchQuery})>(
+        selector: (state) => (
+          wallpapers: state.searchQuery.isNotEmpty 
+              ? state.searchResults 
+              : state.curatedWallpapers,
+          searchQuery: state.searchQuery,
+        ),
+        builder: (context, data) {
+          final wallpaperDataWrapper = data.wallpapers;
+          final hasSearchQuery = data.searchQuery.isNotEmpty;
+
           return wallpaperDataWrapper.when(
             loading: (_) => const _LoadingIndicator(),
             success: (wallpaperList) => wallpaperList.isEmpty
@@ -304,9 +326,17 @@ class _WallpaperCarouselSection extends StatelessWidget {
                   ),
             error: (errorDetails, _) => _ErrorStateView(
               errorMessage: errorDetails.message,
-              onRetryPressed: () => context
-                  .read<WallpaperCubit>()
-                  .loadCuratedWallpapers(refresh: true),
+              onRetryPressed: () {
+                if (hasSearchQuery) {
+                  context
+                      .read<WallpaperCubit>()
+                      .searchWallpapers(query: data.searchQuery, refresh: true);
+                } else {
+                  context
+                      .read<WallpaperCubit>()
+                      .loadCuratedWallpapers(refresh: true);
+                }
+              },
             ),
             initial: () => const _LoadingIndicator(),
           );
@@ -357,13 +387,8 @@ class _WallpaperPageView extends StatelessWidget {
   }
 
   void _handleWallpaperTap(BuildContext context, Wallpaper selectedWallpaper) {
-    // TODO: Navigate to wallpaper detail page
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content:
-            Text('Wallpaper detail for ${selectedWallpaper.id} - Coming soon!'),
-        duration: const Duration(seconds: 2),
-      ),
+    context.router.navigate(
+      WallpaperDetailRoute(wallpaper: selectedWallpaper),
     );
   }
 }

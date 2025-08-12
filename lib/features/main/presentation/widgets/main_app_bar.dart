@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:wallinice/features/auth/auth.dart';
-import 'package:wallinice/features/settings/presentation/cubit/settings_cubit.dart';
+import 'package:wallinice/features/settings/settings.dart';
 
 class MainAppBar extends StatelessWidget {
   const MainAppBar({super.key});
@@ -26,7 +26,7 @@ class MainAppBar extends StatelessWidget {
               builder: (context, state) {
                 return IconButton(
                   onPressed: () {
-                    if (state.user.data.isAuthenticated) {
+                    if (state.user()?.isAuthenticated ?? false) {
                       _showAuthenticatedUserBottomSheet(
                         context,
                         state.user.data,
@@ -83,76 +83,80 @@ class MainAppBar extends StatelessWidget {
           topRight: Radius.circular(16),
         ),
       ),
-      builder: (context) =>
-          Container(
-            padding: const EdgeInsets.all(30),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(30),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              backgroundColor: theme.colorScheme.secondary,
+              radius: 50,
+              child: Icon(
+                Iconsax.user,
+                size: 40,
+                color: theme.colorScheme.onSecondary,
               ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircleAvatar(
-                  backgroundColor: theme.colorScheme.secondary,
-                  radius: 50,
-                  child: Icon(
-                    Iconsax.user,
-                    size: 40,
-                    color: theme.colorScheme.onSecondary,
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  'Guest User',
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.textTheme.bodyLarge?.color,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Sign in to save your favorite wallpapers',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.textTheme.bodyLarge?.color?.withValues(
-                        alpha: .7,),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    context.router.pushNamed('/login');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text('Sign In'),
-                ),
-                const SizedBox(height: 12),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    context.router.pushNamed('/register');
-                  },
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text('Create Account'),
-                ),
-              ],
+            const SizedBox(height: 18),
+            Text(
+              'Guest User',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.textTheme.bodyLarge?.color,
+              ),
             ),
-          ),
+            const SizedBox(height: 8),
+            Text(
+              'Sign in to save your favorite wallpapers',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.textTheme.bodyLarge?.color?.withValues(
+                  alpha: .7,
+                ),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                context.router.pushNamed('/login');
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.primaryColor,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: Text(
+                'Sign In',
+                style: theme.textTheme.bodyLarge,
+              ),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                context.router.pushNamed('/register');
+              },
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: const Text('Create Account'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -167,125 +171,120 @@ class MainAppBar extends StatelessWidget {
           topRight: Radius.circular(16),
         ),
       ),
-      builder: (context) =>
-          Container(
-            padding: const EdgeInsets.all(30),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(30),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircleAvatar(
+              backgroundColor: theme.colorScheme.secondary,
+              radius: 50,
+              child: Text(
+                user.username?.toUpperCase().substring(0, 1) ?? 'U',
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  color: theme.colorScheme.onSecondary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            const SizedBox(height: 18),
+            Text(
+              user.username ?? 'User',
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.textTheme.bodyLarge?.color,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  backgroundColor: theme.colorScheme.secondary,
-                  radius: 50,
+                Icon(
+                  Iconsax.user,
+                  color: theme.textTheme.bodyLarge?.color,
+                ),
+                const SizedBox(width: 12),
+                Flexible(
                   child: Text(
-                    user.username?.toUpperCase().substring(0, 1) ?? 'U',
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: theme.colorScheme.onSecondary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  user.username ?? 'User',
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.textTheme.bodyLarge?.color,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Iconsax.user,
+                    user.email ?? 'No email',
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       color: theme.textTheme.bodyLarge?.color,
                     ),
-                    const SizedBox(width: 12),
-                    Flexible(
-                      child: Text(
-                        user.email ?? 'No email',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.textTheme.bodyLarge?.color,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    context.read<AuthCubit>().signOut();
-                  },
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
                   ),
-                  child: const Text('Logout'),
-                ),
-                const SizedBox(height: 12),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    // Show confirmation dialog for account deletion
-                    _showDeleteAccountDialog(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.error,
-                    foregroundColor: theme.colorScheme.onError,
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text('Delete Account'),
                 ),
               ],
             ),
-          ),
+            const SizedBox(height: 32),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                context.read<AuthCubit>().signOut();
+              },
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: const Text('Logout'),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                // Show confirmation dialog for account deletion
+                _showDeleteAccountDialog(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.error,
+                foregroundColor: theme.colorScheme.onError,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: const Text('Delete Account'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   void _showDeleteAccountDialog(BuildContext context) {
     showDialog<void>(
       context: context,
-      builder: (context) =>
-          AlertDialog(
-            title: const Text('Delete Account'),
-            content: const Text(
-              'Are you sure you want to delete your account? '
-                  'This action cannot be undone.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  // TODO: Implement account deletion
-                  context.read<AuthCubit>().signOut();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme
-                      .of(context)
-                      .colorScheme
-                      .error,
-                ),
-                child: const Text('Delete'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Account'),
+        content: const Text(
+          'Are you sure you want to delete your account? '
+          'This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
           ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // TODO: Implement account deletion
+              context.read<AuthCubit>().signOut();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
     );
   }
 }
