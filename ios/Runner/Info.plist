@@ -52,5 +52,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app needs access to photo library to save downloaded wallpapers.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to photo library to save downloaded wallpapers.</string>
 </dict>
 </plist>

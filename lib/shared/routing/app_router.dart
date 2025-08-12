@@ -75,45 +75,6 @@ class AppRouter extends RootStackRouter {
       ];
 }
 
-// Route pages with @RoutePage annotation
-@RoutePage()
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Login Page - Implementation in progress'),
-      ),
-    );
-  }
-}
-
-@RoutePage()
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
-
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Register Page - Implementation in progress'),
-      ),
-    );
-  }
-}
-
 @RoutePage()
 class ForgotPasswordPage extends StatelessWidget {
   const ForgotPasswordPage({super.key});
@@ -171,7 +132,6 @@ class ProfilePage extends StatelessWidget {
     );
   }
 }
-
 
 @RoutePage()
 class SettingsPage extends StatelessWidget {

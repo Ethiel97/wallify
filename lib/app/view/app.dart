@@ -16,7 +16,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<SettingsCubit>(
-      future: getIt.getAsync<SettingsCubit>(),
+      future: _initializeSettingsCubit(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return BlocProvider<SettingsCubit>.value(
@@ -36,6 +36,12 @@ class App extends StatelessWidget {
         return _buildMaterialApp(ThemeMode.system);
       },
     );
+  }
+
+  Future<SettingsCubit> _initializeSettingsCubit() async {
+    // Ensure SettingsLocalDataSource is ready before creating SettingsCubit
+    await getIt.getAsync<SettingsLocalDataSource>();
+    return getIt<SettingsCubit>();
   }
 
   Widget _buildMaterialApp(ThemeMode themeMode) {

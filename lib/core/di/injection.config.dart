@@ -17,6 +17,9 @@ import 'package:wallinice/core/di/third_party_module.dart' as _i473;
 import 'package:wallinice/core/network/dio_client.dart' as _i272;
 import 'package:wallinice/core/network/dio_network_client.dart' as _i652;
 import 'package:wallinice/core/network/network.dart' as _i686;
+import 'package:wallinice/core/services/download_service.dart' as _i114;
+import 'package:wallinice/core/services/services.dart' as _i901;
+import 'package:wallinice/core/services/share_service.dart' as _i840;
 import 'package:wallinice/core/storage/hive_storage_service.dart' as _i726;
 import 'package:wallinice/core/storage/storage.dart' as _i309;
 import 'package:wallinice/features/auth/auth.dart' as _i50;
@@ -90,6 +93,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingletonAsync<_i96.FavoritesLocalDataSource>(() async =>
         _i96.FavoritesLocalDataSourceImpl(
             await getAsync<_i309.StorageService>()));
+    gh.lazySingleton<_i840.ShareService>(
+        () => _i840.ShareServiceImpl(gh<_i361.Dio>()));
+    gh.lazySingleton<_i114.DownloadService>(
+        () => _i114.DownloadServiceImpl(gh<_i361.Dio>()));
     gh.lazySingleton<_i757.AuthLocalDataSource>(
         () => _i757.AuthLocalDataSourceImpl(gh<_i558.FlutterSecureStorage>()));
     gh.lazySingletonAsync<_i509.FavoritesRepository>(() async =>
@@ -121,6 +128,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i367.WallpaperRepositoryImpl(
               gh<_i823.PexelsRemoteDataSource>(),
               gh<_i823.WallhavenRemoteDataSource>(),
+              gh<_i901.DownloadService>(),
+              gh<_i901.ShareService>(),
             ));
     gh.factory<_i1.WallpaperDetailCubit>(
         () => _i1.WallpaperDetailCubit(gh<_i823.WallpaperRepository>()));
@@ -128,10 +137,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i242.WallpaperCubit(gh<_i823.WallpaperRepository>()));
     gh.factory<_i926.SearchCubit>(
         () => _i926.SearchCubit(gh<_i823.WallpaperRepository>()));
-    gh.lazySingletonAsync<_i154.SettingsRepository>(() async =>
-        _i635.SettingsRepositoryImpl(await getAsync<_i154.SettingsLocalDataSource>()));
-    gh.factoryAsync<_i193.SettingsCubit>(() async =>
-        _i193.SettingsCubit(await getAsync<_i154.SettingsRepository>()));
+    gh.lazySingleton<_i154.SettingsRepository>(() =>
+        _i635.SettingsRepositoryImpl(gh<_i154.SettingsLocalDataSource>()));
+    gh.factory<_i193.SettingsCubit>(
+        () => _i193.SettingsCubit(gh<_i154.SettingsRepository>()));
     return this;
   }
 }

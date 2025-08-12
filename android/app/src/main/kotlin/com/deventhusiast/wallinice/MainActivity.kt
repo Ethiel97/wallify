@@ -1,4 +1,4 @@
-package com.example.verygoodcore.nice_wall
+package com.deventhusiast.wallinice
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -168,88 +168,90 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
           return Material(
             type: MaterialType.transparency,
             color: Theme.of(context).colorScheme.surface,
-            child: Stack(
-              children: [
-                // Full screen wallpaper background
-                Hero(
-                  tag: selectedWallpaper.id,
-                  transitionOnUserGestures: true,
-                  child: CachedNetworkImage(
-                    imageUrl: selectedWallpaper.src.original,
-                    memCacheHeight: MediaQuery.sizeOf(context).height.toInt(),
-                    memCacheWidth: MediaQuery.sizeOf(context).width.toInt(),
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => _buildShimmerLoader(),
-                    errorWidget: (context, url, error) => _buildShimmerLoader(),
-                    imageBuilder: (context, imageProvider) => Container(
-                      key: UniqueKey(),
-                      width: double.infinity,
-                      height: MediaQuery.sizeOf(context).height,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          colorFilter: ColorFilter.mode(
-                            Theme.of(context)
-                                .colorScheme
-                                .surface
-                                .withValues(alpha: 0.2),
-                            BlendMode.srcOver,
+            child: Scaffold(
+              body: Stack(
+                children: [
+                  // Full screen wallpaper background
+                  Hero(
+                    tag: selectedWallpaper.id,
+                    transitionOnUserGestures: true,
+                    child: CachedNetworkImage(
+                      imageUrl: selectedWallpaper.src.original,
+                      memCacheHeight: MediaQuery.sizeOf(context).height.toInt(),
+                      memCacheWidth: MediaQuery.sizeOf(context).width.toInt(),
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => _buildShimmerLoader(),
+                      errorWidget: (context, url, error) => _buildShimmerLoader(),
+                      imageBuilder: (context, imageProvider) => Container(
+                        key: UniqueKey(),
+                        width: double.infinity,
+                        height: MediaQuery.sizeOf(context).height,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            colorFilter: ColorFilter.mode(
+                              Theme.of(context)
+                                  .colorScheme
+                                  .surface
+                                  .withValues(alpha: 0.2),
+                              BlendMode.srcOver,
+                            ),
+                            fit: BoxFit.cover,
+                            image: imageProvider,
                           ),
-                          fit: BoxFit.cover,
-                          image: imageProvider,
                         ),
                       ),
                     ),
                   ),
-                ),
 
-                // Top action buttons
-                Padding(
-                  padding: const EdgeInsets.only(top: 50, left: 12, right: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Back button
-                      _buildBlurredIconButton(
-                        Iconsax.arrow_circle_left,
-                        () => context.router.back(),
-                      ),
-
-                      // Set wallpaper button (Android only)
-                      if (Platform.isAndroid)
+                  // Top action buttons
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50, left: 12, right: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Back button
                         _buildBlurredIconButton(
-                          Iconsax.paintbucket,
-                          () => _showSetWallpaperBottomSheet(
-                            context,
-                            selectedWallpaper,
-                          ),
+                          Iconsax.arrow_circle_left,
+                          () => context.router.back(),
                         ),
-                    ],
-                  ),
-                ),
 
-                // Bottom draggable sheet with details and actions
-                Positioned.fill(
-                  child: AnimatedPadding(
-                    duration: const Duration(seconds: 1),
-                    padding: const EdgeInsets.only(
-                      top: 36,
-                      left: 12,
-                      right: 12,
+                        // Set wallpaper button (Android only)
+                        if (Platform.isAndroid)
+                          _buildBlurredIconButton(
+                            Iconsax.paintbucket,
+                            () => _showSetWallpaperBottomSheet(
+                              context,
+                              selectedWallpaper,
+                            ),
+                          ),
+                      ],
                     ),
-                    child: DraggableScrollableSheet(
-                      controller: _scrollableController,
-                      initialChildSize: 0.071,
-                      maxChildSize: _sheetMaxSize,
-                      minChildSize: 0.071,
-                      builder: (context, scrollController) =>
-                          SingleChildScrollView(
-                        controller: scrollController,
-                        child: _buildBottomSheet(selectedWallpaper),
+                  ),
+
+                  // Bottom draggable sheet with details and actions
+                  Positioned.fill(
+                    child: AnimatedPadding(
+                      duration: const Duration(seconds: 1),
+                      padding: const EdgeInsets.only(
+                        top: 36,
+                        left: 12,
+                        right: 12,
+                      ),
+                      child: DraggableScrollableSheet(
+                        controller: _scrollableController,
+                        initialChildSize: 0.071,
+                        maxChildSize: _sheetMaxSize,
+                        minChildSize: 0.071,
+                        builder: (context, scrollController) =>
+                            SingleChildScrollView(
+                          controller: scrollController,
+                          child: _buildBottomSheet(selectedWallpaper),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
@@ -592,6 +594,7 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Text(message),
         action: SnackBarAction(
           label: actionText,

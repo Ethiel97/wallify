@@ -20,15 +20,27 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
   }
 
   Future<void> downloadWallpaper() async {
-    if (!state.currentWallpaper.hasData) return;
+    final wallpaperData = state.currentWallpaper.data;
+
+    final wallpaper = wallpaperData;
 
     emit(state.copyWith(downloadStatus: null.toLoading<bool>()));
 
     try {
-      // TODO: Implement actual download functionality
-      await Future.delayed(const Duration(seconds: 2)); // Simulate download
+      // Download the wallpaper with progress tracking
+      final downloadPath = await _wallpaperRepository.downloadWallpaper(
+        wallpaper: wallpaper,
+        onProgress: (progress) {
+          // Optionally emit progress updates here if needed
+          // You could add a progress field to the state
+        },
+      );
 
+      // Emit success with download path info
       emit(state.copyWith(downloadStatus: true.toSuccess<bool>()));
+
+      // You might want to show a success message with the file path
+      print('Wallpaper downloaded to: $downloadPath');
     } catch (error) {
       emit(
         state.copyWith(
@@ -40,8 +52,9 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
     }
   }
 
-  Future<void> setAsWallpaper(
-      {required WallpaperLocation wallpaperLocation,}) async {
+  Future<void> setAsWallpaper({
+    required WallpaperLocation wallpaperLocation,
+  }) async {
     if (!state.currentWallpaper.hasData) return;
 
     emit(state.copyWith(setWallpaperStatus: null.toLoading<bool>()));
@@ -49,7 +62,8 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
     try {
       // TODO: Implement actual wallpaper setting functionality
       await Future.delayed(
-          const Duration(seconds: 1),); // Simulate setting wallpaper
+        const Duration(seconds: 1),
+      ); // Simulate setting wallpaper
 
       emit(state.copyWith(setWallpaperStatus: true.toSuccess<bool>()));
     } catch (error) {
@@ -71,7 +85,8 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
     try {
       // TODO: Implement actual favorite toggle functionality
       await Future.delayed(
-          const Duration(milliseconds: 500),); // Simulate toggle
+        const Duration(milliseconds: 500),
+      ); // Simulate toggle
 
       final newFavoriteStatus = !state.isWallpaperFavorited;
       emit(
@@ -91,14 +106,22 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
     }
   }
 
-  Future<void> shareWallpaper() async {
+  Future<void> shareWallpaper({
+    bool includeImage = true,
+    String? customMessage,
+  }) async {
     if (!state.currentWallpaper.hasData) return;
+
+    final wallpaper = state.currentWallpaper.data;
 
     emit(state.copyWith(shareStatus: null.toLoading<bool>()));
 
     try {
-      // TODO: Implement actual share functionality
-      await Future.delayed(const Duration(milliseconds: 500)); // Simulate share
+      await _wallpaperRepository.shareWallpaper(
+        wallpaper: wallpaper,
+        includeImage: includeImage,
+        customMessage: customMessage,
+      );
 
       emit(state.copyWith(shareStatus: true.toSuccess<bool>()));
     } catch (error) {

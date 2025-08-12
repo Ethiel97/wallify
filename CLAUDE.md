@@ -1,8 +1,8 @@
-# Nice Wall - Flutter Wallpaper App
+# Wallinice - Flutter Wallpaper App
 
 ## Project Overview
 
-Nice Wall is a modern Flutter wallpaper application built with clean architecture principles, implementing best practices for performance, maintainability, and scalability. The project is based on the original [Wallify](https://github.com/Ethiel97/wallify) repository but modernized with improved architecture and patterns.
+Wallinice is a modern Flutter wallpaper application built with clean architecture principles, implementing best practices for performance, maintainability, and scalability. The project is based on the original [Wallify](https://github.com/Ethiel97/wallify) repository but modernized with improved architecture and patterns.
 
 ## Architecture & Design Patterns
 

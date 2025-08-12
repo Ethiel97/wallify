@@ -14,15 +14,31 @@ class MainWrapperPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => getIt<NavigationCubit>()),
-        BlocProvider(create: (_) => getIt<AuthCubit>()),
-        BlocProvider(create: (_) => getIt<FavoritesCubit>()),
-      ],
-      child: const _MainWrapperView(),
+    return FutureBuilder<FavoritesCubit>(
+      future: getIt.getAsync<FavoritesCubit>(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => getIt<NavigationCubit>()),
+              BlocProvider(create: (_) => getIt<AuthCubit>()),
+              BlocProvider.value(
+                value: snapshot.data!,
+              ), // FavoritesCubit
+            ],
+            child: const _MainWrapperView(),
+          );
+        }
+        // Show loading while async dependencies are being initialized
+        return const Scaffold(
+          body: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
     );
   }
+
 }
 
 class _MainWrapperView extends StatelessWidget {

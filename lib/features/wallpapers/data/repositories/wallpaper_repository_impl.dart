@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:wallinice/core/errors/errors.dart';
+import 'package:wallinice/core/services/services.dart';
 import 'package:wallinice/features/wallpapers/wallpapers.dart';
 
 @LazySingleton(as: WallpaperRepository)
@@ -7,10 +8,14 @@ class WallpaperRepositoryImpl implements WallpaperRepository {
   const WallpaperRepositoryImpl(
     this._pexelsRemoteDataSource,
     this._wallhavenRemoteDataSource,
+    this._downloadService,
+    this._shareService,
   );
 
   final PexelsRemoteDataSource _pexelsRemoteDataSource;
   final WallhavenRemoteDataSource _wallhavenRemoteDataSource;
+  final DownloadService _downloadService;
+  final ShareService _shareService;
 
   @override
   Future<List<Wallpaper>> getCuratedWallpapers({
@@ -155,6 +160,50 @@ class WallpaperRepositoryImpl implements WallpaperRepository {
       }
     } catch (e) {
       throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<String> downloadWallpaper({
+    required Wallpaper wallpaper,
+    void Function(double progress)? onProgress,
+  }) async {
+    try {
+      // Generate a unique filename for the wallpaper
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final fileName = 'wallinice_${wallpaper.id}_$timestamp.jpg';
+
+      // Use the highest quality URL available
+      final downloadUrl = wallpaper.url;
+
+      final filePath = await _downloadService.downloadImage(
+        imageUrl: downloadUrl,
+        fileName: fileName,
+        onProgress: onProgress,
+      );
+
+      return filePath;
+    } catch (e, stack) {
+      print("Error: $e\n Stack $stack");
+      throw ServerException('Failed to download wallpaper: ${e.toString()}');
+    }
+  }
+
+  @override
+  Future<void> shareWallpaper({
+    required Wallpaper wallpaper,
+    bool includeImage = true,
+    String? customMessage,
+  }) async {
+    try {
+      await _shareService.shareWallpaper(
+        wallpaper: wallpaper,
+        includeImage: includeImage,
+        customMessage: customMessage,
+      );
+    } catch (e, stack) {
+      print("Error: $e\n Stack $stack");
+      throw ServerException('Failed to share wallpaper: ${e.toString()}');
     }
   }
 }

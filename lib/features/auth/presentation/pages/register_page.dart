@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:wallinice/core/di/di.dart';
 import 'package:wallinice/features/auth/auth.dart';
 import 'package:wallinice/shared/routing/routing.dart';
@@ -51,225 +52,223 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: _authCubit,
-      child: SafeArea(
-        maintainBottomViewPadding: true,
-        child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.zero,
-            child: AppBar(
-              elevation: 0,
-              backgroundColor: AppColors.primaryColor,
-            ),
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.zero,
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: AppColors.primaryColor,
           ),
-          backgroundColor: Colors.white,
-          body: BlocListener<AuthCubit, AuthState>(
-            listenWhen: (previous, current) =>
-                previous.registerStatus != current.registerStatus,
-            listener: (context, state) {
-              if (state.registerStatus.isSuccess) {
-                _authCubit.clearRegisterStatus();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Registration successful!'),
-                    backgroundColor: AppColors.successColor,
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-                // Redirect to main app (landing page) like in original
-                context.router.goToMain();
-              } else if (state.registerStatus.isError) {
-                final errorMessage = state.registerStatus.error?.message ?? '';
-                final userFriendlyMessage =
-                    ErrorMessageMapper.mapErrorToUserFriendlyMessage(
-                  errorMessage,
-                );
+        ),
+        backgroundColor: Colors.white,
+        body: BlocListener<AuthCubit, AuthState>(
+          listenWhen: (previous, current) =>
+              previous.registerStatus != current.registerStatus,
+          listener: (context, state) {
+            if (state.registerStatus.isSuccess) {
+              _authCubit.clearRegisterStatus();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Registration successful!'),
+                  backgroundColor: AppColors.successColor,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+              // Redirect to main app (landing page) like in original
+              context.router.goToMain();
+            } else if (state.registerStatus.isError) {
+              final errorMessage = state.registerStatus.error?.message ?? '';
+              final userFriendlyMessage =
+                  ErrorMessageMapper.mapErrorToUserFriendlyMessage(
+                errorMessage,
+              );
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(userFriendlyMessage),
-                    backgroundColor: AppColors.errorColor,
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(userFriendlyMessage),
+                  backgroundColor: AppColors.errorColor,
+                ),
+              );
+            }
+          },
+          child: ColoredBox(
+            color: Colors.white,
+            child: Stack(
+              children: [
+                const CurvedContainer(),
+                ListView(
+                  physics: const BouncingScrollPhysics(),
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.proportionateWidth(25),
+                    vertical: context.proportionateHeight(12),
                   ),
-                );
-              }
-            },
-            child: ColoredBox(
-              color: Colors.white,
-              child: Stack(
-                children: [
-                  const CurvedContainer(),
-                  ListView(
-                    physics: const BouncingScrollPhysics(),
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: context.proportionateWidth(25),
-                      vertical: context.proportionateHeight(12),
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: context.proportionateWidth(8),
+                        top: context.screenHeight * 0.08,
+                      ),
+                      child: Image.asset(
+                        'assets/images/ico.png',
+                        fit: BoxFit.contain,
+                        height: 60,
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(
+                          Icons.wallpaper,
+                          size: 60,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          bottom: context.proportionateWidth(8),
-                          top: context.screenHeight * 0.08,
-                        ),
-                        child: Image.asset(
-                          'assets/images/ico.png',
-                          fit: BoxFit.contain,
-                          height: 60,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(
-                            Icons.wallpaper,
-                            size: 60,
-                            color: Colors.white,
-                          ),
-                        ),
+                    Container(
+                      padding: EdgeInsets.only(
+                        bottom: context.proportionateWidth(30),
+                        top: context.proportionateWidth(0),
                       ),
-                      Container(
-                        padding: EdgeInsets.only(
-                          bottom: context.proportionateWidth(30),
-                          top: context.proportionateWidth(0),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Create Account', // TODO: Add to l10n
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineMedium
-                              ?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                      ),
-                      Form(
-                        key: _formKey,
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: const Offset(0, 4),
-                                    blurRadius: 8,
-                                    color: AppColors.darkColor.withOpacity(0.1),
-                                  ),
-                                ],
-                              ),
-                              padding: const EdgeInsets.all(25),
-                              child: Column(
-                                children: [
-                                  TextFormField(
-                                    decoration: customInputDecoration(
-                                      'Username', // TODO: Add to l10n
-                                      context,
-                                      contentPadding: 12,
-                                    ),
-                                    controller: _usernameController,
-                                    validator: Validators.usernameValidator,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.copyWith(
-                                          color: AppColors.darkColor,
-                                        ),
-                                  ),
-                                  SizedBox(
-                                    height: context.proportionateWidth(4),
-                                  ),
-                                  TextFormField(
-                                    decoration: customInputDecoration(
-                                      'Email', // TODO: Add to l10n
-                                      context,
-                                      contentPadding: 12,
-                                    ),
-                                    controller: _emailController,
-                                    validator: Validators.emailValidator,
-                                    keyboardType: TextInputType.emailAddress,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.copyWith(
-                                          color: AppColors.darkColor,
-                                        ),
-                                  ),
-                                  SizedBox(
-                                    height: context.proportionateWidth(4),
-                                  ),
-                                  TextFormField(
-                                    decoration: customInputDecoration(
-                                      'Password', // TODO: Add to l10n
-                                      context,
-                                      contentPadding: 12,
-                                    ),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge
-                                        ?.copyWith(
-                                          color: AppColors.darkColor,
-                                        ),
-                                    controller: _passwordController,
-                                    validator: Validators.passwordValidator,
-                                    keyboardType: TextInputType.visiblePassword,
-                                    obscureText: true,
-                                  ),
-                                  SizedBox(
-                                    height: context.proportionateWidth(40),
-                                  ),
-                                ],
-                              ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Create Account', // TODO: Add to l10n
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium
+                            ?.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ],
-                        ),
                       ),
-                      SizedBox(
-                        height: context.proportionateHeight(150),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Stack(
+                        clipBehavior: Clip.none,
                         children: [
-                          Text(
-                            'Already have an account? ', // TODO: Add to l10n
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: const Offset(0, 4),
+                                  blurRadius: 8,
+                                  color: AppColors.darkColor.withOpacity(0.1),
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.all(25),
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  decoration: customInputDecoration(
+                                    prefix: const Icon(Iconsax.user),
+                                    'Username', // TODO: Add to l10n
+                                    context,
+                                    contentPadding: 12,
+                                  ),
+                                  controller: _usernameController,
+                                  validator: Validators.usernameValidator,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: AppColors.darkColor,
+                                      ),
+                                ),
+                                SizedBox(
+                                  height: context.proportionateWidth(4),
+                                ),
+                                TextFormField(
+                                  decoration: customInputDecoration(
+                                    prefix: const Icon(Iconsax.user_octagon),
+                                    'Email', // TODO: Add to l10n
+                                    context,
+                                    contentPadding: 12,
+                                  ),
+                                  controller: _emailController,
+                                  validator: Validators.emailValidator,
+                                  keyboardType: TextInputType.emailAddress,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: AppColors.darkColor,
+                                      ),
+                                ),
+                                SizedBox(
+                                  height: context.proportionateWidth(4),
+                                ),
+                                TextFormField(
+                                  decoration: customInputDecoration(
+                                    prefix: const Icon(Iconsax.password_check),
+                                    'Password', // TODO: Add to l10n
+                                    context,
+                                    contentPadding: 12,
+                                  ),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(
+                                        color: AppColors.darkColor,
+                                      ),
+                                  controller: _passwordController,
+                                  validator: Validators.passwordValidator,
+                                  keyboardType: TextInputType.visiblePassword,
+                                  obscureText: true,
+                                ),
+                                SizedBox(
+                                  height: context.proportionateWidth(40),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: context.proportionateHeight(150),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Already have an account? ', // TODO: Add to l10n
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.darkColor,
+                                  ),
+                        ),
+                        InkWell(
+                          child: Text(
+                            'Login', // TODO: Add to l10n
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: AppColors.darkColor,
+                                  color: AppColors.accentColor,
+                                  fontWeight: FontWeight.bold,
                                 ),
                           ),
-                          InkWell(
-                            child: Text(
-                              'Login', // TODO: Add to l10n
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: AppColors.accentColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                            onTap: () {
-                              context.router.pushLogin();
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    top: 36,
-                    left: 24,
-                    child: _buildBackButton(),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 50,
-                    right: 50,
-                    child: _buildRegisterButton(),
-                  ),
-                ],
-              ),
+                          onTap: () {
+                            context.router.pushLogin();
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 36,
+                  left: 24,
+                  child: _buildBackButton(),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 50,
+                  right: 50,
+                  child: _buildRegisterButton(),
+                ),
+              ],
             ),
           ),
         ),

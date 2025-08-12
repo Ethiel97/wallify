@@ -20,4 +20,17 @@ abstract class WallpaperRepository {
   });
 
   Future<Wallpaper> getWallpaperById(String id);
+
+  /// Downloads a wallpaper image to device storage
+  Future<String> downloadWallpaper({
+    required Wallpaper wallpaper,
+    void Function(double progress)? onProgress,
+  });
+
+  /// Shares a wallpaper with options to include image or just the link
+  Future<void> shareWallpaper({
+    required Wallpaper wallpaper,
+    bool includeImage = true,
+    String? customMessage,
+  });
 }

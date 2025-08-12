@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:wallinice/core/di/di.dart';
 import 'package:wallinice/core/utils/utils.dart';
 import 'package:wallinice/features/favorites/favorites.dart';
 import 'package:wallinice/features/main/main.dart';
@@ -15,10 +14,7 @@ class FavoritesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<FavoritesCubit>(),
-      child: const _FavoritesView(),
-    );
+    return const _FavoritesView();
   }
 }
 

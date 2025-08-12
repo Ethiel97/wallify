@@ -177,7 +177,7 @@ class _SearchInputField extends StatelessWidget {
   }
 
   void _showProviderSelectionBottomSheet(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
