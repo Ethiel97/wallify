@@ -1,0 +1,30 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "wallinice",
+          "appId": "1:91871510880:android:d68325cc4895a7d4b11e05",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "wallinice",
+          "appId": "1:91871510880:ios:15b34b8fa6450f43b11e05",
+          "uploadDebugSymbols": true,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "wallinice",
+          "configurations": {
+            "android": "1:91871510880:android:d68325cc4895a7d4b11e05",
+            "ios": "1:91871510880:ios:15b34b8fa6450f43b11e05"
+          }
+        }
+      }
+    }
+  }
+}
