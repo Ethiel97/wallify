@@ -31,7 +31,10 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   Future<void> setThemeMode(ThemeMode themeMode) async {
     final themeModeString = _themeModeToString(themeMode);
     await _storageService.put<String>(
-        _collection, _themeModeKey, themeModeString,);
+      _collection,
+      _themeModeKey,
+      themeModeString,
+    );
   }
 
   @override
@@ -43,7 +46,10 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   Future<void> setLanguageCode(String? languageCode) async {
     if (languageCode != null) {
       await _storageService.put<String>(
-          _collection, _languageCodeKey, languageCode,);
+        _collection,
+        _languageCodeKey,
+        languageCode,
+      );
     } else {
       await _storageService.delete(_collection, _languageCodeKey);
     }
@@ -75,7 +81,7 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   }
 
   @override
-  @disposeMethod  
+  @disposeMethod
   void dispose() {
     // No resources to dispose
   }

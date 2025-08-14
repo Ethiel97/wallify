@@ -7,6 +7,9 @@ abstract class NetworkModule {
   Dio get dio {
     final dio = Dio()
       ..options = BaseOptions(
+        validateStatus: (status) {
+          return status != null && (status >= 200 && status < 401);
+        },
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 30),
         sendTimeout: const Duration(seconds: 30),

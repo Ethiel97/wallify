@@ -56,7 +56,6 @@ class PexelsRemoteDataSourceImpl implements PexelsRemoteDataSource {
     } on NetworkException {
       rethrow;
     } catch (e, stack) {
-
       print('Error: $e, $stack');
       throw ServerException(e.toString());
     }

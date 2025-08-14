@@ -38,7 +38,6 @@ class MainWrapperPage extends StatelessWidget {
       },
     );
   }
-
 }
 
 class _MainWrapperView extends StatelessWidget {

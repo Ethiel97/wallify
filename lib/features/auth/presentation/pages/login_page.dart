@@ -27,6 +27,13 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _authCubit = getIt<AuthCubit>();
+
+    _emailController.addListener(() {
+      setState(() {}); // Update UI when email changes
+    });
+    _passwordController.addListener(() {
+      setState(() {}); // Update UI when password changes
+    });
   }
 
   @override
@@ -44,6 +51,11 @@ class _LoginPageState extends State<LoginPage> {
       );
     }
   }
+
+  bool get isSubmitButtonEnabled =>
+      _emailController.text.isNotEmpty &&
+      _passwordController.text.isNotEmpty &&
+      !_authCubit.state.loginStatus.isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                             fit: BoxFit.contain,
                             height: context.screenHeight / 4,
                             width: double.infinity,
-                            errorBuilder: (context, error, stackTrace) =>
-                                Icon(
+                            errorBuilder: (context, error, stackTrace) => Icon(
                               Icons.wallpaper,
                               size: context.screenHeight / 4,
                               color: AppColors.accentColor,
@@ -130,7 +141,9 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                           ),
                         ),
-                        SizedBox(height: 20,),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         TextFormField(
                           decoration: customInputDecoration(
                             prefix: const Icon(Iconsax.user),
@@ -141,6 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                           validator: Validators.usernameValidator,
                           style: Theme.of(context).textTheme.bodyLarge,
                           keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
                         ),
                         SizedBox(
                           height: context.proportionateWidth(15),

@@ -5,13 +5,17 @@ class SizeConfig {
   static const double _designHeight = 812;
 
   static double getProportionateScreenWidth(
-      BuildContext context, double inputWidth,) {
+    BuildContext context,
+    double inputWidth,
+  ) {
     final screenWidth = MediaQuery.sizeOf(context).width;
     return (inputWidth / _designWidth) * screenWidth;
   }
 
   static double getProportionateScreenHeight(
-      BuildContext context, double inputHeight,) {
+    BuildContext context,
+    double inputHeight,
+  ) {
     final screenHeight = MediaQuery.sizeOf(context).height;
     return (inputHeight / _designHeight) * screenHeight;
   }

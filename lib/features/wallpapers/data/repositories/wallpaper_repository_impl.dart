@@ -101,7 +101,7 @@ class WallpaperRepositoryImpl implements WallpaperRepository {
 
       return allWallpapers;
     } catch (e, stack) {
-      print("Search error: $e\n $stack");
+      print('Search error: $e\n $stack');
       throw ServerException(e.toString());
     }
   }
@@ -184,8 +184,8 @@ class WallpaperRepositoryImpl implements WallpaperRepository {
 
       return filePath;
     } catch (e, stack) {
-      print("Error: $e\n Stack $stack");
-      throw ServerException('Failed to download wallpaper: ${e.toString()}');
+      print('Error: $e\n Stack $stack');
+      throw ServerException('Failed to download wallpaper: $e');
     }
   }
 
@@ -202,8 +202,8 @@ class WallpaperRepositoryImpl implements WallpaperRepository {
         customMessage: customMessage,
       );
     } catch (e, stack) {
-      print("Error: $e\n Stack $stack");
-      throw ServerException('Failed to share wallpaper: ${e.toString()}');
+      print('Error: $e\n Stack $stack');
+      throw ServerException('Failed to share wallpaper: $e');
     }
   }
 }

@@ -139,10 +139,10 @@ class _BackgroundWallpaper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<WallpaperCubit, WallpaperState, 
+    return BlocSelector<WallpaperCubit, WallpaperState,
         ({List<Wallpaper> wallpapers, String searchQuery})>(
       selector: (state) {
-        final wallpapers = state.searchQuery.isNotEmpty 
+        final wallpapers = state.searchQuery.isNotEmpty
             ? (state.searchResults.value ?? [])
             : (state.curatedWallpapers.value ?? []);
         return (wallpapers: wallpapers, searchQuery: state.searchQuery);
@@ -306,8 +306,8 @@ class _WallpaperCarouselSection extends StatelessWidget {
       child: BlocSelector<WallpaperCubit, WallpaperState,
           ({ValueWrapper<List<Wallpaper>> wallpapers, String searchQuery})>(
         selector: (state) => (
-          wallpapers: state.searchQuery.isNotEmpty 
-              ? state.searchResults 
+          wallpapers: state.searchQuery.isNotEmpty
+              ? state.searchResults
               : state.curatedWallpapers,
           searchQuery: state.searchQuery,
         ),

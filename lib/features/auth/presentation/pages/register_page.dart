@@ -28,6 +28,16 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     super.initState();
     _authCubit = getIt<AuthCubit>();
+
+    _usernameController.addListener(() {
+      setState(() {}); // Update UI when username changes
+    });
+    _emailController.addListener(() {
+      setState(() {}); // Update UI when email changes
+    });
+    _passwordController.addListener(() {
+      setState(() {}); // Update UI when password changes
+    });
   }
 
   @override
@@ -47,6 +57,12 @@ class _RegisterPageState extends State<RegisterPage> {
       );
     }
   }
+
+  bool get isSubmitButtonEnabled =>
+      _usernameController.text.isNotEmpty &&
+      _emailController.text.isNotEmpty &&
+      _passwordController.text.isNotEmpty &&
+      !_authCubit.state.registerStatus.isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +84,13 @@ class _RegisterPageState extends State<RegisterPage> {
             if (state.registerStatus.isSuccess) {
               _authCubit.clearRegisterStatus();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Registration successful!'),
+                SnackBar(
+                  content: Text(
+                    state.registerStatus.value ?? 'Registration successful',
+                  ),
+                  // TODO: Add to l10n
                   backgroundColor: AppColors.successColor,
-                  duration: Duration(seconds: 2),
+                  duration: const Duration(seconds: 2),
                 ),
               );
               // Redirect to main app (landing page) like in original
@@ -152,7 +171,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                 BoxShadow(
                                   offset: const Offset(0, 4),
                                   blurRadius: 8,
-                                  color: AppColors.darkColor.withOpacity(0.1),
+                                  color: AppColors.darkColor
+                                      .withValues(alpha: 0.1),
                                 ),
                               ],
                             ),
@@ -166,6 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     context,
                                     contentPadding: 12,
                                   ),
+                                  textInputAction: TextInputAction.next,
                                   controller: _usernameController,
                                   validator: Validators.usernameValidator,
                                   style: Theme.of(context)
@@ -185,6 +206,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     context,
                                     contentPadding: 12,
                                   ),
+                                  textInputAction: TextInputAction.next,
                                   controller: _emailController,
                                   validator: Validators.emailValidator,
                                   keyboardType: TextInputType.emailAddress,
@@ -263,7 +285,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: _buildBackButton(),
                 ),
                 Positioned(
-                  bottom: 0,
+                  bottom: 12,
                   left: 50,
                   right: 50,
                   child: _buildRegisterButton(),
@@ -290,9 +312,11 @@ class _RegisterPageState extends State<RegisterPage> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: CustomButton(
-                text: 'REGISTER', // TODO: Add to l10n
+                text: 'REGISTER',
+                // TODO: Add to l10n
                 color: AppColors.accentColor,
                 processing: isLoading,
+                enabled: isSubmitButtonEnabled,
                 onTap: _register,
               ),
             ),

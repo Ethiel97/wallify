@@ -88,7 +88,7 @@ class DioNetworkClient implements NetworkClient {
   Map<String, dynamic> _handleResponse(Response response) {
     if (response.statusCode != null &&
         response.statusCode! >= 200 &&
-        response.statusCode! < 300) {
+        response.statusCode! < 401) {
       return response.data as Map<String, dynamic>;
     }
     throw ServerException('Request failed with status: ${response.statusCode}');

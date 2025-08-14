@@ -123,7 +123,6 @@ class WallpaperCard extends StatelessWidget {
                           ],
                         ),
                       ),
-
                       if ((wallpaper.tags ?? []).isNotEmpty)
                         Wrap(
                           spacing: 4,

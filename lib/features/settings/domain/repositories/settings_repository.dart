@@ -7,7 +7,6 @@ abstract class SettingsRepository {
   /// Set theme mode
   Future<void> setThemeMode(ThemeMode themeMode);
 
-
   /// Get language code
   Future<String?> getLanguageCode();
 

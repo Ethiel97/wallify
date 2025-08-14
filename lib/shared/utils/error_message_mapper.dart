@@ -16,7 +16,7 @@ class ErrorMessageMapper {
       return 'Email or username already taken.';
     }
 
-    if (lowerCaseError.contains('invalid credentials') ||
+    if (lowerCaseError.contains('invalid identifier') ||
         lowerCaseError.contains('wrong password') ||
         lowerCaseError.contains('user not found')) {
       return 'Invalid email or password.';

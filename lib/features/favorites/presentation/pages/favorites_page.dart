@@ -70,6 +70,7 @@ class _FavoritesViewState extends State<_FavoritesView>
               expandedHeight: 120,
               pinned: true,
               elevation: 0,
+              leading: const SizedBox.shrink(),
               backgroundColor: Colors.transparent,
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
@@ -242,6 +243,10 @@ class _FavoritesViewState extends State<_FavoritesView>
                 context.read<NavigationCubit>().navigateToTab(0);
               },
               icon: const Icon(Iconsax.search_normal),
+              style: ElevatedButton.styleFrom(
+                backgroundColor:  Theme.of(context).colorScheme.primary,
+                foregroundColor:  Theme.of(context).colorScheme.onPrimary,
+              ),
               label: const Text('Explore Wallpapers'),
             ),
           ],

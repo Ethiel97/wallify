@@ -7,7 +7,6 @@ class ApiConstants {
   static const String pexelsBaseUrl = 'https://api.pexels.com/v1/';
   static String? pexelsApiKey = dotenv.env['PEXELS_API_KEY'] ?? '';
 
-
   static String? pexelsApiHost = dotenv.env['PEXELS_API_HOST'];
   static String? wallhavenApiHost = dotenv.env['WALLHAVEN_API_HOST'];
 
@@ -16,7 +15,7 @@ class ApiConstants {
   static String? wallhavenApiKey = dotenv.env['WALLHAVEN_API_KEY'] ?? '';
 
   // Custom Auth API (Strapi backend)
-  static  String? customApiUrl = dotenv.env['CUSTOM_API_URL'];
+  static String? customApiUrl = dotenv.env['CUSTOM_API_URL'];
 
   // Common endpoints
   static const String searchEndpoint = 'search';

@@ -59,13 +59,13 @@ class ShareServiceImpl implements ShareService {
   }) async {
     try {
       final message = customMessage ?? _buildDefaultMessage(wallpaper);
-      
+
       await Share.share(
         message,
         subject: 'Check out this amazing wallpaper!',
       );
     } catch (e) {
-      throw Exception('Failed to share wallpaper link: ${e.toString()}');
+      throw Exception('Failed to share wallpaper link: $e');
     }
   }
 
@@ -77,7 +77,7 @@ class ShareServiceImpl implements ShareService {
     try {
       // Download the image to a temporary file first
       final tempFile = await _downloadImageToTemp(wallpaper);
-      
+
       final message = customMessage ?? _buildDefaultMessage(wallpaper);
 
       // Share the image file with the message
@@ -86,11 +86,11 @@ class ShareServiceImpl implements ShareService {
         text: message,
         subject: 'Check out this amazing wallpaper!',
       );
-      
+
       // Clean up the temporary file after sharing
       await _cleanupTempFile(tempFile);
     } catch (e) {
-      throw Exception('Failed to share wallpaper image: ${e.toString()}');
+      throw Exception('Failed to share wallpaper image: $e');
     }
   }
 
@@ -99,7 +99,7 @@ class ShareServiceImpl implements ShareService {
     try {
       // Get temporary directory
       final tempDir = await getTemporaryDirectory();
-      
+
       // Create a unique filename
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final fileName = 'wallpaper_share_${wallpaper.id}_$timestamp.jpg';
@@ -118,24 +118,24 @@ class ShareServiceImpl implements ShareService {
 
       return tempFile;
     } catch (e) {
-      throw Exception('Failed to download image for sharing: ${e.toString()}');
+      throw Exception('Failed to download image for sharing: $e');
     }
   }
 
   /// Builds a default share message for the wallpaper
   String _buildDefaultMessage(Wallpaper wallpaper) {
     final buffer = StringBuffer();
-    
+
     buffer.writeln('🖼️ Amazing wallpaper by ${wallpaper.photographer}');
-    
+
     if (wallpaper.width != null && wallpaper.height != null) {
       buffer.writeln('📏 ${wallpaper.width}x${wallpaper.height} resolution');
     }
-    
-    buffer.writeln('');
+
+    buffer.writeln();
     buffer.writeln('📱 Get more wallpapers with Wallinice app!');
     buffer.writeln('🔗 ${wallpaper.url}');
-    
+
     return buffer.toString();
   }
 

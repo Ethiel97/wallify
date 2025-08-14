@@ -181,7 +181,8 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
                       memCacheWidth: MediaQuery.sizeOf(context).width.toInt(),
                       fit: BoxFit.cover,
                       placeholder: (context, url) => _buildShimmerLoader(),
-                      errorWidget: (context, url, error) => _buildShimmerLoader(),
+                      errorWidget: (context, url, error) =>
+                          _buildShimmerLoader(),
                       imageBuilder: (context, imageProvider) => Container(
                         key: UniqueKey(),
                         width: double.infinity,
@@ -205,7 +206,8 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
 
                   // Top action buttons
                   Padding(
-                    padding: const EdgeInsets.only(top: 50, left: 12, right: 12),
+                    padding:
+                        const EdgeInsets.only(top: 50, left: 12, right: 12),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

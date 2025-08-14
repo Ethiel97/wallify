@@ -19,7 +19,7 @@ class MainAppBar extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: Padding(
             padding: const EdgeInsets.only(
-              top: 42,
+              top: 52,
               left: 10,
             ),
             child: BlocBuilder<AuthCubit, AuthState>(
@@ -51,7 +51,7 @@ class MainAppBar extends StatelessWidget {
           alignment: Alignment.topRight,
           child: Padding(
             padding: const EdgeInsets.only(
-              top: 42,
+              top: 52,
               right: 10,
             ),
             child: IconButton(
@@ -125,7 +125,7 @@ class MainAppBar extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                context.router.back();
                 context.router.pushNamed('/login');
               },
               style: ElevatedButton.styleFrom(
@@ -143,7 +143,7 @@ class MainAppBar extends StatelessWidget {
             const SizedBox(height: 12),
             OutlinedButton(
               onPressed: () {
-                Navigator.pop(context);
+                context.router.back();
                 context.router.pushNamed('/register');
               },
               style: OutlinedButton.styleFrom(
@@ -224,7 +224,7 @@ class MainAppBar extends StatelessWidget {
             const SizedBox(height: 32),
             OutlinedButton(
               onPressed: () {
-                Navigator.pop(context);
+                context.router.back();
                 context.read<AuthCubit>().signOut();
               },
               style: OutlinedButton.styleFrom(
@@ -238,7 +238,7 @@ class MainAppBar extends StatelessWidget {
             const SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                context.router.back();
                 // Show confirmation dialog for account deletion
                 _showDeleteAccountDialog(context);
               },
@@ -269,12 +269,12 @@ class MainAppBar extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => context.router.back(),
             child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(context);
+              context.router.back();
               // TODO: Implement account deletion
               context.read<AuthCubit>().signOut();
             },

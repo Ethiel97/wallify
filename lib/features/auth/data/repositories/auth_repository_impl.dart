@@ -183,7 +183,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   // Method to switch between Firebase and custom backend
-  void setUseFirebase(bool useFirebase) {
+  void setUseFirebase({bool useFirebase = false}) {
     _useFirebase = useFirebase;
   }
 }

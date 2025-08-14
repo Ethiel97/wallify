@@ -52,14 +52,18 @@ extension AppRouterExtension on StackRouter {
 
   Future<void> pushSearch({String? query}) {
     final route =
-    query != null ? '${RouteNames.search}?query=$query' : RouteNames.search;
+        query != null ? '${RouteNames.search}?query=$query' : RouteNames.search;
     return pushNamed(route);
   }
 
   Future<void> pushSettings() => pushNamed(RouteNames.settings);
 
   // Utility methods
-  Future<void> pushAndClearStack(String routeName) {
-    return pushAndClearStack(routeName);
+  Future<void> pushAndClearStack(String routeName) async {
+    //clear all routes and push the new one
+
+    removeUntil(
+      (route) => route.name == routeName,
+    );
   }
 }

@@ -63,7 +63,6 @@ class WallhavenRemoteDataSourceImpl implements WallhavenRemoteDataSource {
     } on NetworkException {
       rethrow;
     } catch (e, stack) {
-
       print('Error $e\n $stack');
       throw ServerException(e.toString());
     }
@@ -85,7 +84,8 @@ class WallhavenRemoteDataSourceImpl implements WallhavenRemoteDataSource {
       );
 
       return WallhavenWallpaperModel.fromJson(
-          response['data'] as Map<String, dynamic>,);
+        response['data'] as Map<String, dynamic>,
+      );
     } on ServerException {
       rethrow;
     } on NetworkException {

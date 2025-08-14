@@ -20,7 +20,7 @@ class HiveStorageService implements StorageService {
   Future<void> initialize() async {
     if (_isInitialized) return;
 
-     await Hive.initFlutter(_appDocumentDir);
+    await Hive.initFlutter(_appDocumentDir);
 
     // Register adapters only once
     if (!Hive.isAdapterRegistered(0)) {

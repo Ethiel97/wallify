@@ -9,13 +9,17 @@ abstract class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+
   Future<Map<String, dynamic>> register({
     required String email,
     required String password,
     String? username,
   });
+
   Future<UserModel> fetchMe();
+
   Future<void> deleteAccount(String id);
+
   Future<void> resetPassword(String email);
 }
 
@@ -42,7 +46,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.containsKey('jwt') && response.containsKey('user')) {
         return response;
       } else {
-        throw const AuthException('Invalid credentials');
+        throw AuthException(
+          (response['error']['message'] as String?) ?? 'Invalid credentials',
+        );
       }
     } on ServerException catch (e) {
       throw AuthException(e.message ?? 'Login failed');
@@ -72,10 +78,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       if (response.containsKey('jwt') && response.containsKey('user')) {
         return response;
       } else {
-        throw const AuthException('Registration failed');
+        throw AuthException(
+          (response['error']['message'] as String?) ?? 'Registration failed',
+        );
       }
     } on ServerException catch (e) {
-      if (e.message?.contains('409') == true) {
+      if (e.message?.contains('409') ?? false) {
         throw const AuthException('Email or username already taken');
       }
       throw AuthException(e.message ?? 'Registration failed');

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:wallinice/core/errors/errors.dart';
 import 'package:wallinice/core/utils/utils.dart';
 import 'package:wallinice/features/auth/auth.dart';
 
@@ -76,7 +77,15 @@ class AuthCubit extends Cubit<AuthState> {
           loginStatus: state.loginStatus.toSuccess('Sign in successful'),
         ),
       );
-    } catch (e) {
+    } on AuthException catch (e) {
+      emit(
+        state.copyWith(
+          loginStatus: state.loginStatus.toError(
+            ErrorDetails(message: e.message.toString()),
+          ),
+        ),
+      );
+    } on Exception catch (e) {
       emit(
         state.copyWith(
           loginStatus: state.loginStatus.toError(

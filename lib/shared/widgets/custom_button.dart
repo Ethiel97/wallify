@@ -52,11 +52,11 @@ class CustomButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: enabled
                 ? _getBackgroundColor(context)
-                : _getBackgroundColor(context).withOpacity(0.65),
+                : _getBackgroundColor(context).withValues(alpha: 0.65),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: _getBackgroundColor(context).withOpacity(0.3),
+                color: _getBackgroundColor(context).withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
