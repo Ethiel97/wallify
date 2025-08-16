@@ -7,6 +7,7 @@ import 'package:wallinice/core/utils/utils.dart';
 import 'package:wallinice/features/favorites/favorites.dart';
 import 'package:wallinice/features/main/main.dart';
 import 'package:wallinice/features/wallpapers/wallpapers.dart';
+import 'package:wallinice/shared/routing/routing.dart';
 
 @RoutePage()
 class FavoritesPage extends StatelessWidget {
@@ -63,110 +64,122 @@ class _FavoritesViewState extends State<_FavoritesView>
             },
           ),
         ],
-        child: CustomScrollView(
-          slivers: [
-            // App Bar
-            SliverAppBar(
-              expandedHeight: 120,
-              pinned: true,
-              elevation: 0,
-              leading: const SizedBox.shrink(),
-              backgroundColor: Colors.transparent,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  'My Favorites',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            // Reload favorites on pull-to-refresh
+            await context.read<FavoritesCubit>().loadFavorites();
+          },
+          child: CustomScrollView(
+            slivers: [
+              // App Bar
+              SliverAppBar(
+                expandedHeight: 100,
+                pinned: true,
+                elevation: 0,
+                leading: const SizedBox.shrink(),
+                backgroundColor: Colors.transparent,
+                flexibleSpace: FlexibleSpaceBar(
+                  title: Text(
+                    'My Favorites',
+                    style: Theme.of(context).textTheme.headlineSmall?.apply(
+                          // fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface,
+                          fontSizeDelta: -4,
+                        ),
+                  ),
+                  centerTitle: true,
                 ),
-                centerTitle: true,
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: 12,
+                      top: 24,
+                    ),
+                    child: BlocSelector<FavoritesCubit, FavoritesState,
+                        List<Wallpaper>?>(
+                      selector: (state) => state.favoriteWallpapers.value,
+                      builder: (context, favorites) {
+                        if (favorites?.isNotEmpty ?? false) {
+                          return PopupMenuButton<String>(
+                            icon: const Icon(Iconsax.more),
+                            onSelected: (value) {
+                              if (value == 'clear_all') {
+                                _showClearAllDialog(context);
+                              }
+                            },
+                            itemBuilder: (context) => [
+                              const PopupMenuItem(
+                                value: 'clear_all',
+                                child: Row(
+                                  children: [
+                                    Icon(Iconsax.trash, color: Colors.red),
+                                    SizedBox(width: 8),
+                                    Text('Clear All'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+                        return const SizedBox();
+                      },
+                    ),
+                  ),
+                ],
               ),
-              actions: [
-                BlocSelector<FavoritesCubit, FavoritesState, List<Wallpaper>?>(
-                  selector: (state) => state.favoriteWallpapers.value,
-                  builder: (context, favorites) {
-                    if (favorites?.isNotEmpty ?? false) {
-                      return PopupMenuButton<String>(
-                        icon: const Icon(Iconsax.more),
-                        onSelected: (value) {
-                          if (value == 'clear_all') {
-                            _showClearAllDialog(context);
-                          }
-                        },
-                        itemBuilder: (context) => [
-                          const PopupMenuItem(
-                            value: 'clear_all',
-                            child: Row(
-                              children: [
-                                Icon(Iconsax.trash, color: Colors.red),
-                                SizedBox(width: 8),
-                                Text('Clear All'),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
-              ],
-            ),
 
-            // Favorites Count
-            BlocSelector<FavoritesCubit, FavoritesState, List<Wallpaper>?>(
-              selector: (state) => state.favoriteWallpapers.value,
-              builder: (context, favorites) {
-                if (favorites != null) {
-                  return SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+              // Favorites Count
+              BlocSelector<FavoritesCubit, FavoritesState, List<Wallpaper>?>(
+                selector: (state) => state.favoriteWallpapers.value,
+                builder: (context, favorites) {
+                  if (favorites != null) {
+                    return SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          '${favorites.length} '
+                          'wallpaper${favorites.length != 1 ? 's' : ''}',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: 0.7),
+                                  ),
+                        ),
                       ),
-                      child: Text(
-                        '${favorites.length} '
-                        'wallpaper${favorites.length != 1 ? 's' : ''}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.7),
-                            ),
-                      ),
+                    );
+                  }
+                  return const SliverToBoxAdapter(child: SizedBox());
+                },
+              ),
+
+              // Favorites Grid
+              BlocSelector<FavoritesCubit, FavoritesState,
+                  ValueWrapper<List<Wallpaper>>>(
+                selector: (state) => state.favoriteWallpapers,
+                builder: (context, wallpapersWrapper) {
+                  return wallpapersWrapper.maybeWhen(
+                    orElse: () => const SliverToBoxAdapter(
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    success: (wallpapers) {
+                      if (wallpapers.isEmpty) {
+                        return SliverToBoxAdapter(child: _buildEmptyState());
+                      }
+                      return _buildFavoritesGrid(wallpapers);
+                    },
+                    error: (error, _) => SliverToBoxAdapter(
+                      child: _buildErrorState(error),
                     ),
                   );
-                }
-                return const SliverToBoxAdapter(child: SizedBox());
-              },
-            ),
-
-            // Favorites Grid
-            BlocSelector<FavoritesCubit, FavoritesState,
-                ValueWrapper<List<Wallpaper>>>(
-              selector: (state) => state.favoriteWallpapers,
-              builder: (context, wallpapersWrapper) {
-                return wallpapersWrapper.when(
-                  initial: () => const SliverToBoxAdapter(
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                  loading: (_) => const SliverToBoxAdapter(
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                  success: (wallpapers) {
-                    if (wallpapers.isEmpty) {
-                      return SliverToBoxAdapter(child: _buildEmptyState());
-                    }
-                    return _buildFavoritesGrid(wallpapers);
-                  },
-                  error: (error, _) => SliverToBoxAdapter(
-                    child: _buildErrorState(error),
-                  ),
-                );
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -190,10 +203,17 @@ class _FavoritesViewState extends State<_FavoritesView>
               context.read<FavoritesCubit>().removeFromFavorites(wallpaper.id);
             },
             showFavoriteButton: true,
+            onTap: () => _handleWallpaperTap(context, wallpaper),
             isFavorited: true,
           );
         },
       ),
+    );
+  }
+
+  void _handleWallpaperTap(BuildContext context, Wallpaper selectedWallpaper) {
+    context.router.navigate(
+      WallpaperDetailRoute(wallpaper: selectedWallpaper),
     );
   }
 
@@ -244,8 +264,8 @@ class _FavoritesViewState extends State<_FavoritesView>
               },
               icon: const Icon(Iconsax.search_normal),
               style: ElevatedButton.styleFrom(
-                backgroundColor:  Theme.of(context).colorScheme.primary,
-                foregroundColor:  Theme.of(context).colorScheme.onPrimary,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
               ),
               label: const Text('Explore Wallpapers'),
             ),
@@ -290,6 +310,10 @@ class _FavoritesViewState extends State<_FavoritesView>
               onPressed: () {
                 context.read<FavoritesCubit>().loadFavorites();
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              ),
               child: const Text('Retry'),
             ),
           ],
@@ -298,9 +322,9 @@ class _FavoritesViewState extends State<_FavoritesView>
     );
   }
 
-  void _showClearAllDialog(BuildContext context) {
+  void _showClearAllDialog(BuildContext outerContext) {
     showDialog<void>(
-      context: context,
+      context: outerContext,
       builder: (context) => AlertDialog(
         title: const Text('Clear All Favorites'),
         content: const Text(
@@ -315,7 +339,7 @@ class _FavoritesViewState extends State<_FavoritesView>
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              context.read<FavoritesCubit>().clearAllFavorites();
+              outerContext.read<FavoritesCubit>().clearAllFavorites();
             },
             style: TextButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,

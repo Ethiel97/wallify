@@ -1,10 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:wallinice/core/network/auth_interceptor.dart';
+
 @module
 abstract class NetworkModule {
   @lazySingleton
-  Dio get dio {
+  Dio dio(AuthInterceptor authInterceptor) {
     final dio = Dio()
       ..options = BaseOptions(
         validateStatus: (status) {
@@ -20,6 +22,7 @@ abstract class NetworkModule {
       );
 
     dio.interceptors.addAll([
+      authInterceptor, // Add auth interceptor first
       LogInterceptor(
         requestBody: true,
         responseBody: true,

@@ -72,7 +72,16 @@ class HiveStorageService implements StorageService {
   @override
   Future<List<T>> getAll<T>(String collection) async {
     final box = await _getBox<T>(collection);
-    return box.values.cast<T>().toList();
+    final values = box.values.toList();
+    
+    // Safe conversion - filter out null values and ensure proper type
+    final result = <T>[];
+    for (final value in values) {
+      if (value is T) {
+        result.add(value);
+      }
+    }
+    return result;
   }
 
   @override
@@ -114,8 +123,16 @@ class HiveStorageService implements StorageService {
     // Emit current values first
     yield await getAll<T>(collection);
 
-    // Then emit updates
-    yield* _streamControllers[collection]!.stream.cast<List<T>>();
+    // Then emit updates with safe type conversion
+    yield* _streamControllers[collection]!.stream.map((dynamicList) {
+      final result = <T>[];
+      for (final value in dynamicList) {
+        if (value is T) {
+          result.add(value);
+        }
+      }
+      return result;
+    });
   }
 
   /// Get a specific box, ensuring it's opened

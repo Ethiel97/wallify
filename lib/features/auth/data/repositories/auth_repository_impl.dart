@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:injectable/injectable.dart';
 import 'package:wallinice/core/errors/errors.dart';
@@ -81,8 +82,14 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     } on AuthException {
       rethrow;
-    } catch (e) {
+    } catch (e, stack) {
+      log(
+        'Error signing in with email: $e \n$stack',
+        name: 'AuthRepositoryImpl',
+      );
       throw AuthException(e.toString());
+
+      //ethiel97@gmail.com
     }
   }
 
@@ -141,7 +148,11 @@ class AuthRepositoryImpl implements AuthRepository {
         await _firebaseAuthDatasource.signOut();
       }
       await _authLocalDataSource.clearAuthData();
-    } catch (e) {
+    } catch (e, stack) {
+      log(
+        'Error signing out: $e \n$stack',
+        name: 'AuthRepositoryImpl',
+      );
       throw AuthException(e.toString());
     }
   }

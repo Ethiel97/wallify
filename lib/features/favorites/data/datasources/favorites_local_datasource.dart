@@ -62,7 +62,7 @@ class FavoritesLocalDataSourceImpl implements FavoritesLocalDataSource {
         .map((favorites) {
       // Sort by most recent first
       favorites.sort((a, b) => b.savedAt.compareTo(a.savedAt));
-      return favorites;
+      return favorites; // No need to cast since storage service now handles type safety
     });
   }
 

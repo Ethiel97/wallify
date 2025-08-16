@@ -40,7 +40,7 @@ class MainWrapperPage extends StatelessWidget {
   }
 }
 
-class _MainWrapperView extends StatelessWidget {
+class _MainWrapperView extends StatefulWidget {
   const _MainWrapperView();
 
   // Main app screens
@@ -49,6 +49,23 @@ class _MainWrapperView extends StatelessWidget {
     WallpaperHomePage(), // Real home screen implementation
     FavoritesPage(),
   ];
+
+  @override
+  State<_MainWrapperView> createState() => _MainWrapperViewState();
+}
+
+class _MainWrapperViewState extends State<_MainWrapperView> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Load favorites after the first frame to ensure context is available
+      if (context.read<AuthCubit>().state.isAuthenticated) {
+        context.read<FavoritesCubit>().loadFavorites();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +89,7 @@ class _MainWrapperView extends StatelessWidget {
               // Main content with IndexedStack for better performance
               IndexedStack(
                 index: currentIndex,
-                children: _screens,
+                children: _MainWrapperView._screens,
               ),
 
               // Top app bar with user and theme buttons

@@ -173,7 +173,7 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
                 children: [
                   // Full screen wallpaper background
                   Hero(
-                    tag: selectedWallpaper.id,
+                    tag: selectedWallpaper.url,
                     transitionOnUserGestures: true,
                     child: CachedNetworkImage(
                       imageUrl: selectedWallpaper.src.original,
@@ -241,7 +241,7 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
                       ),
                       child: DraggableScrollableSheet(
                         controller: _scrollableController,
-                        initialChildSize: 0.071,
+                        initialChildSize: _sheetMaxSize,
                         maxChildSize: _sheetMaxSize,
                         minChildSize: 0.071,
                         builder: (context, scrollController) =>
@@ -420,15 +420,21 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
 
                   // Favorite button
                   BlocSelector<WallpaperDetailCubit, WallpaperDetailState,
-                      bool>(
+                      ValueWrapper<bool>>(
                     selector: (state) => state.isWallpaperFavorited,
-                    builder: (context, isFavorited) {
-                      return _buildActionButton(
-                        isFavorited ? Iconsax.heart5 : Iconsax.heart,
-                        isFavorited ? 'Remove' : 'Save',
-                        () => _handleFavoriteToggle(isFavorited),
-                      );
-                    },
+                    builder: (context, isFavorited) => isFavorited.maybeWhen(
+                      success: (isFav) => _buildActionButton(
+                        isFav ? Iconsax.heart5 : Iconsax.heart,
+                        isFav ? 'Remove' : 'Save',
+                        () => _handleFavoriteToggle(isFav),
+                      ),
+                      error: (error, _) => _buildActionButton(
+                        Iconsax.heart,
+                        'Save',
+                        () => _handleFavoriteToggle(false),
+                      ),
+                      orElse: CircularProgressIndicator.new,
+                    ),
                   ),
 
                   // Share button
@@ -594,12 +600,17 @@ class _WallpaperDetailViewState extends State<_WallpaperDetailView>
     required String actionText,
     required VoidCallback onConfirm,
   }) {
+    final theme = Theme.of(context);
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         behavior: SnackBarBehavior.floating,
-        content: Text(message),
+        content: Text(
+          message,
+        ),
         action: SnackBarAction(
           label: actionText,
+          textColor: theme.colorScheme.secondary,
           onPressed: onConfirm,
         ),
       ),

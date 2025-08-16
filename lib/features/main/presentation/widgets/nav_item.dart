@@ -25,7 +25,7 @@ class NavItem extends StatelessWidget {
 
         return AnimatedScale(
           curve: Curves.fastLinearToSlowEaseIn,
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 500),
           scale: isSelected ? 1.02 : 0.9,
           child: AnimatedContainer(
             curve: Curves.fastLinearToSlowEaseIn,
@@ -44,7 +44,7 @@ class NavItem extends StatelessWidget {
                   ? theme.brightness == Brightness.dark
                       ? theme.textTheme.bodyLarge?.color
                       : Colors.white
-                  : theme.colorScheme.surface.withValues(alpha: .9),
+                  : theme.colorScheme.onSurface.withValues(alpha: .9),
             ),
             duration: const Duration(milliseconds: 300),
             child: isSelected
@@ -67,10 +67,12 @@ class NavItem extends StatelessWidget {
   }
 
   Widget _buildIconButton(BuildContext context, bool isSelected) {
+    final theme = Theme.of(context);
     return IconButton(
       icon: Icon(
         icon,
         size: isSelected ? 32 : 24,
+        color: theme.colorScheme.surface.withValues(alpha: .9),
       ),
       onPressed: () {
         // Check if trying to access favorites (index 2) without authentication

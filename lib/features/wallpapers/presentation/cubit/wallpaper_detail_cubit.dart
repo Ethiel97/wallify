@@ -1,22 +1,39 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wallinice/core/utils/utils.dart';
+import 'package:wallinice/features/favorites/domain/repositories/favorites_repository.dart';
 import 'package:wallinice/features/wallpapers/wallpapers.dart';
 
 @injectable
 class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
-  WallpaperDetailCubit(this._wallpaperRepository)
-      : super(const WallpaperDetailState());
+  WallpaperDetailCubit(
+    this._wallpaperRepository,
+    this._favoritesRepository,
+  ) : super(const WallpaperDetailState());
 
   final WallpaperRepository _wallpaperRepository;
+  final FavoritesRepository _favoritesRepository;
 
-  void setSelectedWallpaper(Wallpaper selectedWallpaper) {
+  Future<void> setSelectedWallpaper(Wallpaper selectedWallpaper) async {
     emit(
       state.copyWith(
         currentWallpaper: selectedWallpaper.toSuccess<Wallpaper>(),
-        isWallpaperFavorited: false, // TODO: Check if wallpaper is in favorites
+        isWallpaperFavorited: null.toLoading<bool>(), // Loading state
       ),
     );
+
+    try {
+      final isFavorited =
+          await _favoritesRepository.isWallpaperFavorited(selectedWallpaper.id);
+      emit(state.copyWith(isWallpaperFavorited: isFavorited.toSuccess<bool>()));
+    } catch (error) {
+      emit(
+        state.copyWith(
+            isWallpaperFavorited: false.toError<bool>(
+          const ErrorDetails(message: 'Failed to check favorite status'),
+        )),
+      );
+    }
   }
 
   Future<void> downloadWallpaper() async {
@@ -61,7 +78,8 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
 
     try {
       // TODO: Implement actual wallpaper setting functionality
-      await Future.delayed(
+
+      await Future<void>.delayed(
         const Duration(seconds: 1),
       ); // Simulate setting wallpaper
 
@@ -78,21 +96,30 @@ class WallpaperDetailCubit extends Cubit<WallpaperDetailState> {
   }
 
   Future<void> toggleFavoriteStatus() async {
-    if (!state.currentWallpaper.hasData) return;
+    if (!state.currentWallpaper.hasData ||
+        !state.isWallpaperFavorited.hasData) {
+      return;
+    }
 
     emit(state.copyWith(favoriteStatus: null.toLoading<bool>()));
 
     try {
-      // TODO: Implement actual favorite toggle functionality
-      await Future.delayed(
-        const Duration(milliseconds: 500),
-      ); // Simulate toggle
+      final wallpaper = state.currentWallpaper.data;
+      final currentlyFavorited = state.isWallpaperFavorited.data;
 
-      final newFavoriteStatus = !state.isWallpaperFavorited;
+      if (currentlyFavorited) {
+        // Repository handles both local and remote removal
+        await _favoritesRepository.removeFromFavorites(wallpaper.id);
+      } else {
+        // Repository handles both local and remote saving
+        await _favoritesRepository.addToFavorites(wallpaper);
+      }
+
+      final newFavoriteStatus = !currentlyFavorited;
       emit(
         state.copyWith(
           favoriteStatus: newFavoriteStatus.toSuccess<bool>(),
-          isWallpaperFavorited: newFavoriteStatus,
+          isWallpaperFavorited: newFavoriteStatus.toSuccess<bool>(),
         ),
       );
     } catch (error) {
@@ -154,7 +181,7 @@ class WallpaperDetailState {
     this.setWallpaperStatus = const ValueWrapper(),
     this.favoriteStatus = const ValueWrapper(),
     this.shareStatus = const ValueWrapper(),
-    this.isWallpaperFavorited = false,
+    this.isWallpaperFavorited = const ValueWrapper(),
   });
 
   final ValueWrapper<Wallpaper> currentWallpaper;
@@ -162,7 +189,7 @@ class WallpaperDetailState {
   final ValueWrapper<bool> setWallpaperStatus;
   final ValueWrapper<bool> favoriteStatus;
   final ValueWrapper<bool> shareStatus;
-  final bool isWallpaperFavorited;
+  final ValueWrapper<bool> isWallpaperFavorited;
 
   WallpaperDetailState copyWith({
     ValueWrapper<Wallpaper>? currentWallpaper,
@@ -170,7 +197,7 @@ class WallpaperDetailState {
     ValueWrapper<bool>? setWallpaperStatus,
     ValueWrapper<bool>? favoriteStatus,
     ValueWrapper<bool>? shareStatus,
-    bool? isWallpaperFavorited,
+    ValueWrapper<bool>? isWallpaperFavorited,
   }) {
     return WallpaperDetailState(
       currentWallpaper: currentWallpaper ?? this.currentWallpaper,

@@ -19,7 +19,7 @@ class MainAppBar extends StatelessWidget {
           alignment: Alignment.topLeft,
           child: Padding(
             padding: const EdgeInsets.only(
-              top: 52,
+              top: 42,
               left: 10,
             ),
             child: BlocBuilder<AuthCubit, AuthState>(
@@ -51,7 +51,7 @@ class MainAppBar extends StatelessWidget {
           alignment: Alignment.topRight,
           child: Padding(
             padding: const EdgeInsets.only(
-              top: 52,
+              top: 42,
               right: 10,
             ),
             child: IconButton(
@@ -160,11 +160,11 @@ class MainAppBar extends StatelessWidget {
     );
   }
 
-  void _showAuthenticatedUserBottomSheet(BuildContext context, User user) {
-    final theme = Theme.of(context);
+  void _showAuthenticatedUserBottomSheet(BuildContext outerContext, User user) {
+    final theme = Theme.of(outerContext);
 
     showModalBottomSheet<void>(
-      context: context,
+      context: outerContext,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16),
@@ -225,7 +225,7 @@ class MainAppBar extends StatelessWidget {
             OutlinedButton(
               onPressed: () {
                 context.router.back();
-                context.read<AuthCubit>().signOut();
+                outerContext.read<AuthCubit>().signOut();
               },
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
@@ -258,9 +258,9 @@ class MainAppBar extends StatelessWidget {
     );
   }
 
-  void _showDeleteAccountDialog(BuildContext context) {
+  void _showDeleteAccountDialog(BuildContext outerContext) {
     showDialog<void>(
-      context: context,
+      context: outerContext,
       builder: (context) => AlertDialog(
         title: const Text('Delete Account'),
         content: const Text(
@@ -276,7 +276,7 @@ class MainAppBar extends StatelessWidget {
             onPressed: () {
               context.router.back();
               // TODO: Implement account deletion
-              context.read<AuthCubit>().signOut();
+              outerContext.read<AuthCubit>().signOut();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,

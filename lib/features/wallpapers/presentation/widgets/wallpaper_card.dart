@@ -29,7 +29,7 @@ class WallpaperCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Hero(
-        tag: wallpaper.id,
+        tag: wallpaper.url,
         transitionOnUserGestures: true,
         child: Container(
           margin: const EdgeInsets.symmetric(

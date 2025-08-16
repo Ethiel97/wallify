@@ -60,10 +60,10 @@ extension AppRouterExtension on StackRouter {
 
   // Utility methods
   Future<void> pushAndClearStack(String routeName) async {
-    //clear all routes and push the new one
-
-    removeUntil(
-      (route) => route.name == routeName,
+    // Clear all routes and push the new one
+    await pushAndPopUntil(
+      PageRouteInfo(routeName),
+      predicate: (route) => route.isFirst,
     );
   }
 }

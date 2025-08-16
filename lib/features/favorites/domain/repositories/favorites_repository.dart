@@ -1,4 +1,5 @@
 import 'package:wallinice/features/wallpapers/wallpapers.dart';
+import '../entities/favorite.dart';
 
 abstract class FavoritesRepository {
   Future<List<Wallpaper>> getFavoriteWallpapers();
@@ -14,4 +15,10 @@ abstract class FavoritesRepository {
   Future<void> clearAllFavorites();
 
   Future<int> getFavoritesCount();
+
+  // Remote API methods
+  Future<List<Favorite>> getUserSavedWallpapers();
+  Future<void> saveWallpaper(String wallpaperId);
+  Future<void> deleteSavedWallpaper(String wallpaperId);
+  Future<void> deleteUserSavedWallpapers();
 }

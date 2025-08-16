@@ -17,53 +17,53 @@ class AppTheme {
         onSurface: AppColors.darkColor,
         error: AppColors.errorColor,
       ),
-      textTheme: GoogleFonts.interTextTheme().copyWith(
-        displayLarge: GoogleFonts.inter(
+      textTheme: GoogleFonts.nunitoSansTextTheme().copyWith(
+        displayLarge: GoogleFonts.nunitoSans(
           fontSize: 32,
           fontWeight: FontWeight.bold,
           color: AppColors.darkColor,
         ),
-        displayMedium: GoogleFonts.inter(
+        displayMedium: GoogleFonts.nunitoSans(
           fontSize: 28,
           fontWeight: FontWeight.bold,
           color: AppColors.darkColor,
         ),
-        displaySmall: GoogleFonts.inter(
+        displaySmall: GoogleFonts.nunitoSans(
           fontSize: 24,
           fontWeight: FontWeight.w600,
           color: AppColors.darkColor,
         ),
-        headlineLarge: GoogleFonts.inter(
+        headlineLarge: GoogleFonts.nunitoSans(
           fontSize: 22,
           fontWeight: FontWeight.w600,
           color: AppColors.darkColor,
         ),
-        headlineMedium: GoogleFonts.inter(
+        headlineMedium: GoogleFonts.nunitoSans(
           fontSize: 20,
           fontWeight: FontWeight.w500,
           color: AppColors.darkColor,
         ),
-        titleLarge: GoogleFonts.inter(
+        titleLarge: GoogleFonts.nunitoSans(
           fontSize: 18,
           fontWeight: FontWeight.w500,
           color: AppColors.darkColor,
         ),
-        titleMedium: GoogleFonts.inter(
+        titleMedium: GoogleFonts.nunitoSans(
           fontSize: 16,
           fontWeight: FontWeight.w500,
           color: AppColors.darkColor,
         ),
-        bodyLarge: GoogleFonts.inter(
+        bodyLarge: GoogleFonts.nunitoSans(
           fontSize: 16,
           fontWeight: FontWeight.normal,
           color: AppColors.darkColor,
         ),
-        bodyMedium: GoogleFonts.inter(
+        bodyMedium: GoogleFonts.nunitoSans(
           fontSize: 14,
           fontWeight: FontWeight.normal,
           color: AppColors.darkColor,
         ),
-        labelLarge: GoogleFonts.inter(
+        labelLarge: GoogleFonts.nunitoSans(
           fontSize: 14,
           fontWeight: FontWeight.w500,
           color: AppColors.darkColor,
@@ -73,7 +73,7 @@ class AppTheme {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.darkColor),
-        titleTextStyle: GoogleFonts.inter(
+        titleTextStyle: GoogleFonts.nunitoSans(
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: AppColors.darkColor,
@@ -86,11 +86,11 @@ class AppTheme {
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: AppColors.accentColor, width: 2),
         ),
-        hintStyle: GoogleFonts.inter(
+        hintStyle: GoogleFonts.nunitoSans(
           fontSize: 14,
           color: AppColors.greyMedium,
         ),
-        labelStyle: GoogleFonts.inter(
+        labelStyle: GoogleFonts.nunitoSans(
           fontSize: 14,
           color: AppColors.darkColor,
         ),
@@ -113,53 +113,53 @@ class AppTheme {
         onSurface: AppColors.textColor,
         error: AppColors.errorColor,
       ),
-      textTheme: GoogleFonts.interTextTheme().copyWith(
-        displayLarge: GoogleFonts.inter(
+      textTheme: GoogleFonts.nunitoSansTextTheme().copyWith(
+        displayLarge: GoogleFonts.nunitoSans(
           fontSize: 32,
           fontWeight: FontWeight.bold,
           color: AppColors.textColor,
         ),
-        displayMedium: GoogleFonts.inter(
+        displayMedium: GoogleFonts.nunitoSans(
           fontSize: 28,
           fontWeight: FontWeight.bold,
           color: AppColors.textColor,
         ),
-        displaySmall: GoogleFonts.inter(
+        displaySmall: GoogleFonts.nunitoSans(
           fontSize: 24,
           fontWeight: FontWeight.w600,
           color: AppColors.textColor,
         ),
-        headlineLarge: GoogleFonts.inter(
+        headlineLarge: GoogleFonts.nunitoSans(
           fontSize: 22,
           fontWeight: FontWeight.w600,
           color: AppColors.textColor,
         ),
-        headlineMedium: GoogleFonts.inter(
+        headlineMedium: GoogleFonts.nunitoSans(
           fontSize: 20,
           fontWeight: FontWeight.w500,
           color: AppColors.textColor,
         ),
-        titleLarge: GoogleFonts.inter(
+        titleLarge: GoogleFonts.nunitoSans(
           fontSize: 18,
           fontWeight: FontWeight.w500,
           color: AppColors.textColor,
         ),
-        titleMedium: GoogleFonts.inter(
+        titleMedium: GoogleFonts.nunitoSans(
           fontSize: 16,
           fontWeight: FontWeight.w500,
           color: AppColors.textColor,
         ),
-        bodyLarge: GoogleFonts.inter(
+        bodyLarge: GoogleFonts.nunitoSans(
           fontSize: 16,
           fontWeight: FontWeight.normal,
           color: AppColors.textColor,
         ),
-        bodyMedium: GoogleFonts.inter(
+        bodyMedium: GoogleFonts.nunitoSans(
           fontSize: 14,
           fontWeight: FontWeight.normal,
           color: AppColors.textColor,
         ),
-        labelLarge: GoogleFonts.inter(
+        labelLarge: GoogleFonts.nunitoSans(
           fontSize: 14,
           fontWeight: FontWeight.w500,
           color: AppColors.textColor,
@@ -169,7 +169,7 @@ class AppTheme {
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.textColor),
-        titleTextStyle: GoogleFonts.inter(
+        titleTextStyle: GoogleFonts.nunitoSans(
           fontSize: 18,
           fontWeight: FontWeight.w600,
           color: AppColors.textColor,
@@ -182,11 +182,11 @@ class AppTheme {
         focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: AppColors.accentColor, width: 2),
         ),
-        hintStyle: GoogleFonts.inter(
+        hintStyle: GoogleFonts.nunitoSans(
           fontSize: 14,
           color: AppColors.greyMedium,
         ),
-        labelStyle: GoogleFonts.inter(
+        labelStyle: GoogleFonts.nunitoSans(
           fontSize: 14,
           color: AppColors.textColor,
         ),

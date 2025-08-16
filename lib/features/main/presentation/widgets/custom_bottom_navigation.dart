@@ -16,7 +16,7 @@ class CustomBottomNavigation extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.only(bottom: 24),
         child: Wrap(
           runAlignment: WrapAlignment.spaceBetween,
           runSpacing: 20,

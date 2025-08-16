@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -47,13 +48,24 @@ class FavoritesCubit extends Cubit<FavoritesState> {
     );
 
     try {
+      // Load favorites (repository handles cache and remote sync)
       final favorites = await _favoritesRepository.getFavoriteWallpapers();
       emit(
         state.copyWith(
           favoriteWallpapers: favorites.toSuccess<List<Wallpaper>>(),
         ),
       );
-    } catch (e) {
+
+      // Sync with remote in background after loading local favorites
+      await syncWithRemote();
+    } catch (e, stack) {
+      log(
+        'Error loading favorites: $e',
+        error: e,
+        stackTrace: stack,
+        name: 'FavoritesCubit.loadFavorites',
+      );
+
       emit(
         state.copyWith(
           favoriteWallpapers: null.toError<List<Wallpaper>>(
@@ -66,6 +78,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
 
   Future<void> addToFavorites(Wallpaper wallpaper) async {
     try {
+      // Repository handles both local and remote operations
       await _favoritesRepository.addToFavorites(wallpaper);
       // The stream will automatically update the state
     } catch (e) {
@@ -81,6 +94,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
 
   Future<void> removeFromFavorites(String wallpaperId) async {
     try {
+      // Repository handles both local and remote operations
       await _favoritesRepository.removeFromFavorites(wallpaperId);
       // The stream will automatically update the state
     } catch (e) {
@@ -123,6 +137,7 @@ class FavoritesCubit extends Cubit<FavoritesState> {
 
   Future<void> clearAllFavorites() async {
     try {
+      // Repository handles both local and remote operations
       await _favoritesRepository.clearAllFavorites();
       // The stream will automatically update the state
     } catch (e) {
@@ -131,6 +146,24 @@ class FavoritesCubit extends Cubit<FavoritesState> {
           lastActionError:
               ErrorDetails(message: 'Failed to clear favorites: $e'),
         ),
+      );
+    }
+  }
+
+  // Optional: Method to explicitly sync with remote if needed
+  Future<void> syncWithRemote() async {
+    try {
+      // This could trigger a background sync through the repository
+      // For now, we rely on the repository's built-in sync logic
+      await _favoritesRepository.getUserSavedWallpapers();
+    } catch (e, stack) {
+      // Silently fail - sync is not critical
+
+      log(
+        'Error syncing favorites with remote: $e',
+        error: e,
+        stackTrace: stack,
+        name: 'FavoritesCubit.syncWithRemote',
       );
     }
   }

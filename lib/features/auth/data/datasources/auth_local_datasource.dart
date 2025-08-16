@@ -1,15 +1,20 @@
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:wallinice/core/errors/errors.dart';
+import 'package:wallinice/core/storage/storage.dart';
 import 'package:wallinice/features/auth/auth.dart';
 
 abstract class AuthLocalDataSource {
   Future<void> saveToken(String token);
+
   Future<String?> getToken();
+
   Future<void> saveUser(UserModel user);
+
   Future<UserModel?> getUser();
+
   Future<void> clearAuthData();
 }
 
@@ -17,15 +22,15 @@ abstract class AuthLocalDataSource {
 class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   AuthLocalDataSourceImpl(this._secureStorage);
 
-  final FlutterSecureStorage _secureStorage;
-
-  static const String _tokenKey = 'token';
-  static const String _userKey = 'user';
+  final SecureStorageService _secureStorage;
 
   @override
   Future<void> saveToken(String token) async {
     try {
-      await _secureStorage.write(key: _tokenKey, value: token);
+      await _secureStorage.write(
+        key: SecureStorageConstants.authToken,
+        value: token,
+      );
     } catch (e) {
       throw CacheException('Failed to save token: $e');
     }
@@ -34,7 +39,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<String?> getToken() async {
     try {
-      return await _secureStorage.read(key: _tokenKey);
+      return await _secureStorage.read(key: SecureStorageConstants.authToken);
     } catch (e) {
       throw CacheException('Failed to get token: $e');
     }
@@ -44,7 +49,10 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   Future<void> saveUser(UserModel user) async {
     try {
       final userJson = jsonEncode(user.toJson());
-      await _secureStorage.write(key: _userKey, value: userJson);
+      await _secureStorage.write(
+        key: SecureStorageConstants.user,
+        value: userJson,
+      );
     } catch (e) {
       throw CacheException('Failed to save user: $e');
     }
@@ -53,7 +61,9 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<UserModel?> getUser() async {
     try {
-      final userJson = await _secureStorage.read(key: _userKey);
+      final userJson = await _secureStorage.read(
+        key: SecureStorageConstants.user,
+      );
       if (userJson != null) {
         final userMap = jsonDecode(userJson) as Map<String, dynamic>;
         return UserModel.fromJson(userMap);
@@ -67,9 +77,15 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<void> clearAuthData() async {
     try {
-      await _secureStorage.delete(key: _tokenKey);
-      await _secureStorage.delete(key: _userKey);
-    } catch (e) {
+      await _secureStorage.delete(key: SecureStorageConstants.authToken);
+      await _secureStorage.delete(key: SecureStorageConstants.user);
+    } catch (e, stackTrace) {
+      log(
+        'Error clearing auth data: $e',
+        error: e,
+        stackTrace: stackTrace,
+        name: 'AuthLocalDataSourceImpl.clearAuthData',
+      );
       throw CacheException('Failed to clear auth data: $e');
     }
   }

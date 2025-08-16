@@ -14,12 +14,16 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:wallinice/core/di/third_party_module.dart' as _i473;
+import 'package:wallinice/core/network/auth_interceptor.dart' as _i611;
 import 'package:wallinice/core/network/dio_client.dart' as _i272;
 import 'package:wallinice/core/network/dio_network_client.dart' as _i652;
 import 'package:wallinice/core/network/network.dart' as _i686;
+import 'package:wallinice/core/network/network_client.dart' as _i760;
 import 'package:wallinice/core/services/download_service.dart' as _i114;
 import 'package:wallinice/core/services/services.dart' as _i901;
 import 'package:wallinice/core/services/share_service.dart' as _i840;
+import 'package:wallinice/core/storage/flutter_secure_storage_service.dart'
+    as _i610;
 import 'package:wallinice/core/storage/hive_storage_service.dart' as _i726;
 import 'package:wallinice/core/storage/storage.dart' as _i309;
 import 'package:wallinice/features/auth/auth.dart' as _i50;
@@ -35,8 +39,12 @@ import 'package:wallinice/features/auth/presentation/cubit/auth_cubit.dart'
     as _i1026;
 import 'package:wallinice/features/favorites/data/datasources/favorites_local_datasource.dart'
     as _i96;
+import 'package:wallinice/features/favorites/data/datasources/favorites_remote_datasource.dart'
+    as _i57;
 import 'package:wallinice/features/favorites/data/repositories/favorites_repository_impl.dart'
     as _i154;
+import 'package:wallinice/features/favorites/domain/repositories/favorites_repository.dart'
+    as _i262;
 import 'package:wallinice/features/favorites/favorites.dart' as _i509;
 import 'package:wallinice/features/favorites/presentation/cubit/favorites_cubit.dart'
     as _i888;
@@ -80,9 +88,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i59.FirebaseAuth>(() => thirdPartyModule.firebaseAuth);
     gh.lazySingleton<_i558.FlutterSecureStorage>(
         () => thirdPartyModule.flutterSecureStorage);
-    gh.lazySingleton<_i361.Dio>(() => networkModule.dio);
-    gh.lazySingleton<_i686.NetworkClient>(
-        () => _i652.DioNetworkClient(gh<_i361.Dio>()));
     gh.lazySingletonAsync<_i309.StorageService>(
       () {
         final i = _i726.HiveStorageService();
@@ -93,37 +98,53 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingletonAsync<_i96.FavoritesLocalDataSource>(() async =>
         _i96.FavoritesLocalDataSourceImpl(
             await getAsync<_i309.StorageService>()));
-    gh.lazySingleton<_i840.ShareService>(
-        () => _i840.ShareServiceImpl(gh<_i361.Dio>()));
-    gh.lazySingleton<_i114.DownloadService>(
-        () => _i114.DownloadServiceImpl(gh<_i361.Dio>()));
-    gh.lazySingleton<_i757.AuthLocalDataSource>(
-        () => _i757.AuthLocalDataSourceImpl(gh<_i558.FlutterSecureStorage>()));
-    gh.lazySingletonAsync<_i509.FavoritesRepository>(() async =>
-        _i154.FavoritesRepositoryImpl(
-            await getAsync<_i509.FavoritesLocalDataSource>()));
-    gh.lazySingleton<_i77.AuthRemoteDataSource>(
-        () => _i77.AuthRemoteDataSourceImpl(gh<_i686.NetworkClient>()));
+    gh.lazySingleton<_i309.SecureStorageService>(
+      () => _i610.FlutterSecureStorageService(),
+      dispose: (i) => i.dispose(),
+    );
     gh.lazySingleton<_i612.FirebaseAuthDatasource>(
         () => _i612.FirebaseAuthDatasourceImpl(gh<_i59.FirebaseAuth>()));
-    gh.lazySingleton<_i1022.PexelsRemoteDataSource>(
-        () => _i1022.PexelsRemoteDataSourceImpl(gh<_i686.NetworkClient>()));
-    gh.lazySingleton<_i47.WallhavenRemoteDataSource>(
-        () => _i47.WallhavenRemoteDataSourceImpl(gh<_i686.NetworkClient>()));
-    gh.factoryAsync<_i888.FavoritesCubit>(() async =>
-        _i888.FavoritesCubit(await getAsync<_i509.FavoritesRepository>()));
-    gh.lazySingleton<_i50.AuthRepository>(() => _i814.AuthRepositoryImpl(
-          gh<_i50.AuthRemoteDataSource>(),
-          gh<_i50.FirebaseAuthDatasource>(),
-          gh<_i50.AuthLocalDataSource>(),
-        ));
-    gh.factory<_i1026.AuthCubit>(
-        () => _i1026.AuthCubit(gh<_i50.AuthRepository>()));
+    gh.factory<_i611.AuthInterceptor>(
+        () => _i611.AuthInterceptor(gh<_i309.SecureStorageService>()));
+    gh.lazySingleton<_i757.AuthLocalDataSource>(
+        () => _i757.AuthLocalDataSourceImpl(gh<_i309.SecureStorageService>()));
     gh.lazySingletonAsync<_i510.SettingsLocalDataSource>(
       () async => _i510.SettingsLocalDataSourceImpl(
           await getAsync<_i309.StorageService>()),
       dispose: (i) => i.dispose(),
     );
+    gh.lazySingleton<_i361.Dio>(
+        () => networkModule.dio(gh<_i611.AuthInterceptor>()));
+    gh.lazySingleton<_i154.SettingsRepository>(() =>
+        _i635.SettingsRepositoryImpl(gh<_i154.SettingsLocalDataSource>()));
+    gh.lazySingleton<_i686.NetworkClient>(
+        () => _i652.DioNetworkClient(gh<_i361.Dio>()));
+    gh.lazySingleton<_i840.ShareService>(
+        () => _i840.ShareServiceImpl(gh<_i361.Dio>()));
+    gh.lazySingleton<_i114.DownloadService>(
+        () => _i114.DownloadServiceImpl(gh<_i361.Dio>()));
+    gh.factory<_i193.SettingsCubit>(
+        () => _i193.SettingsCubit(gh<_i154.SettingsRepository>()));
+    gh.lazySingleton<_i77.AuthRemoteDataSource>(
+        () => _i77.AuthRemoteDataSourceImpl(gh<_i686.NetworkClient>()));
+    gh.lazySingleton<_i57.FavoritesRemoteDataSource>(
+        () => _i57.FavoritesDataSourceImpl(gh<_i760.NetworkClient>()));
+    gh.lazySingleton<_i1022.PexelsRemoteDataSource>(
+        () => _i1022.PexelsRemoteDataSourceImpl(gh<_i686.NetworkClient>()));
+    gh.lazySingleton<_i47.WallhavenRemoteDataSource>(
+        () => _i47.WallhavenRemoteDataSourceImpl(gh<_i686.NetworkClient>()));
+    gh.lazySingleton<_i50.AuthRepository>(() => _i814.AuthRepositoryImpl(
+          gh<_i50.AuthRemoteDataSource>(),
+          gh<_i50.FirebaseAuthDatasource>(),
+          gh<_i50.AuthLocalDataSource>(),
+        ));
+    gh.lazySingletonAsync<_i509.FavoritesRepository>(
+        () async => _i154.FavoritesRepositoryImpl(
+              await getAsync<_i509.FavoritesLocalDataSource>(),
+              gh<_i509.FavoritesRemoteDataSource>(),
+            ));
+    gh.factory<_i1026.AuthCubit>(
+        () => _i1026.AuthCubit(gh<_i50.AuthRepository>()));
     gh.lazySingleton<_i823.WallpaperRepository>(
         () => _i367.WallpaperRepositoryImpl(
               gh<_i823.PexelsRemoteDataSource>(),
@@ -131,16 +152,16 @@ extension GetItInjectableX on _i174.GetIt {
               gh<_i901.DownloadService>(),
               gh<_i901.ShareService>(),
             ));
-    gh.factory<_i1.WallpaperDetailCubit>(
-        () => _i1.WallpaperDetailCubit(gh<_i823.WallpaperRepository>()));
     gh.factory<_i242.WallpaperCubit>(
         () => _i242.WallpaperCubit(gh<_i823.WallpaperRepository>()));
     gh.factory<_i926.SearchCubit>(
         () => _i926.SearchCubit(gh<_i823.WallpaperRepository>()));
-    gh.lazySingleton<_i154.SettingsRepository>(() =>
-        _i635.SettingsRepositoryImpl(gh<_i154.SettingsLocalDataSource>()));
-    gh.factory<_i193.SettingsCubit>(
-        () => _i193.SettingsCubit(gh<_i154.SettingsRepository>()));
+    gh.factoryAsync<_i888.FavoritesCubit>(() async =>
+        _i888.FavoritesCubit(await getAsync<_i509.FavoritesRepository>()));
+    gh.factory<_i1.WallpaperDetailCubit>(() => _i1.WallpaperDetailCubit(
+          gh<_i823.WallpaperRepository>(),
+          gh<_i262.FavoritesRepository>(),
+        ));
     return this;
   }
 }
