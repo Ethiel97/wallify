@@ -73,7 +73,7 @@ class HiveStorageService implements StorageService {
   Future<List<T>> getAll<T>(String collection) async {
     final box = await _getBox<T>(collection);
     final values = box.values.toList();
-    
+
     // Safe conversion - filter out null values and ensure proper type
     final result = <T>[];
     for (final value in values) {
